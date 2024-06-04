@@ -11,7 +11,7 @@ const font = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: "boilerplate",
+  title: "Twosday",
 };
 
 export const viewport: Viewport = {
