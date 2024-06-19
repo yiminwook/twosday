@@ -24,6 +24,13 @@ declare global {
 
       // dev-tools
       readonly NEXT_PUBLIC_ENABLE_REACT_QUERY_DEVTOOLS?: "true" | "false";
+
+      // pg
+      readonly PG_HOST: string;
+      readonly PG_PORT: string;
+      readonly PG_DATABASE: string;
+      readonly PG_USER: string;
+      readonly PG_PASSWORD: string;
     }
   }
 }
