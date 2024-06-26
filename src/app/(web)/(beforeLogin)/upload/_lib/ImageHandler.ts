@@ -1,4 +1,3 @@
-import { WAS_URL } from "@/app/_const/url";
 import { RefObject } from "react";
 import ReactQuill from "react-quill";
 
@@ -19,7 +18,7 @@ export const imageHandler = async (ref: RefObject<ReactQuill>) => {
     const formData = new FormData();
     formData.append("image", file);
 
-    const res = await fetch(WAS_URL + "/api/aws/upload", {
+    const res = await fetch("/was/aws/upload", {
       method: "POST",
       cache: "no-cache",
       body: formData,

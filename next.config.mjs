@@ -21,11 +21,18 @@ const nextConfig = {
   },
   async rewrites() {
     const imgUrl = process.env.AWS_CLOUD_FRONT_URL + "/:path*";
+    const wasUrl =
+      process.env.NEXT_PUBLIC_WAS_PROTOCOL + "://" + process.env.NEXT_PUBLIC_WAS_DOMAIN;
+
     return {
       beforeFiles: [
         {
           source: "/img/:path*",
           destination: imgUrl,
+        },
+        {
+          source: "/was/:path*",
+          destination: wasUrl + "/api/:path*",
         },
       ],
     };
