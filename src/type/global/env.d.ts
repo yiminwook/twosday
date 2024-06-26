@@ -18,9 +18,10 @@ declare global {
       // public
       /** @Example - http://localhost:3000 */
       readonly NEXT_PUBLIC_API_URL: string;
+      readonly NEXT_PUBLIC_WAS_PROTOCOL: "http" | "https";
+      readonly NEXT_PUBLIC_WAS_DOMAIN: string;
 
-      // server-only
-      readonly NEXT_API_URL: string;
+      readonly AWS_CLOUD_FRONT_URL: string;
 
       // dev-tools
       readonly NEXT_PUBLIC_ENABLE_REACT_QUERY_DEVTOOLS?: "true" | "false";

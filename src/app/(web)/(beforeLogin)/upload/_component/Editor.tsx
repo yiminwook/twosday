@@ -1,8 +1,11 @@
 /** @ts-ignore */
 import ImageResize from "quill-image-resize";
+import { useSetModalStore } from "@/app/_lib/modalStore";
 import hljs from "highlight.js";
 import { RefObject, useMemo } from "react";
 import ReactQuill, { ReactQuillProps } from "react-quill";
+import { imageHandler } from "../_lib/ImageHandler";
+import ErrorModal from "@/app/_component/modal/ErrorModal";
 
 const Font = ReactQuill.Quill.import("formats/font");
 const Bold = ReactQuill.Quill.import("formats/bold");
@@ -27,6 +30,7 @@ interface EditorProps {
 }
 
 export default function Editor({ onChange, value, editorRef }: EditorProps) {
+  const modalStore = useSetModalStore();
   const modules = useMemo(
     () => ({
       toolbar: {
@@ -48,7 +52,12 @@ export default function Editor({ onChange, value, editorRef }: EditorProps) {
           ["clean"],
         ],
         handlers: {
-          // image: () => imageHandler(quillRef),
+          image: () =>
+            imageHandler(editorRef).catch((error) => {
+              if (error instanceof Error) {
+                modalStore.push(ErrorModal, { props: { error } });
+              }
+            }),
         },
       },
       imageResize: {},
@@ -56,7 +65,7 @@ export default function Editor({ onChange, value, editorRef }: EditorProps) {
         highlight: (text: string) => hljs.highlightAuto(text).value,
       },
     }),
-    [],
+    [editorRef, modalStore],
   );
 
   return (
