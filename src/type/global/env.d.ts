@@ -21,7 +21,7 @@ declare global {
       readonly NEXT_PUBLIC_WAS_PROTOCOL: "http" | "https";
       readonly NEXT_PUBLIC_WAS_DOMAIN: string;
 
-      readonly AWS_CLOUD_FRONT_URL: string;
+      readonly NEXT_PUBLIC_AWS_CLOUD_FRONT_URL: string;
 
       // dev-tools
       readonly NEXT_PUBLIC_ENABLE_REACT_QUERY_DEVTOOLS?: "true" | "false";

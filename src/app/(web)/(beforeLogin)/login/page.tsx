@@ -2,6 +2,7 @@ import { getServerSessionWithOptions } from "@/model/nextAuth";
 import { redirect } from "next/navigation";
 import LoginForm from "./_component/LoginForm";
 import * as style from "./page.css";
+import SocialBox from "./_component/SocialBox";
 
 export default async function Page() {
   const session = await getServerSessionWithOptions();
@@ -12,6 +13,7 @@ export default async function Page() {
       <div className={style.inner}>
         <h1 className={style.title}>로그인</h1>
         <LoginForm />
+        <SocialBox />
       </div>
     </main>
   );

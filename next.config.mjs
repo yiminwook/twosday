@@ -26,14 +26,14 @@ const nextConfig = {
 
     return {
       beforeFiles: [
-        {
-          source: "/img/:path*",
-          destination: imgUrl,
-        },
-        {
-          source: "/was/:path*",
-          destination: wasUrl + "/api/:path*",
-        },
+        // {
+        //   source: "/img/:path*",
+        //   destination: imgUrl,
+        // },
+        // {
+        //   source: "/was/:path*",
+        //   destination: wasUrl + "/api/:path*",
+        // },
       ],
     };
   },

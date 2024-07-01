@@ -12,16 +12,21 @@ const emailLoginFn = async ({ email, password }: { email: string; password: stri
     throw new Error("비밀번호를 입력해주세요.");
   }
 
-  const result = await signIn("emailLogin", {
-    email,
-    password,
-    // 에러메세지를 모달로 띄우기 위해 이동하지 않음
-    redirect: false,
+  const serverUrl =
+    process.env.NEXT_PUBLIC_WAS_PROTOCOL + "://" + process.env.NEXT_PUBLIC_WAS_DOMAIN;
+
+  const res = await fetch(`${serverUrl}/api/auth/email`, {
+    method: "POST",
+    body: JSON.stringify({ email: trimmedEmail, password: trimmedPassword }),
   });
 
-  if (result?.error) {
-    throw new Error(decodeURIComponent(result.error || "서비스 접근권한이 없습니다."));
+  const body = await res.json();
+
+  if (!res.ok) {
+    throw new Error(body.message);
   }
+
+  return body;
 };
 
 export default emailLoginFn;
