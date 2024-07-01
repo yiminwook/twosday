@@ -7,3 +7,5 @@ export async function GET(req: NextRequest) {
   await pgClient.end();
   return NextResponse.json({ data: result.rows }, { status: 200 });
 }
+
+export const dynamic = "force-dynamic";

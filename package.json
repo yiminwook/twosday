@@ -36,6 +36,7 @@
     "react-quill": "^2.0.0",
     "react-remove-scroll": "^2.5.9",
     "react-textarea-autosize": "^8.5.3",
+    "sharp": "^0.33.4",
     "sonner": "^1.4.41",
     "uuid": "^9.0.1",
     "zustand": "^4.5.2"
