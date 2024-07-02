@@ -21,8 +21,7 @@ const nextConfig = {
   },
   async rewrites() {
     const imgUrl = process.env.AWS_CLOUD_FRONT_URL + "/:path*";
-    const wasUrl =
-      process.env.NEXT_PUBLIC_WAS_PROTOCOL + "://" + process.env.NEXT_PUBLIC_WAS_DOMAIN;
+    const wasUrl = process.env.NEXT_PUBLIC_WAS_PROTOCOL + "://" + process.env.NEXT_PUBLIC_WAS_HOST;
 
     return {
       beforeFiles: [

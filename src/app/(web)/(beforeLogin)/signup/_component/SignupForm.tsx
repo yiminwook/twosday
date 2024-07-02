@@ -5,14 +5,17 @@ import ErrorModal from "@/app/_component/modal/ErrorModal";
 import { useApp } from "@/app/_lib/app";
 import { useSetModalStore } from "@/app/_lib/modalStore";
 import { useMutation } from "@tanstack/react-query";
+import emailSignupFn from "@web/(beforeLogin)/_lib/signup";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useStore } from "zustand";
-import emailLoginFn from "../../_lib/login";
-import * as css from "./loginForm.css";
+import * as css from "./signupForm.css";
 
-export default function LoginForm() {
+export default function SignupForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [nickname, setNickname] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const modalStore = useSetModalStore();
   const store = useApp();
@@ -20,12 +23,11 @@ export default function LoginForm() {
 
   const mutateEmailLogin = useMutation({
     mutationKey: ["/api/auth/email"],
-    mutationFn: emailLoginFn,
-    // onMutate: () => setIsLoading(() => true),
+    mutationFn: emailSignupFn,
+    onMutate: () => setIsLoading(() => true),
     onSuccess: () => {
       // 로그인이 성공해도 화면이 전환될때까지 로딩처리
-      action.login();
-      // window.location.reload();
+      router.replace("/login");
     },
     onError: async (error) => {
       await modalStore.push(ErrorModal, { props: { error } });
@@ -44,13 +46,16 @@ export default function LoginForm() {
       case "loginPasswordInput":
         setPassword(() => value);
         break;
+      case "loginNicknameInput":
+        setNickname(() => value);
+        break;
     }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (mutateEmailLogin.isPending) return;
-    mutateEmailLogin.mutate({ email, password });
+    mutateEmailLogin.mutate({ email, password, nickname: nickname });
   };
 
   return (
@@ -84,10 +89,24 @@ export default function LoginForm() {
           />
           <ResetButton isShow={password !== ""} onClick={() => setPassword("")} />
         </div>
+        <div className={css.inputWrap}>
+          <label className={css.label} htmlFor="loginNicknameInput">
+            닉네임
+          </label>
+          <div className={css.inputBox}>
+            <input
+              className={css.input}
+              id="loginNicknameInput"
+              value={nickname}
+              onChange={handleInput}
+            />
+            <ResetButton isShow={nickname !== ""} onClick={() => setNickname("")} />
+          </div>
+        </div>
       </div>
       <div className={css.btnBox}>
         <button className={css.loginBtn} type="submit" disabled={isLoading}>
-          {isLoading ? <DotsLoading /> : "로그인"}
+          {isLoading ? <DotsLoading /> : "회원가입"}
         </button>
       </div>
     </form>
