@@ -6,6 +6,7 @@ import { RefObject, useMemo } from "react";
 import ReactQuill, { ReactQuillProps } from "react-quill";
 import { imageHandler } from "../_lib/ImageHandler";
 import ErrorModal from "@/app/_component/modal/ErrorModal";
+import { ca } from "date-fns/locale";
 
 const Font = ReactQuill.Quill.import("formats/font");
 const Bold = ReactQuill.Quill.import("formats/bold");
@@ -52,12 +53,11 @@ export default function Editor({ onChange, value, editorRef }: EditorProps) {
           ["clean"],
         ],
         handlers: {
-          image: () =>
-            imageHandler(editorRef).catch((error) => {
-              if (error instanceof Error) {
-                modalStore.push(ErrorModal, { props: { error } });
-              }
-            }),
+          image: () => {
+            imageHandler(editorRef, (error) => {
+              modalStore.push(ErrorModal, { props: { error } });
+            });
+          },
         },
       },
       imageResize: {},
