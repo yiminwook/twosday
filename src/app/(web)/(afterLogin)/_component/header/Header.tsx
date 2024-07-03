@@ -1,14 +1,11 @@
-import { fixed, title, wrap } from "./header.css";
-import SidebarToggle from "../sidebar/SidebarToggle";
-import dynamic from "next/dynamic";
-import SessionUpdateBtn from "./SessionUpdateBtn";
-import { getServerSessionWithOptions } from "@/model/nextAuth";
+import { getServerSession } from "@/app/_lib/getServerSession";
 import { redirect } from "next/navigation";
-
-const SessionTime = dynamic(() => import("./SessionTime"), { ssr: false });
+import SidebarToggle from "../sidebar/SidebarToggle";
+import SessionUpdateBtn from "./SessionUpdateBtn";
+import { fixed, title, wrap } from "./header.css";
 
 export default async function Header() {
-  const session = await getServerSessionWithOptions();
+  const session = await getServerSession();
 
   if (!session) {
     redirect("/login");
@@ -22,7 +19,6 @@ export default async function Header() {
           <h1 className={title}>TPRO</h1>
         </div>
         <div>
-          <SessionTime session={session} />
           <SessionUpdateBtn />
         </div>
       </div>

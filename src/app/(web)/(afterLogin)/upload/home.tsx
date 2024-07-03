@@ -3,12 +3,15 @@ import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import Viewer from "./_component/Viewer";
-import "highlight.js/styles/github.css";
-import "./_component/editor.css";
+import { Session } from "@/app/_lib/getServerSession";
 
 const Editor = dynamic(() => import("./_component/Editor"), { ssr: false });
 
-export default function Page() {
+interface HomeProps {
+  session: Session;
+}
+
+export default function Home({ session }: HomeProps) {
   const [value, setValue] = useState("");
   const quillRef = useRef<ReactQuill>(null);
 
@@ -23,7 +26,7 @@ export default function Page() {
       </div>
       <section>
         <h2>에디터</h2>
-        <Editor value={value} onChange={onChange} editorRef={quillRef} />
+        <Editor value={value} onChange={onChange} editorRef={quillRef} session={session} />
       </section>
       <section>
         <h2>미리보기</h2>

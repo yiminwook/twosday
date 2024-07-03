@@ -23,9 +23,7 @@ const emailSignupFn = async ({
     throw new Error("닉네임을 입력해주세요.");
   }
 
-  const serverUrl = process.env.NEXT_PUBLIC_WAS_PROTOCOL + "://" + process.env.NEXT_PUBLIC_WAS_HOST;
-
-  const res = await fetch(`${serverUrl}/api/auth/register`, {
+  const res = await fetch("/was/api/auth/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

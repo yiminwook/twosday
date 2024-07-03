@@ -3,7 +3,7 @@
 import { defaultBtn } from "@/app/_component/btn/btn.css";
 
 export default function SocialBox() {
-  const serverUrl = process.env.NEXT_PUBLIC_WAS_PROTOCOL + "://" + process.env.NEXT_PUBLIC_WAS_HOST;
+  const serverUrl = process.env.WAS_PROTOCOL + "://" + process.env.WAS_HOST;
   return (
     <div>
       <p>소셜 로그인</p>

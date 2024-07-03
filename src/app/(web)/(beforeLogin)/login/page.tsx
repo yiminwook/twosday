@@ -1,22 +1,14 @@
-import { getServerSessionWithOptions } from "@/model/nextAuth";
-import { redirect } from "next/navigation";
 import LoginForm from "./_component/LoginForm";
 import * as style from "./page.css";
 import SocialBox from "../_component/SocialBox";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { getServerSession } from "@/app/_lib/getServerSession";
 
 export default async function Page() {
-  const refreshToken = cookies().get("refreshToken")?.value;
-
-  console.log("refresh", refreshToken);
-  if (refreshToken) {
-    const session = jwt.verify(refreshToken, process.env.NEXTAUTH_SECRET);
-    console.log(session);
-    // if (session) return redirect("/");
-  }
-
+  const session = await getServerSession();
+  console.log(session);
   return (
     <main className={style.main}>
       <div className={style.inner}>

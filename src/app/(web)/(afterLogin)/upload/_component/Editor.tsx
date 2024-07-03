@@ -6,7 +6,7 @@ import { RefObject, useMemo } from "react";
 import ReactQuill, { ReactQuillProps } from "react-quill";
 import { imageHandler } from "../_lib/ImageHandler";
 import ErrorModal from "@/app/_component/modal/ErrorModal";
-import { ca } from "date-fns/locale";
+import { Session } from "@/app/_lib/getServerSession";
 
 const Font = ReactQuill.Quill.import("formats/font");
 const Bold = ReactQuill.Quill.import("formats/bold");
@@ -25,12 +25,13 @@ ReactQuill.Quill.register(AlignClass, true);
 ReactQuill.Quill.register("modules/imageResize", ImageResize);
 
 interface EditorProps {
+  session: Session;
   value: string;
   onChange: ReactQuillProps["onChange"];
   editorRef: RefObject<ReactQuill>;
 }
 
-export default function Editor({ onChange, value, editorRef }: EditorProps) {
+export default function Editor({ session, onChange, value, editorRef }: EditorProps) {
   const modalStore = useSetModalStore();
   const modules = useMemo(
     () => ({
@@ -54,7 +55,7 @@ export default function Editor({ onChange, value, editorRef }: EditorProps) {
         ],
         handlers: {
           image: () => {
-            imageHandler(editorRef, (error) => {
+            imageHandler(editorRef, session, (error) => {
               modalStore.push(ErrorModal, { props: { error } });
             });
           },

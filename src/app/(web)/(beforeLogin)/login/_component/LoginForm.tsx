@@ -19,13 +19,13 @@ export default function LoginForm() {
   const action = useStore(store, (store) => store.actions);
 
   const mutateEmailLogin = useMutation({
-    mutationKey: ["/api/auth/email"],
+    mutationKey: ["/was/auth/email"],
     mutationFn: emailLoginFn,
     // onMutate: () => setIsLoading(() => true),
     onSuccess: () => {
       // 로그인이 성공해도 화면이 전환될때까지 로딩처리
       action.login();
-      // window.location.reload();
+      window.location.reload();
     },
     onError: async (error) => {
       await modalStore.push(ErrorModal, { props: { error } });

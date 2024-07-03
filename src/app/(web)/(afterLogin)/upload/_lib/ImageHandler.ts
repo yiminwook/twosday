@@ -1,7 +1,12 @@
+import { Session } from "@/app/_lib/getServerSession";
 import { RefObject } from "react";
 import ReactQuill from "react-quill";
 
-export const imageHandler = async (ref: RefObject<ReactQuill>, cb?: (error: Error) => void) => {
+export const imageHandler = async (
+  ref: RefObject<ReactQuill>,
+  session: Session,
+  cb?: (error: Error) => void,
+) => {
   const input = document.createElement("input");
   input.setAttribute("type", "file");
   input.setAttribute("accept", "image/jpg, image/png"); //image/*
@@ -25,19 +30,10 @@ export const imageHandler = async (ref: RefObject<ReactQuill>, cb?: (error: Erro
       //   body: formData,
       // });
 
-      const url =
-        process.env.NEXT_PUBLIC_WAS_PROTOCOL +
-        "://" +
-        process.env.NEXT_PUBLIC_WAS_HOST +
-        "/api/image/sign";
-
-      console.log("url", url);
-      const wasRes = await fetch(url, {
+      const wasRes = await fetch("/was/image/sign", {
         method: "POST",
         headers: {
-          Authorization:
-            "Bearer " +
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjQsImVtYWlsIjoiZ3JzMDQxM0BnbWFpbC5jb20iLCJ0eXBlIjoiQUNDRVNTIiwiaWF0IjoxNzE5OTI0NDEzLCJleHAiOjE3MTk5MjgwMTN9.HQXqPpJNik0j0lQXsOcxXXJ6iPyDJ1OIwKdUt_qINf8",
+          Authorization: "Bearer " + session.accessToken,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ fileName: file.name, projectName: "twosday" }),
@@ -50,21 +46,15 @@ export const imageHandler = async (ref: RefObject<ReactQuill>, cb?: (error: Erro
 
       const awsRes = await fetch(body.url, {
         method: "PUT",
+        headers: { "Content-Type": file.type },
         body: file,
-        headers: {
-          "Content-Type": file.type,
-        },
       });
 
       if (!awsRes.ok) throw new Error("업로드중 오류가 발생했습니다.");
 
       const pathname = new URL(body.url).pathname;
 
-      editor.insertEmbed(
-        range.index,
-        "image",
-        process.env.NEXT_PUBLIC_AWS_CLOUD_FRONT_URL + pathname,
-      ); //이미지 삽입
+      editor.insertEmbed(range.index, "image", "/img" + pathname); //이미지 삽입
 
       editor.setSelection({
         //커서 이동
