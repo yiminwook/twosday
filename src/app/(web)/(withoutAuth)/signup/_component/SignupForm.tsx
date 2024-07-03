@@ -5,7 +5,7 @@ import ErrorModal from "@/app/_component/modal/ErrorModal";
 import { useApp } from "@/app/_lib/app";
 import { useSetModalStore } from "@/app/_lib/modalStore";
 import { useMutation } from "@tanstack/react-query";
-import emailSignupFn from "@web/(beforeLogin)/_lib/signup";
+import emailSignupFn from "@web/(withoutAuth)/_lib/signup";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useStore } from "zustand";

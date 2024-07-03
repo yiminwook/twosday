@@ -6,10 +6,6 @@ import { fixed, title, wrap } from "./header.css";
 export default async function Header() {
   const session = await getServerSession();
 
-  if (!session) {
-    redirect("/login");
-  }
-
   return (
     <header className={wrap}>
       <div className={fixed}>
