@@ -6,7 +6,7 @@ export const wrap = style([{ width: "100%", height: 42 }]);
 export const fixed = style([
   zIndex.header,
   {
-    height: 42,
+    height: 52,
     position: "fixed",
     width: "100%",
     display: "flex",

@@ -15,7 +15,7 @@ export default async function Header() {
       <div className={fixed}>
         <div>
           <SidebarToggle />
-          <h1 className={title}>TPRO</h1>
+          <h1 className={title}>twosday</h1>
         </div>
         <div></div>
       </div>

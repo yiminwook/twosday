@@ -1,6 +1,5 @@
 import { PropsWithChildren } from "react";
 import Header from "./_component/header/Header";
-import SidebarLayout from "./_component/sidebar/SidebarLayout";
 
 // css 순서변경 금지
 import "@/style/datepicker.css";
@@ -12,9 +11,7 @@ export default function Layout({ children }: PropsWithChildren) {
     <div className={style.col}>
       <Header />
       <div className={style.row}>
-        <SidebarLayout>
-          <Sidebar />
-        </SidebarLayout>
+        <Sidebar />
         {children}
       </div>
     </div>

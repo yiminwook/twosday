@@ -1,12 +1,16 @@
-import { HiMiniUserGroup } from "react-icons/hi2";
-import { MdUnsubscribe } from "react-icons/md";
-import SidebarMenuItem from "./SidebarMenuItem";
+import { createBtn, menuList } from "./sidebar.css";
+import { FaPencilAlt } from "react-icons/fa";
 
 export default function SidebarMenuList() {
   return (
-    <ul>
-      <SidebarMenuItem svg={<HiMiniUserGroup />} text="회원정보" href="/user" />
-      <SidebarMenuItem svg={<MdUnsubscribe />} text="구독정보" href="/subscribe" />
+    <ul className={menuList}>
+      <li>HOME</li>
+      <li>Search</li>
+      <li>Notifications</li>
+      <li className={createBtn}>
+        <FaPencilAlt />
+        Create
+      </li>
     </ul>
   );
 }

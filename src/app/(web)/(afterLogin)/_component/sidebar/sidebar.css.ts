@@ -1,6 +1,5 @@
-import { fadeIn } from "@/style/keyframe.css";
-import { flexCenter, zIndex } from "@/style/var";
 import { globalStyle, style } from "@vanilla-extract/css";
+import { flexCenter, zIndex } from "@/style/var";
 
 export const layout = style({
   position: "relative",
@@ -17,57 +16,74 @@ export const layout = style({
 export const sidebar = style([
   zIndex.sidebar,
   {
-    width: 200,
-    animation: `${fadeIn} 0.2s ease`,
+    padding: 15,
     position: "fixed",
-    left: 0,
-    top: 42,
-    height: "calc(100dvh - 42px)",
-    background: "#f4f4f2",
+    width: 200,
+    top: 52,
+    height: "calc(100dvh - 52px)",
+    backgroundColor: "#FFFAFA     ",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
-    padding: 7,
-    paddingBottom: 14,
+    visibility: "hidden",
+    opacity: 0,
+    left: -200,
+    transition: "left 0.3s ease, visibility 0.3s ease, opacity 0.3s ease",
+    selectors: {
+      "&.show": {
+        visibility: "visible",
+        opacity: 1,
+        left: 0,
+      },
+    },
   },
 ]);
 
-export const menuItem = style({
-  borderRadius: 2,
-  backgroundColor: "transparent",
-  transition: "background-color 0.2s ease",
-  color: "#242424",
-  selectors: {
-    "&:hover": {
-      backgroundColor: "#ebebe7",
-    },
-    "&.active": {
-      color: "#9b9b9b",
-    },
-  },
-});
-
-globalStyle(`${menuItem} > a`, {
+export const menuList = style({
   display: "flex",
-  alignItems: "center",
-  padding: "6px 10px",
-  gap: 6,
-  fontWeight: 400,
+  flexDirection: "column",
+  gap: 10,
 });
 
-export const logoutBox = style([
+globalStyle(`${menuList} > li`, {
+  position: "relative",
+  padding: 10,
+  cursor: "pointer",
+  color: "#8A8A8A",
+  transition: "background-color 0.3s ease-in-out, color 0.3s ease-in-out",
+  //   borderRadius: 5,
+});
+
+globalStyle(`${menuList} > li::before`, {
+  content: "''",
+  position: "absolute",
+  width: "100%",
+  height: 2,
+  borderRadius: 4,
+  backgroundColor: "#FFB6C1 ",
+  bottom: 0,
+  left: 0,
+  transformOrigin: "right",
+  transform: "scaleX(0)",
+  transition: "transform 0.3s ease-in-out",
+});
+
+globalStyle(`${menuList} > li:hover::before`, {
+  transformOrigin: "left",
+  transform: "scaleX(1)",
+});
+
+globalStyle(`${menuList} > li:hover`, {
+  //   borderBottom: "1px solid #FFB6C1 ",
+  backgroundColor: "rgba(255, 228, 225, 0.3)",
+  color: "#FFB6C1 ",
+});
+
+export const createBtn = style([
   flexCenter,
   {
-    fontSize: 16,
+    border: "1px solid #A0A0A0",
+    borderRadius: 999999,
+    gap: 5,
   },
 ]);
-
-export const logoutBtn = style({
-  color: "#9b9b9b",
-  transition: "color 0.2s ease",
-  selectors: {
-    "&:hover": {
-      color: "#242424",
-    },
-  },
-});
