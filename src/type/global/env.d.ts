@@ -11,10 +11,6 @@ declare global {
       /** main | stg | dev | ...etc */
       readonly NEXT_PUBLIC_VERCEL_GIT_REPO_SLUG: string;
 
-      /** @Example - http://localhost:3000 */
-      readonly NEXTAUTH_URL: string;
-      readonly NEXTAUTH_SECRET: string;
-
       // public
       /** @Example - http://localhost:3000 */
       readonly NEXT_PUBLIC_API_URL: string;

@@ -1,14 +1,5 @@
 import { cookies } from "next/headers";
 
-export type Session = {
-  email: string;
-  id: number;
-  nickname: string;
-  createdAt: string;
-  updatedAt: string;
-  accessToken: string;
-};
-
 export const getServerSession = async (): Promise<Session | null> => {
   const refreshToken = cookies().get("refreshToken")?.value;
 

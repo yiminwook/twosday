@@ -1,7 +1,6 @@
 import { getServerSession } from "@/app/_lib/getServerSession";
 import { redirect } from "next/navigation";
 import SidebarToggle from "../sidebar/SidebarToggle";
-import SessionUpdateBtn from "./SessionUpdateBtn";
 import { fixed, title, wrap } from "./header.css";
 
 export default async function Header() {
@@ -18,9 +17,7 @@ export default async function Header() {
           <SidebarToggle />
           <h1 className={title}>TPRO</h1>
         </div>
-        <div>
-          <SessionUpdateBtn />
-        </div>
+        <div></div>
       </div>
     </header>
   );

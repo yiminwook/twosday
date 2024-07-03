@@ -2,7 +2,6 @@
 import { PropsWithChildren, useState } from "react";
 import { QueryClient, QueryCache, QueryClientProvider } from "@tanstack/react-query";
 import ErrorModal from "./modal/ErrorModal";
-import { signOut } from "next-auth/react";
 import { useSetModalStore } from "../_lib/modalStore";
 import { useApp } from "../_lib/app";
 import { useStore } from "zustand";
@@ -26,7 +25,6 @@ export default function ReactQuery({ children }: PropsWithChildren) {
 
           if (error instanceof Error) {
             if (checkSessionOutCode(error)) {
-              await signOut({ redirect: false, callbackUrl: "/sessionout" });
               action.logout();
               window.location.href = "/sessionout";
               return;
@@ -60,7 +58,7 @@ export default function ReactQuery({ children }: PropsWithChildren) {
           onError: async (error) => {
             if (error instanceof Error) {
               if (checkSessionOutCode(error)) {
-                await signOut({ redirect: false, callbackUrl: "/sessionout" });
+                // await signOut({ redirect: false, callbackUrl: "/sessionout" });
                 action.logout();
                 window.location.href = "/sessionout";
                 return;

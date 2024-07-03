@@ -1,6 +1,5 @@
 "use client";
 import PlaceHolder from "@/app/_component/loading/Placeholder";
-import { Session } from "next-auth";
 
 export default function Client({ session }: { session: Session }) {
   return (

@@ -3,9 +3,6 @@ import Header from "./_component/header/Header";
 import SidebarLayout from "./_component/sidebar/SidebarLayout";
 
 // css 순서변경 금지
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
-import "@/style/agCustomTheme.css";
 import "@/style/datepicker.css";
 import * as style from "./layout.css";
 import Sidebar from "./_component/sidebar/Sidebar";

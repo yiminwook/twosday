@@ -3,7 +3,6 @@ import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import Viewer from "./_component/Viewer";
-import { Session } from "@/app/_lib/getServerSession";
 
 const Editor = dynamic(() => import("./_component/Editor"), { ssr: false });
 
