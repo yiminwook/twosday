@@ -5,4 +5,5 @@ type Session = {
   createdAt: string;
   updatedAt: string;
   accessToken: string;
+  accountType: string;
 };

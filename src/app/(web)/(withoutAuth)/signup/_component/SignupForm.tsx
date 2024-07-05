@@ -5,7 +5,7 @@ import ErrorModal from "@/app/_component/modal/ErrorModal";
 import { useApp } from "@/app/_lib/app";
 import { useSetModalStore } from "@/app/_lib/modalStore";
 import { useMutation } from "@tanstack/react-query";
-import emailSignupFn from "@web/(withoutAuth)/_lib/signup";
+import { emailSignupFn } from "@web/(withoutAuth)/_lib/signup";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useStore } from "zustand";
@@ -14,20 +14,19 @@ import * as css from "./signupForm.css";
 export default function SignupForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [nickname, setNickname] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [nickname, setNickname] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const modalStore = useSetModalStore();
   const store = useApp();
   const action = useStore(store, (store) => store.actions);
 
-  const mutateEmailLogin = useMutation({
-    mutationKey: ["/api/auth/email"],
+  const mutateEmailRegister = useMutation({
+    mutationKey: ["/was/auth/register"],
     mutationFn: emailSignupFn,
     onMutate: () => setIsLoading(() => true),
-    onSuccess: () => {
-      // 로그인이 성공해도 화면이 전환될때까지 로딩처리
-      router.replace("/login");
+    onSuccess: (data) => {
+      router.push(`/signup/register?token=${data.token}`);
     },
     onError: async (error) => {
       await modalStore.push(ErrorModal, { props: { error } });
@@ -43,19 +42,19 @@ export default function SignupForm() {
       case "loginEmailInput":
         setEmail(() => value);
         break;
-      case "loginPasswordInput":
-        setPassword(() => value);
-        break;
-      case "loginNicknameInput":
-        setNickname(() => value);
-        break;
+      // case "loginPasswordInput":
+      //   setPassword(() => value);
+      //   break;
+      // case "loginNicknameInput":
+      //   setNickname(() => value);
+      //   break;
     }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (mutateEmailLogin.isPending) return;
-    mutateEmailLogin.mutate({ email, password, nickname: nickname });
+    if (mutateEmailRegister.isPending) return;
+    mutateEmailRegister.mutate({ email });
   };
 
   return (
@@ -76,7 +75,7 @@ export default function SignupForm() {
         </div>
       </div>
       <div className={css.inputWrap}>
-        <label className={css.label} htmlFor="loginPasswordInput">
+        {/* <label className={css.label} htmlFor="loginPasswordInput">
           비밀번호
         </label>
         <div className={css.inputBox}>
@@ -88,8 +87,8 @@ export default function SignupForm() {
             onChange={handleInput}
           />
           <ResetButton isShow={password !== ""} onClick={() => setPassword("")} />
-        </div>
-        <div className={css.inputWrap}>
+        </div> */}
+        {/* <div className={css.inputWrap}>
           <label className={css.label} htmlFor="loginNicknameInput">
             닉네임
           </label>
@@ -102,11 +101,11 @@ export default function SignupForm() {
             />
             <ResetButton isShow={nickname !== ""} onClick={() => setNickname("")} />
           </div>
-        </div>
+        </div> */}
       </div>
       <div className={css.btnBox}>
         <button className={css.loginBtn} type="submit" disabled={isLoading}>
-          {isLoading ? <DotsLoading /> : "회원가입"}
+          {isLoading ? <DotsLoading /> : "다음"}
         </button>
       </div>
     </form>

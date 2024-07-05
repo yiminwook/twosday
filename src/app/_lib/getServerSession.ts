@@ -5,7 +5,7 @@ export const getServerSession = async (): Promise<Session | null> => {
 
   if (!refreshToken) return null;
   const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/was/auth/session", {
-    method: "POST",
+    method: "GET",
     headers: { Authorization: `Bearer ${refreshToken}` },
   });
 
