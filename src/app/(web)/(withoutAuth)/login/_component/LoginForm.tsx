@@ -19,7 +19,7 @@ export default function LoginForm() {
   const action = useStore(store, (store) => store.actions);
 
   const mutateEmailLogin = useMutation({
-    mutationKey: ["/auth/email"],
+    mutationKey: ["/was/auth/email"],
     mutationFn: emailLoginFn,
     // onMutate: () => setIsLoading(() => true),
     onSuccess: () => {
