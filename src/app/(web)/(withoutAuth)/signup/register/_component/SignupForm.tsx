@@ -101,6 +101,7 @@ export default function SignupForm({ session }: SignupFormProps) {
     switch (id) {
       case "loginEmailCodeInput":
         setCode(() => value);
+        break;
       case "loginPasswordInput":
         setPassword(() => value);
         break;

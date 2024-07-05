@@ -14,9 +14,8 @@ import * as css from "./signupForm.css";
 export default function SignupForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [nickname, setNickname] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
   const modalStore = useSetModalStore();
   const store = useApp();
   const action = useStore(store, (store) => store.actions);
@@ -42,12 +41,6 @@ export default function SignupForm() {
       case "loginEmailInput":
         setEmail(() => value);
         break;
-      // case "loginPasswordInput":
-      //   setPassword(() => value);
-      //   break;
-      // case "loginNicknameInput":
-      //   setNickname(() => value);
-      //   break;
     }
   };
 
@@ -74,35 +67,7 @@ export default function SignupForm() {
           <ResetButton isShow={email !== ""} onClick={() => setEmail("")} />
         </div>
       </div>
-      <div className={css.inputWrap}>
-        {/* <label className={css.label} htmlFor="loginPasswordInput">
-          비밀번호
-        </label>
-        <div className={css.inputBox}>
-          <input
-            className={css.input}
-            id="loginPasswordInput"
-            type="password"
-            value={password}
-            onChange={handleInput}
-          />
-          <ResetButton isShow={password !== ""} onClick={() => setPassword("")} />
-        </div> */}
-        {/* <div className={css.inputWrap}>
-          <label className={css.label} htmlFor="loginNicknameInput">
-            닉네임
-          </label>
-          <div className={css.inputBox}>
-            <input
-              className={css.input}
-              id="loginNicknameInput"
-              value={nickname}
-              onChange={handleInput}
-            />
-            <ResetButton isShow={nickname !== ""} onClick={() => setNickname("")} />
-          </div>
-        </div> */}
-      </div>
+      <div className={css.inputWrap}></div>
       <div className={css.btnBox}>
         <button className={css.loginBtn} type="submit" disabled={isLoading}>
           {isLoading ? <DotsLoading /> : "다음"}
