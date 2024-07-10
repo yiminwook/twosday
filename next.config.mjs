@@ -19,6 +19,15 @@ const nextConfig = {
 
     return config;
   },
+  images: {
+    unoptimized: false, //과금방지
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.twosday.live",
+      },
+    ],
+  },
 };
 
 export default withVanillaExtract(nextConfig);
