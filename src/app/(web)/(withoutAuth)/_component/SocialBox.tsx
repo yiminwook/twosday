@@ -6,10 +6,8 @@ import { getWasUrl } from "@/app/_lib/getWasUrl";
 export default function SocialBox() {
   const onClick = (provider: "google" | "kakao") => {
     document.cookie =
-      "redirect=" +
-      encodeURIComponent(process.env.NEXT_PUBLIC_API_URL) +
-      ";domain=" +
-      "*.twosday.live";
+      "redirect=" + encodeURIComponent(process.env.NEXT_PUBLIC_API_URL) + ";domain=twosday.live";
+
     window.location.href = `${getWasUrl()}/api/auth/${provider}`;
   };
 
