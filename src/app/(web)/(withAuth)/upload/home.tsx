@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Post } from "@web/(anyAuth)/post/_component/List";
 import { useRouter } from "next/navigation";
+import { getWasUrl } from "@/app/_lib/getWasUrl";
 
 const Editor = dynamic(() => import("./_component/Editor"), { ssr: false });
 
@@ -22,7 +23,7 @@ export default function Home({ session }: HomeProps) {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const response = await fetch("/was/twosday/post", {
+      const response = await fetch(`${getWasUrl()}/api/twosday/post`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,6 +69,7 @@ export default function Home({ session }: HomeProps) {
       <div>
         <h1>포스트</h1>
       </div>
+
       <section>
         <form onSubmit={onSubmit}>
           <h2>에디터</h2>

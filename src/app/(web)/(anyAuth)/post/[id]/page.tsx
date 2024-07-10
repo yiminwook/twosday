@@ -1,3 +1,4 @@
+import { getWasUrl } from "@/app/_lib/getWasUrl";
 import Viewer from "@web/(withAuth)/upload/_component/Viewer";
 import { notFound } from "next/navigation";
 import { title } from "process";
@@ -8,7 +9,7 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   console.log("test", params);
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/was/twosday/post/${params.id}`, {
+  const response = await fetch(`${getWasUrl()}/api/twosday/post/${params.id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

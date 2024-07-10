@@ -1,6 +1,8 @@
+import { getWasUrl } from "./getWasUrl";
+
 // url token에서 session을 가져오는 함수
 export const getSessionByToken = async (token: string): Promise<Session> => {
-  const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/was/auth/session", {
+  const res = await fetch(`${getWasUrl()}/api/auth/session`, {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
   });

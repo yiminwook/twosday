@@ -2,6 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { cell, header, headerCell, row, wrap } from "./list.css";
 import { useRouter } from "next/navigation";
+import { getWasUrl } from "@/app/_lib/getWasUrl";
 
 export type Post = {
   id: number;
@@ -21,9 +22,9 @@ export default function List() {
   const router = useRouter();
 
   const { data, isPending } = useQuery({
-    queryKey: ["/was/twosday/post"],
+    queryKey: ["/api/twosday/post"],
     queryFn: async () => {
-      const response = await fetch("/was/twosday/post", {
+      const response = await fetch(`${getWasUrl()}/api/twosday/post`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

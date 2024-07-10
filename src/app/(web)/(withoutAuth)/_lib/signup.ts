@@ -1,3 +1,4 @@
+import { getWasUrl } from "@/app/_lib/getWasUrl";
 import { redirect } from "next/dist/server/api-utils";
 
 export const emailSignupFn = async ({
@@ -27,7 +28,7 @@ export const emailSignupFn = async ({
 
   document.cookie = "redirect=" + encodeURIComponent(process.env.NEXT_PUBLIC_API_URL);
 
-  const res = await fetch("/was/auth/register", {
+  const res = await fetch(`${getWasUrl()}/api/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

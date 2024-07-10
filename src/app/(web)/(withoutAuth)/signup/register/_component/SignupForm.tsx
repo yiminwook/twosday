@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import * as css from "./signupForm.css";
+import { getWasUrl } from "@/app/_lib/getWasUrl";
 
 interface SignupFormProps {
   session: Session;
@@ -24,9 +25,9 @@ export default function SignupForm({ session }: SignupFormProps) {
 
   //이메일 회원가입인 경우, 이메일 인증번호 요청
   const requestEmailCode = useMutation({
-    mutationKey: ["/was/auth/verification"],
+    mutationKey: ["/api/auth/verification"],
     mutationFn: async () => {
-      const res = await fetch("/was/auth/verification", {
+      const res = await fetch(`${getWasUrl()}/api/auth/verification`, {
         method: "POST",
         headers: { Authorization: `Bearer ${session.accessToken}` },
       });
@@ -42,9 +43,9 @@ export default function SignupForm({ session }: SignupFormProps) {
 
   //이메일 회원가입인 경우, 이메일 인증번호 확인
   const checkEmailCode = useMutation({
-    mutationKey: ["/was/auth/verification"],
+    mutationKey: ["/api/auth/verification"],
     mutationFn: async () => {
-      const res = await fetch("/was/auth/verification", {
+      const res = await fetch(`${getWasUrl()}/api/auth/verification`, {
         method: "GET",
         headers: { Authorization: `Bearer ${session.accessToken}` },
       });
@@ -61,9 +62,9 @@ export default function SignupForm({ session }: SignupFormProps) {
 
   //이메일 회원가입인 경우 이메일 인증번호 요청
   const registUser = useMutation({
-    mutationKey: ["/was/auth/register/:id"],
+    mutationKey: ["/api/auth/register/:id"],
     mutationFn: async () => {
-      const res = await fetch(`/was/auth/register/${session.id}`, {
+      const res = await fetch(`${getWasUrl()}/api/auth/register/${session.id}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${session.accessToken}`,

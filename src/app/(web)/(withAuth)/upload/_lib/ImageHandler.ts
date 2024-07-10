@@ -1,3 +1,4 @@
+import { getWasUrl } from "@/app/_lib/getWasUrl";
 import { RefObject } from "react";
 import ReactQuill from "react-quill";
 
@@ -23,13 +24,7 @@ export const imageHandler = async (
       // const formData = new FormData();
       // formData.append("image", file);
 
-      // const res = await fetch("/was/aws/upload", {
-      //   method: "POST",
-      //   cache: "no-cache",
-      //   body: formData,
-      // });
-
-      const wasRes = await fetch("/was/image/sign", {
+      const wasRes = await fetch(`${getWasUrl()}/api/image/sign`, {
         method: "POST",
         headers: {
           Authorization: "Bearer " + session.accessToken,
@@ -53,7 +48,11 @@ export const imageHandler = async (
 
       const pathname = new URL(body.url).pathname;
 
-      editor.insertEmbed(range.index, "image", "/img" + pathname); //이미지 삽입
+      editor.insertEmbed(
+        range.index,
+        "image",
+        `${process.env.NEXT_PUBLIC_AWS_CLOUD_FRONT_URL}\${pathname}`,
+      ); //이미지 삽입
 
       editor.setSelection({
         //커서 이동

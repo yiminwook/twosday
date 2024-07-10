@@ -1,3 +1,5 @@
+import { getWasUrl } from "@/app/_lib/getWasUrl";
+
 const emailLoginFn = async ({ email, password }: { email: string; password: string }) => {
   const trimmedEmail = email.trim();
   const trimmedPassword = password.trim();
@@ -12,7 +14,7 @@ const emailLoginFn = async ({ email, password }: { email: string; password: stri
 
   const basicToken = btoa(`${trimmedEmail}:${trimmedPassword}`);
 
-  const res = await fetch("/was/auth/email", {
+  const res = await fetch(`${getWasUrl()}/api/auth/email`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -19,22 +19,6 @@ const nextConfig = {
 
     return config;
   },
-  async rewrites() {
-    const imgUrl = process.env.AWS_CLOUD_FRONT_URL + "/:path*";
-    const wasUrl = process.env.WAS_PROTOCOL + "://" + process.env.WAS_HOST;
-
-    return {
-      beforeFiles: [
-        {
-          source: "/img/:path*",
-          destination: imgUrl,
-        },
-        {
-          source: "/was/:path*",
-          destination: wasUrl + "/api/:path*",
-        },
-      ],
-    };
-  },
 };
+
 export default withVanillaExtract(nextConfig);

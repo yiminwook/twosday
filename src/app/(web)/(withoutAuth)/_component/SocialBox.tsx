@@ -1,11 +1,16 @@
 "use client";
 
 import { defaultBtn } from "@/app/_component/btn/btn.css";
+import { getWasUrl } from "@/app/_lib/getWasUrl";
 
 export default function SocialBox() {
   const onClick = (provider: "google" | "kakao") => {
-    document.cookie = "redirect=" + encodeURIComponent(process.env.NEXT_PUBLIC_API_URL);
-    window.location.href = `/was/auth/${provider}`;
+    document.cookie =
+      "redirect=" +
+      encodeURIComponent(process.env.NEXT_PUBLIC_API_URL) +
+      ";domain=" +
+      "*.twosday.live";
+    window.location.href = `${getWasUrl()}/api/auth/${provider}`;
   };
 
   return (

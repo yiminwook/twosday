@@ -21,7 +21,7 @@ export default function SignupForm() {
   const action = useStore(store, (store) => store.actions);
 
   const mutateEmailRegister = useMutation({
-    mutationKey: ["/was/auth/register"],
+    mutationKey: ["/api/auth/register"],
     mutationFn: emailSignupFn,
     onMutate: () => setIsLoading(() => true),
     onSuccess: (data) => {
