@@ -16,7 +16,17 @@ export const inner = style({
   gap: 28,
   paddingBottom: 24,
 });
+
 export const title = style({
   textAlign: "center",
   fontSize: 24,
 });
+
+export const btnWrap = style({
+  maxWidth: 360,
+  display: "flex",
+  flexDirection: "column",
+  gap: 16,
+  justifyContent: "center"
+})
+

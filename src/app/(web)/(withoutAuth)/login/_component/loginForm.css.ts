@@ -1,5 +1,5 @@
 import { flexCenter } from "@/style/var";
-import { style } from "@vanilla-extract/css";
+import { globalStyle, style } from "@vanilla-extract/css";
 import { global } from "@/style/globalTheme.css";
 
 export const form = style({
@@ -59,3 +59,24 @@ export const loginBtn = style({
     backgroundColor: global.blueDisabled,
   },
 });
+
+export const ContinueBtnWrap = style([
+  flexCenter,{
+gap: 8,
+width: "100%",
+height: 48,
+backgroundColor: "#fff",
+borderRadius: 10,
+border: "1px solid #e1e2e4",
+selectors: {
+  "&.kakao" : {
+      backgroundColor: "#FEE500",
+  borderColor: "#FEE500"
+  }
+}
+}])
+
+globalStyle(`${ContinueBtnWrap} > span`, {
+  display: "flex",
+})
+
