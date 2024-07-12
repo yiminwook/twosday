@@ -1,9 +1,9 @@
-import { global } from "@/style/globalTheme.css";
+import { globalVar } from "@/style/globalTheme.css";
 import { style } from "@vanilla-extract/css";
 
 export const modalDefaultBtn = style([
   {
-    backgroundColor: global.blueDefault,
+    backgroundColor: globalVar.blueDefault,
     width: 100,
     padding: "7px 0",
     borderRadius: 3,
@@ -11,10 +11,10 @@ export const modalDefaultBtn = style([
     transition: "background-color 0.2s ease, color 0.2s ease",
     color: "#fff",
     ":hover": {
-      backgroundColor: global.blueHover,
+      backgroundColor: globalVar.blueHover,
     },
     ":disabled": {
-      background: global.blueDisabled,
+      background: globalVar.blueDisabled,
     },
   },
 ]);
@@ -22,12 +22,12 @@ export const modalDefaultBtn = style([
 export const modalCancelBtn = style([
   modalDefaultBtn,
   {
-    backgroundColor: global.grayDefault,
+    backgroundColor: globalVar.grayDefault,
     ":hover": {
-      backgroundColor: global.grayHover,
+      backgroundColor: globalVar.grayHover,
     },
     ":disabled": {
-      background: global.grayDisabled,
+      background: globalVar.grayDisabled,
     },
   },
 ]);

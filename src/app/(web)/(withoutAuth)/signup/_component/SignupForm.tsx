@@ -61,7 +61,10 @@ export default function SignupForm() {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("여기");
+
     e.preventDefault();
+    console.log("여기");
 
     if (mutateEmailRegister.isPending) return;
     mutateEmailRegister.mutate({ email, nickname, password });
@@ -135,8 +138,8 @@ export default function SignupForm() {
         </div>
       </div>
 
-      <div className={css.btnBox}>
-        <button className={css.loginBtn} type="submit" disabled={validationPw || isLoading}>
+      <div className={css.btnBox} tabIndex={0}>
+        <button className={css.loginBtn} type="submit" disabled={isLoading}>
           {isLoading ? <DotsLoading /> : "가입하기"}
         </button>
       </div>

@@ -1,6 +1,6 @@
 import { flexCenter } from "@/style/var";
 import { style } from "@vanilla-extract/css";
-import { global } from "@/style/globalTheme.css";
+import { globalVar } from "@/style/globalTheme.css";
 
 export const form = style({
   display: "flex",
@@ -28,7 +28,7 @@ export const inputBox = style({
   padding: "0px 16px",
   height: 48,
   ":focus-within": {
-    border: `1px solid ${global.purpleDefault}`,
+    border: `1px solid ${globalVar.purpleDefault}`,
   },
 });
 
@@ -54,7 +54,7 @@ export const btnBox = style([
 export const loginBtn = style({
   width: "100%",
   height: 40,
-  backgroundColor: global.purpleDefault,
+  backgroundColor: globalVar.purpleDefault,
   padding: "7px 0",
   fontWeight: 600,
   fontSize: 16,
@@ -62,10 +62,10 @@ export const loginBtn = style({
   borderRadius: 10,
   transition: "background-color 0.2s ease, color 0.2s ease",
   ":hover": {
-    backgroundColor: global.purpleHover,
+    backgroundColor: globalVar.purpleHover,
   },
   ":disabled": {
-    backgroundColor: global.purpleDisabled,
+    backgroundColor: globalVar.purpleDisabled,
   },
 });
 
