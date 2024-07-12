@@ -60,23 +60,24 @@ export const loginBtn = style({
   },
 });
 
-export const ContinueBtnWrap = style([
-  flexCenter,{
-gap: 8,
-width: "100%",
-height: 48,
-backgroundColor: "#fff",
-borderRadius: 10,
-border: "1px solid #e1e2e4",
-selectors: {
-  "&.kakao" : {
-      backgroundColor: "#FEE500",
-  borderColor: "#FEE500"
-  }
-}
-}])
+export const AuthBtnWrap = style([
+  flexCenter,
+  {
+    gap: 8,
+    width: "100%",
+    height: 48,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    border: "1px solid #e1e2e4",
+    selectors: {
+      "&.kakao": {
+        backgroundColor: "#FEE500",
+        borderColor: "#FEE500",
+      },
+    },
+  },
+]);
 
-globalStyle(`${ContinueBtnWrap} > span`, {
+globalStyle(`${AuthBtnWrap} > span`, {
   display: "flex",
-})
-
+});

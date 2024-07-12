@@ -3,7 +3,7 @@
 import Kakao from "@/asset/svg/kakao.svg?react";
 import Google from "@/asset/svg/google.svg?react";
 import * as css from "../page.css";
-import ContinueBtn from "./ContinueBtn";
+import AuthBtn from "./AuthBtn";
 import { getWasUrl } from "@/app/_lib/getWasUrl";
 
 export default function AuthButtonGroup() {
@@ -16,18 +16,14 @@ export default function AuthButtonGroup() {
 
   return (
     <div className={css.btnWrap}>
-      <ContinueBtn
+      <AuthBtn
         icon={<Kakao />}
         text="카카오 계정으로 계속하기"
         type="kakao"
         onClick={() => onClick("kakao")}
       />
-      <ContinueBtn
-        icon={<Google />}
-        text="구글 계정으로 계속하기"
-        onClick={() => onClick("google")}
-      />
-      <ContinueBtn text="이메일로 계속하기" onClick={() => {}} />
+      <AuthBtn icon={<Google />} text="구글 계정으로 계속하기" onClick={() => onClick("google")} />
+      <AuthBtn text="이메일로 계속하기" onClick={() => {}} />
     </div>
   );
 }
