@@ -6,23 +6,23 @@ const loadingAni = keyframes({
   "0%": {
     opacity: 0.95,
     transform: "scale(0.95)",
-    backgroundColor: "#1075c2",
+    backgroundColor: "#BAA8FF",
   },
   "25%": {
-    backgroundColor: "#abddf1",
+    backgroundColor: "#D1C2FF",
   },
   "50%": {
     opacity: 1,
     transform: "scale(1.02)",
-    backgroundColor: "#1075c2",
+    backgroundColor: "#BAA8FF",
   },
   "75%": {
-    backgroundColor: "#abddf1",
+    backgroundColor: "#D1C2FF",
   },
   "100%": {
     opacity: 0.95,
     transform: "scale(0.95)",
-    backgroundColor: "#1075c2",
+    backgroundColor: "#BAA8FF",
   },
 });
 
