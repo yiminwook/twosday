@@ -27,6 +27,9 @@ export const inputBox = style({
   backgroundColor: "transparent",
   padding: "0px 16px",
   height: 48,
+  ":focus-within": {
+    border: `1px solid ${global.purpleDefault}`,
+  },
 });
 
 export const input = style({
