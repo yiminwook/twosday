@@ -61,10 +61,7 @@ export default function SignupForm() {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("여기");
-
     e.preventDefault();
-    console.log("여기");
 
     if (mutateEmailRegister.isPending) return;
     mutateEmailRegister.mutate({ email, nickname, password });
