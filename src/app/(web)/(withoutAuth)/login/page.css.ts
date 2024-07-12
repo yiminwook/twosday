@@ -13,13 +13,14 @@ export const inner = style({
   display: "flex",
   flexDirection: "column",
   width: 300,
-  gap: 28,
+  gap: 48,
   paddingBottom: 24,
 });
 
 export const title = style({
   textAlign: "center",
   fontSize: 24,
+  fontWeight: 700,
 });
 
 export const btnWrap = style({
@@ -27,6 +28,5 @@ export const btnWrap = style({
   display: "flex",
   flexDirection: "column",
   gap: 16,
-  justifyContent: "center"
-})
-
+  justifyContent: "center",
+});

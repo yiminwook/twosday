@@ -5,7 +5,7 @@ import { global } from "@/style/globalTheme.css";
 export const form = style({
   display: "flex",
   flexDirection: "column",
-  gap: 48,
+  gap: 20,
 });
 
 export const inputWrap = style({
@@ -15,17 +15,8 @@ export const inputWrap = style({
   gap: 10,
 });
 
-export const top = style({
-  display: "flex",
-  flexDirection: "column",
-  gap: 30,
-});
-
-export const bottom = style({});
-
 export const label = style({
   width: 60,
-  color: "#70737C",
 });
 
 export const inputBox = style({
@@ -51,18 +42,19 @@ export const btnBox = style([flexCenter]);
 export const loginBtn = style({
   width: "100%",
   height: 40,
-  backgroundColor: global.purpleDefault,
+  backgroundColor: global.blueDefault,
   padding: "7px 0",
   fontWeight: 600,
   fontSize: 16,
   color: "#fff",
-  borderRadius: 10,
+  boxShadow: "rgba(0, 0, 0, 0.1) 0px 1px 2px 0px",
+  borderRadius: 3,
   transition: "background-color 0.2s ease, color 0.2s ease",
   ":hover": {
-    backgroundColor: global.purpleHover,
+    backgroundColor: global.blueHover,
   },
   ":disabled": {
-    backgroundColor: global.purpleDisabled,
+    backgroundColor: global.blueDisabled,
   },
 });
 
@@ -105,23 +97,8 @@ export const signUp = style({
 export const division = style({
   position: "absolute",
   top: 0,
-  left: 150,
+  left: 50,
   transform: "translateY(-50%) translateX(-50%)",
   padding: "0px 12px",
-  fontSize: 12,
-  color: "#70737C",
-  backgroundColor: "#fff",
+  color: "#70737C36",
 });
-
-export const singUpBtn = style([
-  loginBtn,
-  {
-    border: "1px solid #70737C36",
-    backgroundColor: "#fff",
-    color: global.purpleDefault,
-    ":hover": {
-      backgroundColor: "#fff ",
-      border: `1px solid ${global.purpleDefault}`,
-    },
-  },
-]);

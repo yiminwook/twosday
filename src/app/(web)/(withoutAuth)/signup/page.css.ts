@@ -19,4 +19,5 @@ export const inner = style({
 export const title = style({
   textAlign: "center",
   fontSize: 24,
+  fontWeight: 700,
 });

@@ -83,9 +83,10 @@ export const checkAmount = ({
   return true;
 };
 
+/** 비밀번호 정규식  */
+// 영문, 숫자, 특수문자(!@#$%^&*), 그리고 공백 없이 최소 8자 이상의 문자열
 export const checkPassword = (password: string): boolean => {
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?!.*\s).{8,}$/;
-
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?!.*\s).{8,}$/;
   return passwordRegex.test(password);
 };
 

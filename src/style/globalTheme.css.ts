@@ -10,6 +10,11 @@ export const global = createGlobalThemeContract({
   grayHover: "grayHover",
   grayDefault: "grayDefault",
   grayDisabled: "grayDisabled",
+
+  purpleActive: "purpleActive",
+  purpleHover: "purpleHover",
+  purpleDefault: "purpleDefault",
+  purpleDisabled: "purpleDisabled",
 });
 
 export const whiteGlobalTheme = {
@@ -22,6 +27,11 @@ export const whiteGlobalTheme = {
   grayHover: "#D9D9D9", // 5%
   grayDefault: "#cccccc", // 0%
   grayDisabled: "#B3B3B3", // -10%
+
+  purpleActive: "#9C8AFF", // 20%
+  purpleHover: "#7D63FF", // 10%
+  purpleDefault: "#BAA8FF", // 0%
+  purpleDisabled: "#997FFF", // -10%
 };
 
 // const darkGlobalTheme = {

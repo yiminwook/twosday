@@ -1,30 +1,34 @@
 import { getWasUrl } from "@/app/_lib/getWasUrl";
-import { redirect } from "next/dist/server/api-utils";
+import { checkEmail, checkPassword } from "@/app/_lib/regexp";
 
 export const emailSignupFn = async ({
   email,
-}: // password,
-// nickname,
-{
+  nickname,
+  password,
+}: {
   email: string;
-  // password: string;
-  // nickname: string;
+  nickname: string;
+  password: string;
 }) => {
   const trimmedEmail = email.trim();
-  // const trimmedPassword = password.trim();
-  // const trimmedNickname = nickname.trim();
+  const trimmedNickname = nickname.trim();
+  const trimmedPassword = password.trim();
 
   if (!trimmedEmail) {
     throw new Error("이메일을 입력해주세요.");
   }
 
-  // if (!trimmedPassword) {
-  //   throw new Error("비밀번호를 입력해주세요.");
-  // }
+  if (checkEmail(trimmedEmail) === false) {
+    throw new Error("이메일 형식이 올바르지 않습니다.");
+  }
 
-  // if (!trimmedNickname) {
-  //   throw new Error("닉네임을 입력해주세요.");
-  // }
+  if (!trimmedNickname) {
+    throw new Error("닉네임을 입력해주세요.");
+  }
+
+  if (checkPassword(trimmedPassword)) {
+    throw new Error("비밀번호를 확인하세요.");
+  }
 
   document.cookie = "redirect=" + encodeURIComponent(process.env.NEXT_PUBLIC_API_URL);
 
@@ -33,7 +37,8 @@ export const emailSignupFn = async ({
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       email: trimmedEmail,
-      nickname: trimmedEmail.split("@")[0],
+      nickname: trimmedNickname,
+      password: trimmedPassword,
     }),
     credentials: "include",
   });

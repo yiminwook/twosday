@@ -11,7 +11,6 @@ export default async function Page() {
       <div className={css.inner}>
         <h1 className={css.title}>회원가입</h1>
         <SignupForm />
-        <SocialBox />
       </div>
     </main>
   );

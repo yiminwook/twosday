@@ -17,12 +17,16 @@ export const inputWrap = style({
 
 export const label = style({
   width: 60,
+  color: "#70737C",
 });
 
 export const inputBox = style({
-  border: "none",
   display: "flex",
-  borderBottom: "1px solid #000",
+  border: "1px solid #70737C36",
+  borderRadius: 10,
+  backgroundColor: "transparent",
+  padding: "0px 16px",
+  height: 48,
 });
 
 export const input = style({
@@ -31,6 +35,9 @@ export const input = style({
   padding: 7,
   ":focus": {
     outline: "none",
+  },
+  "::placeholder": {
+    color: "#70737C66",
   },
 });
 
@@ -44,18 +51,30 @@ export const btnBox = style([
 export const loginBtn = style({
   width: "100%",
   height: 40,
-  backgroundColor: global.blueDefault,
+  backgroundColor: global.purpleDefault,
   padding: "7px 0",
   fontWeight: 600,
   fontSize: 16,
   color: "#fff",
-  boxShadow: "rgba(0, 0, 0, 0.1) 0px 1px 2px 0px",
-  borderRadius: 3,
+  borderRadius: 10,
   transition: "background-color 0.2s ease, color 0.2s ease",
   ":hover": {
-    backgroundColor: global.blueHover,
+    backgroundColor: global.purpleHover,
   },
   ":disabled": {
-    backgroundColor: global.blueDisabled,
+    backgroundColor: global.purpleDisabled,
   },
 });
+
+export const pwInfo = style({
+  minHeight: 40,
+  display: "flex",
+  flexDirection: "column",
+  gap: 5,
+  fontSize: 12,
+  color: "#70737C",
+});
+export const pwCorrect = style({
+  color: "#FE415C",
+});
+export const pwCondition = style({});
