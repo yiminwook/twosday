@@ -23,6 +23,11 @@ export default async function Header() {
               <span>글쓰기</span>
             </Link>
           </li>
+          <li>
+            <Link href="/login" className={link}>
+              <span>로그인</span>
+            </Link>
+          </li>
         </ul>
       </div>
     </header>

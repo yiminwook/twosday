@@ -23,13 +23,13 @@ export default function SignupForm({ session }: SignupFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const modalStore = useSetModalStore();
 
-  //이메일 회원가입인 경우, 이메일 인증번호 요청
   const requestEmailCode = useMutation({
-    mutationKey: ["/api/auth/verification"],
-    mutationFn: async () => {
-      const res = await fetch(`${getWasUrl()}/api/auth/verification`, {
+    mutationKey: ["/api/auth/signup"],
+    mutationFn: async ({ email }: { email: string }) => {
+      const res = await fetch(`${getWasUrl()}/api/auth/signup`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${session.accessToken}` },
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
       });
 
       const body: { message: string } = await res.json();
@@ -39,60 +39,6 @@ export default function SignupForm({ session }: SignupFormProps) {
       return body;
     },
     onSuccess: (data) => toast.success(data.message),
-  });
-
-  //이메일 회원가입인 경우, 이메일 인증번호 확인
-  const checkEmailCode = useMutation({
-    mutationKey: ["/api/auth/verification"],
-    mutationFn: async () => {
-      const res = await fetch(`${getWasUrl()}/api/auth/verification`, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${session.accessToken}` },
-      });
-
-      const body: { message: string } = await res.json();
-
-      if (!res.ok) {
-        throw new Error(body.message);
-      }
-      return body;
-    },
-    onSuccess: (data) => toast.success(data.message),
-  });
-
-  //이메일 회원가입인 경우 이메일 인증번호 요청
-  const registUser = useMutation({
-    mutationKey: ["/api/auth/register/:id"],
-    mutationFn: async () => {
-      const res = await fetch(`${getWasUrl()}/api/auth/register/${session.id}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${session.accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: session.email,
-          password,
-          nickname,
-          verificationCode: code,
-        }),
-      });
-
-      const body: { message: string } = await res.json();
-      if (!res.ok) {
-        throw new Error(body.message);
-      }
-      return body;
-    },
-    onMutate: () => setIsLoading(() => true),
-    onSuccess: (data) => {
-      toast.success(data.message);
-      router.push("/login");
-    },
-    onError: async (error) => {
-      await modalStore.push(ErrorModal, { props: { error } });
-      setIsLoading(() => false);
-    },
   });
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,7 +60,7 @@ export default function SignupForm({ session }: SignupFormProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    registUser.mutate();
+    // registUser.mutate();
   };
 
   return (
@@ -136,7 +82,7 @@ export default function SignupForm({ session }: SignupFormProps) {
           <button
             type="button"
             style={{ height: 40 }}
-            onClick={() => requestEmailCode.mutate()}
+            // onClick={() => requestEmailCode.mutate()}
             disabled={requestEmailCode.isPending}
           >
             {requestEmailCode.isPending ? <DotsLoading /> : "요청하기"}

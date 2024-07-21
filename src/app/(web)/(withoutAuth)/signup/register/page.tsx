@@ -16,7 +16,7 @@ export default async function Page({ searchParams }: PageProps) {
   return (
     <main className={css.main}>
       <div className={css.inner}>
-        <h1 className={css.title}>회원가입 2</h1>
+        <h1 className={css.title}>이메일 회원가입</h1>
         <SignupForm session={session} />
       </div>
     </main>

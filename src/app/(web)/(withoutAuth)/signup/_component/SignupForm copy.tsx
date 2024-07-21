@@ -10,40 +10,31 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useStore } from "zustand";
 import * as css from "./signupForm.css";
-import { getWasUrl } from "@/app/_lib/getWasUrl";
-import { toast } from "sonner";
-import { SIGNUP_EMAIL_PAGE_VALUES, useSetSignupEmail } from "../_lib/store";
 
 export default function SignupForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [validationPw, setValidationPw] = useState(true);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const modalStore = useSetModalStore();
   const store = useApp();
   const action = useStore(store, (store) => store.actions);
-  const setState = useSetSignupEmail();
 
-  const requestEmailCode = useMutation({
-    mutationKey: ["/api/auth/signup"],
-    mutationFn: async ({ email }: { email: string }) => {
-      const res = await fetch(`${getWasUrl()}/api/auth/signup`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
-      });
-
-      const body: { message: string; id: string } = await res.json();
-      if (!res.ok) {
-        throw new Error(body.message);
-      }
-      return body;
-    },
+  const mutateEmailRegister = useMutation({
+    mutationKey: ["/api/auth/register"],
+    mutationFn: emailSignupFn,
+    onMutate: () => setIsLoading(() => true),
     onSuccess: (data) => {
-      toast.success(data.message);
-
-      setState({ page: SIGNUP_EMAIL_PAGE_VALUES.EMAIL_CONFIRM, id: data.id });
+      router.push("/");
+    },
+    onError: async (error) => {
+      await modalStore.push(ErrorModal, { props: { error } });
+      setIsLoading(() => false);
     },
   });
 
@@ -55,8 +46,16 @@ export default function SignupForm() {
       case "emailInput":
         setEmail(() => value);
         break;
-      case "verificationCode":
-        setVerificationCode(() => value);
+      case "nicknameInput":
+        setNickname(() => value);
+        break;
+      case "passwordInput":
+        setPassword(() => value);
+        setValidationPw(() => value === passwordConfirm);
+        break;
+      case "passwordConfirmInput":
+        setPasswordConfirm(() => value);
+        setValidationPw(() => value === password);
         break;
     }
   };
@@ -64,8 +63,8 @@ export default function SignupForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (requestEmailCode.isPending) return;
-    requestEmailCode.mutate({ email });
+    if (mutateEmailRegister.isPending) return;
+    mutateEmailRegister.mutate({ email, nickname, password });
   };
 
   return (
@@ -138,7 +137,7 @@ export default function SignupForm() {
 
       <div className={css.btnBox} tabIndex={0}>
         <button className={css.loginBtn} type="submit" disabled={isLoading}>
-          {isLoading ? <DotsLoading /> : "회원가입"}
+          {isLoading ? <DotsLoading /> : "인증번호 요청"}
         </button>
       </div>
     </form>
