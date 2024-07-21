@@ -1,3 +1,9 @@
+import CardSection from "@web/_component/card/CardSection";
+
 export default async function Page() {
-  return <div></div>;
+  return (
+    <div>
+      <CardSection />
+    </div>
+  );
 }
