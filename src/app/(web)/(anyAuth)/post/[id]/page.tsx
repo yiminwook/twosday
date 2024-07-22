@@ -1,14 +1,40 @@
+import "@/style/highlight.css"; // 코드박스 하이라이트 스타일
+import "@/style/editor.css";
 import { getWasUrl } from "@/app/_lib/getWasUrl";
 import Viewer from "@web/(withAuth)/upload/_component/Viewer";
 import { notFound } from "next/navigation";
-import { title } from "process";
+
+type Author = {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+  deletedAt: string | null;
+  email: string;
+  nickname: string;
+  avartar: string | null;
+};
+
+type Tag = string[];
+
+type Post = {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+  deletedAt: string | null;
+  title: string;
+  thumbnail: string | null;
+  content: string;
+  isPublic: boolean;
+  viewCount: number;
+  author: Author;
+  tags: Tag;
+};
 
 interface PageProps {
   params: { id: string };
 }
 
 export default async function Page({ params }: PageProps) {
-  console.log("test", params);
   const response = await fetch(`${getWasUrl()}/api/twosday/post/${params.id}`, {
     method: "GET",
     headers: {
@@ -16,35 +42,27 @@ export default async function Page({ params }: PageProps) {
     },
   });
 
-  const data = await response.json();
+  const data: { post: Post; message: string[] } = await response.json();
 
   if (!response.ok) {
     if (response.status === 404) {
       notFound();
     }
-    throw new Error(data.message);
+    throw new Error(data.message[0]);
   }
 
-  const post = data.post as {
-    id: number;
-    updatedAt: string;
-    createdAt: string;
-    deletedAt: string | null;
-    title: string;
-    content: string;
-    isPublic: boolean;
-  };
+  console.log("data", data);
 
   return (
     <div>
       <h1>단건 조회 페이지</h1>
       <div>
         <div>
-          <h2>{post.title}</h2>
-          <p>{post.createdAt}</p>
-          <p>{post.updatedAt}</p>
+          <h2>{data.post.title}</h2>
+          <p>{data.post.createdAt}</p>
+          <p>{data.post.updatedAt}</p>
         </div>
-        <Viewer content={post.content} />
+        <Viewer content={data.post.content} />
       </div>
     </div>
   );
