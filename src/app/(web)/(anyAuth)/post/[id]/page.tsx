@@ -42,27 +42,27 @@ export default async function Page({ params }: PageProps) {
     },
   });
 
-  const data: { post: Post; message: string[] } = await response.json();
+  const body: { data: Post; message: string[] } = await response.json();
 
   if (!response.ok) {
     if (response.status === 404) {
       notFound();
     }
-    throw new Error(data.message[0]);
+    throw new Error(body.message[0]);
   }
 
-  console.log("data", data);
+  console.log("data", body);
 
   return (
     <div>
       <h1>단건 조회 페이지</h1>
       <div>
         <div>
-          <h2>{data.post.title}</h2>
-          <p>{data.post.createdAt}</p>
-          <p>{data.post.updatedAt}</p>
+          <h2>{body.data.title}</h2>
+          <p>{body.data.createdAt}</p>
+          <p>{body.data.updatedAt}</p>
         </div>
-        <Viewer content={data.post.content} />
+        <Viewer content={body.data.content} />
       </div>
     </div>
   );
