@@ -39,6 +39,9 @@ export const input = style({
   ":focus": {
     outline: "none",
   },
+  ":disabled": {
+    backgroundColor: "transparent",
+  },
   "::placeholder": {
     color: "#70737C66",
   },
@@ -68,16 +71,3 @@ export const loginBtn = style({
     backgroundColor: globalVar.purpleDisabled,
   },
 });
-
-export const pwInfo = style({
-  minHeight: 40,
-  display: "flex",
-  flexDirection: "column",
-  gap: 5,
-  fontSize: 12,
-  color: "#70737C",
-});
-export const pwCorrect = style({
-  color: "#FE415C",
-});
-export const pwCondition = style({});

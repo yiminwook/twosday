@@ -9,40 +9,68 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useStore } from "zustand";
 import * as css from "./signupForm.css";
+import { checkPassword } from "@/app/_lib/regexp";
 import { getWasUrl } from "@/app/_lib/getWasUrl";
-import { toast } from "sonner";
-import { SIGNUP_EMAIL_PAGE_VALUES, useSetSignupEmail } from "../_lib/store";
 
-export default function SignupForm() {
+interface RegisterFormProps {
+  session: Session;
+}
+
+export default function RegisterForm({ session }: RegisterFormProps) {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [validationPw, setValidationPw] = useState(true);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const modalStore = useSetModalStore();
   const store = useApp();
   const action = useStore(store, (store) => store.actions);
-  const setState = useSetSignupEmail();
 
-  const emailSignUpFn = useMutation({
-    mutationKey: ["/api/auth/signup"],
-    mutationFn: async ({ email }: { email: string }) => {
-      const res = await fetch(`${getWasUrl()}/api/auth/signup`, {
+  const emailSignupFn = useMutation({
+    mutationKey: ["/api/auth/register"],
+    mutationFn: async ({
+      session,
+      nickname,
+      password,
+    }: {
+      session: Session;
+      nickname: string;
+      password: string;
+    }) => {
+      const trimmedNickname = nickname.trim();
+      const trimmedPassword = password.trim();
+
+      if (!trimmedNickname) {
+        throw new Error("닉네임을 입력해주세요.");
+      }
+
+      if (checkPassword(trimmedPassword)) {
+        throw new Error("비밀번호를 확인하세요.");
+      }
+
+      document.cookie = "redirect=" + encodeURIComponent(process.env.NEXT_PUBLIC_API_URL);
+
+      const res = await fetch(`${getWasUrl()}/api/auth/register`, {
         method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: session.email,
+          nickname: trimmedNickname,
+          password: trimmedPassword,
+        }),
+        credentials: "include",
       });
 
-      const body: { message: string[]; data: { id: number } } = await res.json();
+      const body: { token: string; message: string } = await res.json();
+
       if (!res.ok) {
-        throw new Error(body.message[0]);
+        throw new Error(body.message);
       }
+
       return body;
-    },
-    onSuccess: (data) => {
-      toast.success(data.message[0]);
-      console.log("data", data);
-      setState({ page: SIGNUP_EMAIL_PAGE_VALUES.EMAIL_CONFIRM, id: data.data.id, email });
     },
   });
 
@@ -51,11 +79,16 @@ export default function SignupForm() {
     const value = e.target.value;
 
     switch (id) {
-      case "emailInput":
-        setEmail(() => value);
+      case "nicknameInput":
+        setNickname(() => value);
         break;
-      case "verificationCode":
-        setVerificationCode(() => value);
+      case "passwordInput":
+        setPassword(() => value);
+        setValidationPw(() => value === passwordConfirm);
+        break;
+      case "passwordConfirmInput":
+        setPasswordConfirm(() => value);
+        setValidationPw(() => value === password);
         break;
     }
   };
@@ -63,8 +96,8 @@ export default function SignupForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (emailSignUpFn.isPending) return;
-    emailSignUpFn.mutate({ email });
+    if (emailSignupFn.isPending) return;
+    emailSignupFn.mutate({ session, nickname, password });
   };
 
   return (
@@ -74,17 +107,10 @@ export default function SignupForm() {
           이메일
         </label>
         <div className={css.inputBox}>
-          <input
-            className={css.input}
-            id="emailInput"
-            type="text"
-            value={email}
-            onChange={handleInput}
-          />
-          <ResetButton isShow={email !== ""} onClick={() => setEmail("")} />
+          <input className={css.input} id="emailInput" type="text" value={session.email} />
         </div>
       </div>
-      {/* <div className={css.inputWrap}>
+      <div className={css.inputWrap}>
         <label className={css.label} htmlFor="nicknameInput">
           닉네임
         </label>
@@ -133,11 +159,10 @@ export default function SignupForm() {
             {!validationPw && "비밀번호가 서로 일치하지 않습니다."}
           </div>
         </div>
-      </div> */}
-
+      </div>
       <div className={css.btnBox} tabIndex={0}>
         <button className={css.loginBtn} type="submit" disabled={isLoading}>
-          {isLoading ? <DotsLoading /> : "회원가입"}
+          {isLoading ? <DotsLoading /> : "인증번호 요청"}
         </button>
       </div>
     </form>

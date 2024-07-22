@@ -59,3 +59,16 @@ export const loginBtn = style({
     backgroundColor: globalVar.blueDisabled,
   },
 });
+
+export const pwInfo = style({
+  minHeight: 40,
+  display: "flex",
+  flexDirection: "column",
+  gap: 5,
+  fontSize: 12,
+  color: "#70737C",
+});
+export const pwCorrect = style({
+  color: "#FE415C",
+});
+export const pwCondition = style({});

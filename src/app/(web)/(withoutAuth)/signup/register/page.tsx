@@ -1,7 +1,9 @@
 import { getSessionByToken } from "@/app/_lib/getTokenPayload";
 import { notFound } from "next/navigation";
 import * as css from "./page.css";
+
 import SignupForm from "./_component/SignupForm";
+import RegisterForm from "./_component/RegisterForm";
 
 interface PageProps {
   searchParams: {
@@ -17,7 +19,7 @@ export default async function Page({ searchParams }: PageProps) {
     <main className={css.main}>
       <div className={css.inner}>
         <h1 className={css.title}>이메일 회원가입</h1>
-        <SignupForm session={session} />
+        <RegisterForm session={session} />
       </div>
     </main>
   );
