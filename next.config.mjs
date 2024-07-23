@@ -26,6 +26,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "*.twosday.live",
       },
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+      },
     ],
   },
 };

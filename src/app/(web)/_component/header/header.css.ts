@@ -1,7 +1,7 @@
 import { zIndex } from "@/style/var";
 import { globalStyle, style } from "@vanilla-extract/css";
 
-export const wrap = style([{ width: "100%", height: 42 }]);
+export const wrap = style([{ width: "100%", height: 52 }]);
 
 export const fixed = style([
   zIndex.header,

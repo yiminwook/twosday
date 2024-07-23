@@ -8,17 +8,19 @@ import { toast } from "sonner";
 import { Post } from "@web/(anyAuth)/post/_component/List";
 import { useRouter } from "next/navigation";
 import { getWasUrl } from "@/app/_lib/getWasUrl";
+import TagInput from "@web/_component/tagInput/TagInput";
 
 const Editor = dynamic(() => import("./_component/Editor"), { ssr: false });
 
 interface HomeProps {
-  session: Session;
+  session: Session | null;
 }
 
 export default function Home({ session }: HomeProps) {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
   const quillRef = useRef<ReactQuill>(null);
+  const [tags, setTags] = useState<string[]>([]);
   const router = useRouter();
 
   const mutation = useMutation({
@@ -27,7 +29,7 @@ export default function Home({ session }: HomeProps) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${session.accessToken}`,
+          // Authorization: `Bearer ${session.accessToken}`,
         },
         body: JSON.stringify({
           title,
@@ -64,6 +66,10 @@ export default function Home({ session }: HomeProps) {
     setTitle(() => e.target.value);
   };
 
+  const addTag = (tag: string) => {
+    setTags((prev) => [...prev, tag]);
+  };
+
   return (
     <div>
       <div>
@@ -76,7 +82,10 @@ export default function Home({ session }: HomeProps) {
           <div>
             <input type="text" onChange={onChangeTitle} />
           </div>
-          <Editor value={value} onChange={onChange} editorRef={quillRef} session={session} />
+          <div>
+            <TagInput tags={tags} onClose={setTags} />
+          </div>
+          {/* <Editor value={value} onChange={onChange} editorRef={quillRef} session={session} /> */}
           <div>
             <button type="submit" disabled={mutation.isPending}>
               업로드
