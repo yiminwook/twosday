@@ -13,10 +13,10 @@ import { checkPassword } from "@/app/_lib/regexp";
 import { getWasUrl } from "@/app/_lib/getWasUrl";
 
 interface RegisterFormProps {
-  session: Session;
+  //   session: Session;
 }
 
-export default function RegisterForm({ session }: RegisterFormProps) {
+export default function RegisterForm({}: RegisterFormProps) {
   const router = useRouter();
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
@@ -97,7 +97,7 @@ export default function RegisterForm({ session }: RegisterFormProps) {
     e.preventDefault();
 
     if (emailSignupFn.isPending) return;
-    emailSignupFn.mutate({ session, nickname, password });
+    // emailSignupFn.mutate({ session, nickname, password });
   };
 
   return (
@@ -107,7 +107,7 @@ export default function RegisterForm({ session }: RegisterFormProps) {
           이메일
         </label>
         <div className={css.inputBox}>
-          <input className={css.input} id="emailInput" type="text" value={session.email} />
+          <input className={css.input} id="emailInput" type="text" value={""} />
         </div>
       </div>
       <div className={css.inputWrap}>
