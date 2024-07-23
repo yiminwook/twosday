@@ -41,7 +41,6 @@ export default function SignupForm() {
     },
     onSuccess: (data) => {
       toast.success(data.message[0]);
-      console.log("data", data);
       setState({ page: SIGNUP_EMAIL_PAGE_VALUES.EMAIL_CONFIRM, id: data.data.id, email });
     },
   });
