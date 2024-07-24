@@ -2,13 +2,11 @@
 
 import { useState } from "react";
 import * as css from "./signupForm.css";
-import ResetButton from "@/app/_component/btn/ResetBtn";
 import { SIGNUP_EMAIL_PAGE_VALUES, useSetSignupEmail, useSignupEmailStore } from "../_lib/store";
 import { useMutation } from "@tanstack/react-query";
 import { getWasUrl } from "@/app/_lib/getWasUrl";
 import { toast } from "sonner";
 import DotsLoading from "@/app/_component/loading/DotsLoading";
-import { checkPassword } from "@/app/_lib/regexp";
 
 interface EmailConfirmProps {}
 
@@ -55,21 +53,6 @@ export default function EmailConfirm() {
           <input className={css.input} id="emailInput" type="text" value={email} disabled />
         </div>
       </div>
-      {/* <div className={css.inputWrap}>
-        <label className={css.label} htmlFor="verificationCodeInput">
-          인증번호
-        </label>
-        <div className={css.inputBox}>
-          <input
-            className={css.input}
-            id="verificationCodeInput"
-            type="text"
-            value={verificationCode}
-            onChange={handleInput}
-          />
-          <ResetButton isShow={verificationCode !== ""} onClick={() => setVerificationCode("")} />
-        </div>
-      </div> */}
       <div className={css.btnBox} tabIndex={0}>
         <button className={css.loginBtn} type="submit" disabled={isLoading}>
           {isLoading ? <DotsLoading /> : "인증번호 요청"}
