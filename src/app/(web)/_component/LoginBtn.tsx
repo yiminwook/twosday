@@ -4,11 +4,8 @@ import { loginBtn } from "./loginBtn.css";
 
 export default function LoginBtn() {
   const onClick = () => {
-    const redirect = encodeURIComponent(process.env.NEXT_PUBLIC_API_URL);
-    const domain =
-      process.env.NEXT_PUBLIC_VERCEL_ENV === "production" ? "twosday.live" : "localhost";
-    document.cookie = `redirect=${redirect};domain=${domain}`;
-    window.location.href = getWasUrl() + "/login";
+    const redirect = encodeURIComponent(window.location.href);
+    window.location.href = getWasUrl() + "/login?redirect=" + redirect;
   };
   return (
     <button className={loginBtn} onClick={onClick}>
