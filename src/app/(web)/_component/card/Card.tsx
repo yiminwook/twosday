@@ -1,12 +1,15 @@
 import Tag from "../tag/Tag";
 import * as css from "./card.css";
+import { faker } from "@faker-js/faker";
 
 /* eslint-disable @next/next/no-img-element */
 export default function Card() {
+  const randomImg = Math.random() >= 0.5 ? faker.image.url() : "https://placehold.co/600x400";
+
   return (
     <article className={css.wrap}>
       <div className={css.imageBox}>
-        <img className={css.image} src="https://placehold.co/600x400" alt="placeholder_image" />
+        <img className={css.image} src={randomImg} alt="placeholder_image" />
       </div>
       <div className={css.desc}>
         <h4 className={css.title}>
