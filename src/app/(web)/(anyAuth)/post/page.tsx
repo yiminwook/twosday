@@ -1,7 +1,7 @@
 import Image from "next/image";
 import List from "./_component/List";
 
-export default function Page() {
+export default async function Page() {
   return (
     <div>
       <h1>조회 페이지</h1>

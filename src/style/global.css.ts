@@ -33,8 +33,6 @@ globalStyle("::-webkit-scrollbar-button", {
 
 globalStyle("html, body", {
   fontSize: 14, //root font size
-  minWidth: 1280,
-  minHeight: 720,
   letterSpacing: "-0.05em",
   margin: 0,
   padding: 0,
