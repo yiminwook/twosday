@@ -4,13 +4,14 @@ import SocialBox from "../_component/SocialBox";
 import SignupForm from "./_component/SignupForm";
 import * as css from "./page.css";
 import { getServerSession } from "@/app/_lib/getServerSession";
+import Content from "./_component/Content";
 
 export default async function Page() {
   return (
     <main className={css.main}>
       <div className={css.inner}>
         <h1 className={css.title}>이메일 회원가입</h1>
-        <SignupForm />
+        <Content />
       </div>
     </main>
   );

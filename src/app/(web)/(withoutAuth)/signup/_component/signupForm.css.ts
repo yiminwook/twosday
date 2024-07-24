@@ -32,6 +32,13 @@ export const inputBox = style({
   },
 });
 
+export const DisabledInputBox = style([
+  inputBox,
+  {
+    backgroundColor: "#F4F4F5",
+  },
+]);
+
 export const input = style({
   border: "none",
   width: "100%",
@@ -41,10 +48,16 @@ export const input = style({
   },
   ":disabled": {
     backgroundColor: "transparent",
+    color: "#70737C",
   },
   "::placeholder": {
     color: "#70737C66",
   },
+});
+
+export const mailInfo = style({
+  fontSize: 12,
+  color: globalVar.purpleDefault,
 });
 
 export const btnBox = style([
@@ -71,3 +84,16 @@ export const loginBtn = style({
     backgroundColor: globalVar.purpleDisabled,
   },
 });
+
+export const pwInfo = style({
+  minHeight: 40,
+  display: "flex",
+  flexDirection: "column",
+  gap: 5,
+  fontSize: 12,
+  color: "#70737C",
+});
+export const pwCorrect = style({
+  color: "#FE415C",
+});
+export const pwCondition = style({});
