@@ -6,12 +6,12 @@ import { useApp } from "@/app/_lib/app";
 import { useSetModalStore } from "@/app/_lib/modalStore";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStore } from "zustand";
 import * as css from "./signupForm.css";
 import { getWasUrl } from "@/app/_lib/getWasUrl";
 import { toast } from "sonner";
-import { SIGNUP_EMAIL_PAGE_VALUES, useSetSignupEmail } from "../_lib/store";
+import { SIGNUP_EMAIL_PAGE_VALUES, useSetSignupEmail, useSignupEmailStore } from "../_lib/store";
 
 export default function SignupForm() {
   const router = useRouter();
@@ -23,6 +23,7 @@ export default function SignupForm() {
   const store = useApp();
   const action = useStore(store, (store) => store.actions);
   const setState = useSetSignupEmail();
+  const page = useSignupEmailStore((store) => store.page);
 
   const emailSignUpFn = useMutation({
     mutationKey: ["/api/auth/signup"],
@@ -44,6 +45,10 @@ export default function SignupForm() {
       setState({ page: SIGNUP_EMAIL_PAGE_VALUES.EMAIL_CONFIRM, id: data.data.id, email });
     },
   });
+
+  useEffect(() => {
+    console.log(page);
+  }, [page]);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.target.id;

@@ -8,15 +8,17 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useStore } from "zustand";
-import * as css from "./signupForm.css";
+import * as css from "../../_component/signupForm.css";
 import { checkPassword } from "@/app/_lib/regexp";
 import { getWasUrl } from "@/app/_lib/getWasUrl";
+import { VerificationData } from "../../_lib/signup";
+import { toast } from "sonner";
 
 interface RegisterFormProps {
-  //   session: Session;
+  data: VerificationData;
 }
 
-export default function RegisterForm({}: RegisterFormProps) {
+export default function RegisterForm({ data }: RegisterFormProps) {
   const router = useRouter();
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
@@ -30,16 +32,8 @@ export default function RegisterForm({}: RegisterFormProps) {
   const action = useStore(store, (store) => store.actions);
 
   const emailSignupFn = useMutation({
-    mutationKey: ["/api/auth/register"],
-    mutationFn: async ({
-      session,
-      nickname,
-      password,
-    }: {
-      session: Session;
-      nickname: string;
-      password: string;
-    }) => {
+    mutationKey: ["/api/auth/signup/email"],
+    mutationFn: async ({ nickname, password }: { nickname: string; password: string }) => {
       const trimmedNickname = nickname.trim();
       const trimmedPassword = password.trim();
 
@@ -47,19 +41,57 @@ export default function RegisterForm({}: RegisterFormProps) {
         throw new Error("닉네임을 입력해주세요.");
       }
 
-      if (checkPassword(trimmedPassword)) {
+      if (!checkPassword(trimmedPassword)) {
         throw new Error("비밀번호를 확인하세요.");
       }
 
       document.cookie = "redirect=" + encodeURIComponent(process.env.NEXT_PUBLIC_API_URL);
 
-      const res = await fetch(`${getWasUrl()}/api/auth/register`, {
+      const res = await fetch(`${getWasUrl()}/api/auth/signup/email`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${data.accessToken}`,
+        },
         body: JSON.stringify({
-          email: session.email,
           nickname: trimmedNickname,
           password: trimmedPassword,
+        }),
+        credentials: "include",
+      });
+
+      const body: { token: string; message: string } = await res.json();
+      if (!res.ok) {
+        throw new Error(body.message);
+      }
+
+      return body;
+    },
+    onSuccess: (data) => {
+      toast.success(data.message[0]);
+      router.push("/");
+    },
+  });
+
+  const socialSignupFn = useMutation({
+    mutationKey: ["/api/auth/signup/social"],
+    mutationFn: async ({ nickname }: { nickname: string }) => {
+      const trimmedNickname = nickname.trim();
+
+      if (!trimmedNickname) {
+        throw new Error("닉네임을 입력해주세요.");
+      }
+
+      document.cookie = "redirect=" + encodeURIComponent(process.env.NEXT_PUBLIC_API_URL);
+
+      const res = await fetch(`${getWasUrl()}/api/auth/signup/social`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${data.accessToken}`,
+        },
+        body: JSON.stringify({
+          nickname: trimmedNickname,
         }),
         credentials: "include",
       });
@@ -71,6 +103,10 @@ export default function RegisterForm({}: RegisterFormProps) {
       }
 
       return body;
+    },
+    onSuccess: (data) => {
+      toast.success(data.message[0]);
+      router.push("/");
     },
   });
 
@@ -93,22 +129,33 @@ export default function RegisterForm({}: RegisterFormProps) {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleEmailSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (emailSignupFn.isPending) return;
-    // emailSignupFn.mutate({ session, nickname, password });
+    emailSignupFn.mutate({ nickname, password });
+  };
+
+  const handleSocialSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (socialSignupFn.isPending) return;
+    socialSignupFn.mutate({ nickname });
   };
 
   return (
-    <form className={css.form} onSubmit={handleSubmit}>
+    <form
+      className={css.form}
+      onSubmit={data.accountType === "email" ? handleEmailSubmit : handleSocialSubmit}
+    >
       <div className={css.inputWrap}>
         <label className={css.label} htmlFor="emailInput">
           이메일
         </label>
-        <div className={css.inputBox}>
-          <input className={css.input} id="emailInput" type="text" value={""} />
+        <div className={css.DisabledInputBox}>
+          <input className={css.input} id="emailInput" type="text" value={data.email} disabled />
         </div>
+        <p className={css.mailInfo}>가입이 가능한 이메일입니다.</p>
       </div>
       <div className={css.inputWrap}>
         <label className={css.label} htmlFor="nicknameInput">
@@ -125,44 +172,46 @@ export default function RegisterForm({}: RegisterFormProps) {
           <ResetButton isShow={nickname !== ""} onClick={() => setNickname("")} />
         </div>
       </div>
-      <div className={css.inputWrap}>
-        <label className={css.label} htmlFor="passwordInput">
-          비밀번호
-        </label>
-        <div className={css.inputBox}>
-          <input
-            className={css.input}
-            id="passwordInput"
-            type="password"
-            value={password}
-            onChange={handleInput}
-            placeholder="비밀번호를 입력해주세요."
-          />
-          <ResetButton isShow={password !== ""} onClick={() => setPassword("")} />
-        </div>
-        <div className={css.inputBox}>
-          <input
-            className={css.input}
-            id="passwordConfirmInput"
-            type="password"
-            value={passwordConfirm}
-            onChange={handleInput}
-            placeholder="비밀번호를 한번 더 입력해주세요."
-          />
-          <ResetButton isShow={passwordConfirm !== ""} onClick={() => setPasswordConfirm("")} />
-        </div>
-        <div className={css.pwInfo}>
-          <div className={css.pwCondition}>
-            영문, 숫자, 특수문자를 조합해 8자 이상으로 입력해주세요.
+      {data.accountType === "email" && (
+        <div className={css.inputWrap}>
+          <label className={css.label} htmlFor="passwordInput">
+            비밀번호
+          </label>
+          <div className={css.inputBox}>
+            <input
+              className={css.input}
+              id="passwordInput"
+              type="password"
+              value={password}
+              onChange={handleInput}
+              placeholder="비밀번호를 입력해주세요."
+            />
+            <ResetButton isShow={password !== ""} onClick={() => setPassword("")} />
           </div>
-          <div className={css.pwCorrect}>
-            {!validationPw && "비밀번호가 서로 일치하지 않습니다."}
+          <div className={css.inputBox}>
+            <input
+              className={css.input}
+              id="passwordConfirmInput"
+              type="password"
+              value={passwordConfirm}
+              onChange={handleInput}
+              placeholder="비밀번호를 한번 더 입력해주세요."
+            />
+            <ResetButton isShow={passwordConfirm !== ""} onClick={() => setPasswordConfirm("")} />
+          </div>
+          <div className={css.pwInfo}>
+            <div className={css.pwCondition}>
+              영문, 숫자, 특수문자를 조합해 8자 이상으로 입력해주세요.
+            </div>
+            <div className={css.pwCorrect}>
+              {!validationPw && "비밀번호가 서로 일치하지 않습니다."}
+            </div>
           </div>
         </div>
-      </div>
+      )}
       <div className={css.btnBox} tabIndex={0}>
         <button className={css.loginBtn} type="submit" disabled={isLoading}>
-          {isLoading ? <DotsLoading /> : "인증번호 요청"}
+          {isLoading ? <DotsLoading /> : "회원가입"}
         </button>
       </div>
     </form>

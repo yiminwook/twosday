@@ -103,7 +103,7 @@ export default function LoginForm() {
               className={css.singUpBtn}
               type="button"
               onClick={() => {
-                router.push("/signup/email");
+                router.push("/signup");
               }}
             >
               이메일로 회원가입
