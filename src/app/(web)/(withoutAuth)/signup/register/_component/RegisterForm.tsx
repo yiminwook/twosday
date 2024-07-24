@@ -56,6 +56,7 @@ export default function RegisterForm({ data }: RegisterFormProps) {
         body: JSON.stringify({
           nickname: trimmedNickname,
           password: trimmedPassword,
+          avatar: null,
         }),
         credentials: "include",
       });
@@ -92,6 +93,7 @@ export default function RegisterForm({ data }: RegisterFormProps) {
         },
         body: JSON.stringify({
           nickname: trimmedNickname,
+          avatar: data.avatar,
         }),
         credentials: "include",
       });
