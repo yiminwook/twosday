@@ -37,6 +37,7 @@ export default function Form({
         <input
           className={css.input}
           type="text"
+          value={title}
           onChange={onChangeTitle}
           placeholder="제목을 입력해주세요"
         />
