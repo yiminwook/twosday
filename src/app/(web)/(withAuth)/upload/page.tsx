@@ -3,10 +3,13 @@ import "@/style/editor.css";
 import Home from "./home";
 import { getServerSession } from "@/app/_lib/getServerSession";
 import { redirect } from "next/navigation";
+import { getWasUrl } from "@/app/_lib/getWasUrl";
 
 export default async function Page() {
   const session = await getServerSession();
-  console.log("test", session);
-  // if (!session) return redirect("/login");
+  const query = new URLSearchParams({
+    redirect: process.env.NEXT_PUBLIC_API_URL + "/upload",
+  }).toString();
+  if (!session) return redirect(`${getWasUrl()}/login?${query}`);
   return <Home session={session} />;
 }

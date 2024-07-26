@@ -51,8 +51,6 @@ export default async function Page({ params }: PageProps) {
     throw new Error(body.message[0]);
   }
 
-  console.log("data", body);
-
   return (
     <div>
       <h1>단건 조회 페이지</h1>

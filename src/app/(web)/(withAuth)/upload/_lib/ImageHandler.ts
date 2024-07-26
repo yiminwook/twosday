@@ -51,7 +51,7 @@ export const imageHandler = async (
       editor.insertEmbed(
         range.index,
         "image",
-        `${process.env.NEXT_PUBLIC_AWS_CLOUD_FRONT_URL}/${pathname}`,
+        `${process.env.NEXT_PUBLIC_AWS_CLOUD_FRONT_URL}${pathname}`,
       ); //이미지 삽입
 
       editor.setSelection({

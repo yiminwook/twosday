@@ -6,7 +6,7 @@ interface ViewerProps {
 
 export default function Viewer({ content }: ViewerProps) {
   return (
-    <div className="ql-snow ql-container">
+    <div className="ql-snow">
       <div className="ql-editor">{parse(content)}</div>
     </div>
   );
