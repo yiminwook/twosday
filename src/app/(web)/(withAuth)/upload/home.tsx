@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { MouseEvent, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import Viewer from "./_component/Viewer";
 import { useMutation } from "@tanstack/react-query";
@@ -25,7 +25,7 @@ export default function Home({ session }: HomeProps) {
   const [togglePreview, setTogglePreview] = useState(false);
 
   const mutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (e: MouseEvent) => {
       const response = await fetch(`${getWasUrl()}/api/twosday/post`, {
         method: "POST",
         headers: {
@@ -54,11 +54,6 @@ export default function Home({ session }: HomeProps) {
       router.push(`/post/${body.data.id}`);
     },
   });
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    mutation.mutate();
-  };
 
   const onChange = (value: string) => {
     setValue(() => value);
@@ -95,7 +90,12 @@ export default function Home({ session }: HomeProps) {
           <button className={css.navBtn} type="button">
             삭제
           </button>
-          <button className={css.navBtn} type="submit" disabled={mutation.isPending}>
+          <button
+            className={css.navBtn}
+            type="submit"
+            disabled={mutation.isPending}
+            onClick={mutation.mutate}
+          >
             저장
           </button>
         </div>
@@ -104,14 +104,14 @@ export default function Home({ session }: HomeProps) {
             <Viewer content={value} />
           ) : (
             <Form
-              onChange={onChange}
+              title={title}
               onChangeTitle={onChangeTitle}
               value={value}
+              onChange={onChange}
+              tags={tags}
+              openTagsModal={openTagsModal}
               quillRef={quillRef}
               session={session}
-              openTagsModal={openTagsModal}
-              onSubmit={onSubmit}
-              tags={tags}
             />
           )}
         </div>

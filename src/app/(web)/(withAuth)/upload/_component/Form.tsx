@@ -11,7 +11,7 @@ const Editor = dynamic(() => import("./Editor"), {
 });
 
 interface FormProps {
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  title: string;
   onChangeTitle: (e: React.ChangeEvent<HTMLInputElement>) => void;
   openTagsModal: () => void;
   tags: string[];
@@ -22,17 +22,17 @@ interface FormProps {
 }
 
 export default function Form({
-  onSubmit,
-  onChange,
+  title,
+  value,
   onChangeTitle,
+  onChange,
   openTagsModal,
   tags,
-  value,
   quillRef,
   session,
 }: FormProps) {
   return (
-    <form onSubmit={onSubmit} className={css.form}>
+    <form className={css.form}>
       <div className={css.inputBox}>
         <input
           className={css.input}
