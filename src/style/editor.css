@@ -30,6 +30,7 @@
   height: 100%;
   margin: 0px;
   position: relative;
+  min-height: 600px;
 }
 .ql-container.ql-disabled .ql-tooltip {
   visibility: hidden;

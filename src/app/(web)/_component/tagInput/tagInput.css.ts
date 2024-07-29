@@ -1,7 +1,8 @@
 import { style } from "@vanilla-extract/css";
 
 export const wrap = style({
-  border: "1px solid yellow",
+  border: "1px solid green",
+  position: "relative",
 });
 
 export const inputBox = style({

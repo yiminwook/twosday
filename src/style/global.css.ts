@@ -67,6 +67,7 @@ globalStyle("button > svg", {
 
 globalStyle("input::placeholder", {
   fontFamily: "inherit",
+  color: "#808080",
 });
 
 //자동입력 스타일 제거, 흰그림자로 스타일을 가린다.

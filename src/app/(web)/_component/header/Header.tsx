@@ -5,6 +5,7 @@ import { fixed, link, right, title, wrap } from "./header.css";
 import { FaPencilAlt } from "react-icons/fa";
 import Link from "next/link";
 import Pencil from "@/asset/svg/pencil.svg?react";
+import LoginBtn from "../LoginBtn";
 
 export default async function Header() {
   const session = await getServerSession();
@@ -24,9 +25,7 @@ export default async function Header() {
             </Link>
           </li>
           <li>
-            <Link href="/login" className={link}>
-              <span>로그인</span>
-            </Link>
+            <LoginBtn />
           </li>
         </ul>
       </div>

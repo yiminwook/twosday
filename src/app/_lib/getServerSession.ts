@@ -10,9 +10,9 @@ export const getServerSession = async (): Promise<Session | null> => {
     headers: { Authorization: `Bearer ${refreshToken}` },
   });
 
-  const body = await res.json();
+  const body: { data: { session: Session }; message: string[] } = await res.json();
 
-  if (!res.ok) throw new Error(body.message);
+  if (!res.ok) throw new Error(body.message[0]);
 
-  return body;
+  return body.data.session;
 };
