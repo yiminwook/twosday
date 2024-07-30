@@ -76,6 +76,7 @@ export default function Editor({ session, onChange, value, editorRef }: EditorPr
       value={value}
       onChange={onChange}
       placeholder="내용을 입력하세요."
+      data-testid="editor"
     />
   );
 }

@@ -40,6 +40,7 @@ export default function Form({
           value={title}
           onChange={onChangeTitle}
           placeholder="제목을 입력해주세요"
+          id="upload-title"
         />
       </div>
       <div className={css.tagsInput} onClick={openTagsModal}>

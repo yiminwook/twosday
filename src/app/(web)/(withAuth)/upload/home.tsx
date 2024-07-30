@@ -10,6 +10,7 @@ import * as css from "./home.css";
 import { useSetModalStore } from "@/app/_lib/modalStore";
 import TagsModal from "./_component/TagsModal";
 import Form from "./_component/Form";
+import { excuteThumnail } from "./_lib/excuteThumbnail";
 
 interface HomeProps {
   session: Session;
@@ -37,6 +38,7 @@ export default function Home({ session }: HomeProps) {
           content: value,
           tags: [],
           isPublic: true,
+          thumbnail: excuteThumnail(value),
         }),
         credentials: "include",
       });

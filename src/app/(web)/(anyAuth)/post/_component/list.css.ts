@@ -24,3 +24,17 @@ export const cell = style({
   flex: 1,
   width: 150,
 });
+
+export const thumbnailBox = style({
+  flex: 1,
+  width: 150,
+  aspectRatio: "16 / 9",
+  border: "1px solid #f0f0f0",
+  position: "relative",
+});
+
+export const thumbnail = style({
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+});
