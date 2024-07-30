@@ -6,14 +6,12 @@ export const SESSION_STORAGE_KEY = "auth-session";
 type State = {
   session: "guest" | "user";
   theme: "light" | "dark";
-  sidebar: boolean;
 };
 
 type Action = {
   actions: {
     logout: () => void;
     login: () => void;
-    toggleSidebar: () => void;
   };
 };
 
@@ -36,7 +34,6 @@ export const createAppStore = (initState: State) => {
         localStorage.setItem(SESSION_STORAGE_KEY, "guest");
         set({ session: "guest" });
       },
-      toggleSidebar: () => set((pre) => ({ sidebar: !pre.sidebar })),
     },
   }));
 };

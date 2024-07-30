@@ -1,8 +1,6 @@
 import { getServerSession } from "@/app/_lib/getServerSession";
 import { redirect } from "next/navigation";
-import SidebarToggle from "../sidebar/SidebarToggle";
 import { fixed, link, right, title, wrap } from "./header.css";
-import { FaPencilAlt } from "react-icons/fa";
 import Link from "next/link";
 import Pencil from "@/asset/svg/pencil.svg?react";
 import LoginBtn from "../LoginBtn";
@@ -14,7 +12,6 @@ export default async function Header() {
     <header className={wrap}>
       <div className={fixed}>
         <div>
-          <SidebarToggle />
           <h1 className={title}>twosday</h1>
         </div>
         <ul className={right}>
