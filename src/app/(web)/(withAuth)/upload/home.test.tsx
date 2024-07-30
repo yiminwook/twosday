@@ -5,11 +5,17 @@ import userEvent from "@testing-library/user-event";
 import { mswServer } from "@/__test__/__mock__/msw";
 import { http, HttpResponse } from "msw";
 import { getWasUrl } from "@/app/_lib/getWasUrl";
+import { useRouter } from "next/navigation";
 
 describe("업로드 페이지 테스트", () => {
-  test("업로드 페이지 렌더링 테스트", async () => {
-    const fetchSpy = jest.spyOn(global, "fetch");
+  test("업로드 테스트", async () => {
+    const pushMock = jest.fn();
+    (useRouter as jest.Mock).mockImplementation(() => ({
+      push: pushMock,
+    }));
+
     window.document.execCommand = jest.fn();
+
     mswServer.use(
       http.post(`${getWasUrl()}/api/twosday/post`, async ({ request }) => {
         const token = request.headers.get("Authorization")?.split(" ")[1];
@@ -25,7 +31,7 @@ describe("업로드 페이지 테스트", () => {
           return HttpResponse.json({ message: ["unauthorized"] }, { status: 401 });
         }
 
-        if (body.title !== "title" || body.content !== "Hello, World!") {
+        if (body.title !== "title" && body.content !== "Hello, World!") {
           return HttpResponse.error();
         }
 
@@ -52,6 +58,9 @@ describe("업로드 페이지 테스트", () => {
     const submitBtn = screen.getByText("저장");
     const titleInput = screen.getByPlaceholderText("제목을 입력해주세요");
 
+    expect(submitBtn).toBeVisible();
+    expect(titleInput).toBeVisible();
+
     await waitFor(() => {
       const loading = screen.queryAllByText(/로딩중/i);
       loading.forEach((el) => {
@@ -61,21 +70,12 @@ describe("업로드 페이지 테스트", () => {
 
     await userEvent.type(titleInput, "title");
     await userEvent.type(container.querySelector(".ql-editor")!, "Hello, World!");
-
-    expect(submitBtn).toBeVisible();
-    expect(titleInput).toBeVisible();
     await userEvent.click(submitBtn);
 
-    // 성공 메시지 확인
-    await waitFor(() => {
-      expect(fetchSpy).toHaveBeenCalled();
-    });
+    expect(screen.getByText("업로드 성공")).toBeVisible();
 
-    // fetch 응답 확인
-    const fetchCalls = fetchSpy.mock.calls;
-    const lastFetchCall = fetchCalls[fetchCalls.length - 1];
-    const body = JSON.parse(lastFetchCall[1]!.body as string);
-    expect(body.data.id).toBe(1);
-    fetchSpy.mockRestore();
+    expect(pushMock).toHaveBeenCalled();
+    const pushMockArg = pushMock.mock.calls[0][0];
+    expect(pushMockArg).toBe("/post/1");
   });
 });

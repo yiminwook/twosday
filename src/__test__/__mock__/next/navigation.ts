@@ -1,4 +1,4 @@
-// __mocks__/next/navagation.js
+// __mock__/next/navagation.js
 const useRouter = jest.fn();
 const usePathname = jest.fn();
 
