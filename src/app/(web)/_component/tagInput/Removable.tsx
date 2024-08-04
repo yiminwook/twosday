@@ -4,12 +4,11 @@ import { IoClose } from "react-icons/io5";
 
 interface EditableTagProps {
   name: string;
-  index: number;
   onClick?: (name: string) => void;
   onRemove?: (name: string) => void;
 }
 
-export default function Removable({ name, onClick, onRemove, index }: EditableTagProps) {
+export default function Removable({ name, onClick, onRemove }: EditableTagProps) {
   return (
     <div className={classNames(wrap, onClick && "click")} onClick={() => onClick?.(name)}>
       <span>{name}</span>

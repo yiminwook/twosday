@@ -45,7 +45,7 @@ export default function Form({
       </div>
       <div className={css.tagsInput} onClick={openTagsModal}>
         {tags.map((tag, index) => (
-          <Removable key={`saved_${tag}`} name={tag} index={index} />
+          <Removable key={`saved_${tag}`} name={tag} />
         ))}
         {tags.length === 0 && <span>태그를 추가해주세요</span>}
       </div>

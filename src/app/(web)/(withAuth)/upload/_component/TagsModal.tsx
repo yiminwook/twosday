@@ -8,9 +8,10 @@ const ID = "tagsModal";
 
 interface TagsModalProps {
   tags: string[];
+  session: Session;
 }
 
-export default function TagsModal({ onSuccess, tags }: ModalProps<TagsModalProps>) {
+export default function TagsModal({ onSuccess, tags, session }: ModalProps<TagsModalProps>) {
   const onClose = () => onSuccess(tags);
 
   return (
@@ -21,7 +22,7 @@ export default function TagsModal({ onSuccess, tags }: ModalProps<TagsModalProps
           <div className={css.modalHeader}>
             <h3 className={css.modalTitle}>Tags</h3>
           </div>
-          <TagInput tags={tags} onClose={onSuccess} />
+          <TagInput tags={tags} session={session} onClose={onSuccess} />
         </div>
       </div>
     </Modal>
