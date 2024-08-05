@@ -1,8 +1,8 @@
+import { getServerSession } from "@/app/_lib/getServerSession";
 import { getWasUrl } from "@/app/_lib/getWasUrl";
 import RefList from "@web/_component/refCard/RefList";
-import Link from "next/link";
-import { Reference } from "./_lib/ref.type";
 import Nav from "./_component/Nav";
+import { Reference } from "./_lib/ref.type";
 
 interface PageProps {
   searchParams: {
@@ -12,6 +12,7 @@ interface PageProps {
 
 export default async function Page({ searchParams }: PageProps) {
   const page = searchParams.page ? parseInt(searchParams.page) || 1 : 1;
+  const session = await getServerSession();
 
   const response = await fetch(`${getWasUrl()}/api/twosday/reference?page=${page}`, {
     method: "GET",
@@ -29,20 +30,9 @@ export default async function Page({ searchParams }: PageProps) {
 
   return (
     <div>
-      <Nav />
+      <Nav session={session} />
       <div>
-        <RefList references={body.data.reference} />
-      </div>
-      <div>
-        <span>PAGE</span>
-        {/* TODO: 페이지네이션 */}
-        <div>
-          <Link href="/reference?page=1">1</Link>
-          <Link href="/reference?page=2">2</Link>
-          <Link href="/reference?page=3">3</Link>
-          <Link href="/reference?page=4">4</Link>
-          <Link href="/reference?page=5">5</Link>
-        </div>
+        <RefList references={body.data.reference} currentPage={page} total={body.data.total} />
       </div>
     </div>
   );
