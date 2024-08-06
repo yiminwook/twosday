@@ -1,7 +1,7 @@
 import "@/style/highlight.css"; // 코드박스 하이라이트 스타일
 import "@/style/editor.css";
 import { getWasUrl } from "@/app/_lib/getWasUrl";
-import Viewer from "@web/(withAuth)/upload/_component/Viewer";
+import Viewer from "@web/post/edit/_component/Viewer";
 import { notFound } from "next/navigation";
 
 type Author = {

@@ -1,7 +1,6 @@
 import { getWasUrl } from "@/app/_lib/getWasUrl";
 import CardSection from "@web/_component/card/CardSection";
 import { Reference } from "./reference/_lib/ref.type";
-import RefList from "@web/_component/refCard/RefList";
 import Link from "next/link";
 import { cardList } from "@web/_component/refCard/refList.css";
 import RefCard from "@web/_component/refCard/RefCard";

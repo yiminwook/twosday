@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Reference } from "@web/(anyAuth)/reference/_lib/ref.type";
+import { Reference } from "@web/reference/_lib/ref.type";
 import * as css from "./refCard.css";
 
 interface RefCardProps {

@@ -1,6 +1,6 @@
 "use client";
 import RefCard from "@web/_component/refCard/RefCard";
-import { Reference } from "@web/(anyAuth)/reference/_lib/ref.type";
+import { Reference } from "@web/reference/_lib/ref.type";
 import { cardList } from "./refList.css";
 import PagePagination from "@/app/_component/pagination/PagePagination";
 import { useRouter } from "next/navigation";
