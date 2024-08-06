@@ -5,13 +5,13 @@ export const wrap = style({
   maxWidth: 250,
   position: "relative",
   borderRadius: 10,
-  boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px;",
+  boxShadow: "2px 4px 12px rgba(17, 17, 17, 0.25)",
+  overflow: "hidden",
 });
 
 export const imageBox = style({
   overflow: "hidden",
-  aspectRatio: "1 / 1.25",
-  borderRadius: 10,
+  aspectRatio: "5 / 4",
 });
 
 export const image = style({
@@ -26,28 +26,37 @@ export const image = style({
   },
 });
 
-export const desc = style({
+export const descBox = style({
   padding: 7,
-  position: "absolute",
   bottom: 0,
   left: 0,
   backdropFilter: "blur(5px)",
-  borderRadius: "0 0px 10px 10px",
 });
 
 export const title = style([
-  textLine(1.6, 1),
+  textLine(1.4, 1),
   {
     fontSize: "1.2em",
-    marginBottom: "0.5em",
+    marginBottom: 10,
+    fontWeight: 500,
+  },
+]);
+
+export const desc = style([
+  textLine(1.4, 2),
+  {
+    color: "#9d9d9d",
+    marginBottom: 10,
   },
 ]);
 
 export const tagBox = style({
   display: "flex",
   flexWrap: "wrap",
-  height: 40, //태그는 2줄이상 보여주지 않는다
+  height: "2.8em", //태그는 2줄이상 보여주지 않는다
   overflow: "hidden",
+  fontSize: "0.875em",
+  color: "#2b2b2b",
 });
 
 globalStyle(`${tagBox} > span:not(:last-of-type)`, {

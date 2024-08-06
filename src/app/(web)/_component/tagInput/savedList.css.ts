@@ -16,6 +16,10 @@ export const row = style({
   },
 });
 
+export const span = style({
+  cursor: "pointer",
+});
+
 export const editButton = style({
   marginRight: "0.5em",
 });

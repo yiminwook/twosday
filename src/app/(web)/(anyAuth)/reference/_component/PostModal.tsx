@@ -10,9 +10,11 @@ import ModalCloseBtn from "@/app/_component/modal/ModalCloseBtn";
 
 const ID = "referencePostModal";
 
-interface PostModalProps {}
+interface PostModalProps {
+  session: Session;
+}
 
-export default function PostModal({ onClose, onSuccess }: ModalProps<PostModalProps>) {
+export default function PostModal({ onClose, onSuccess, session }: ModalProps<PostModalProps>) {
   const [url, setUrl] = useState("");
   const router = useRouter();
   const mutation = useMutation({
@@ -20,7 +22,10 @@ export default function PostModal({ onClose, onSuccess }: ModalProps<PostModalPr
     mutationFn: async () => {
       const response = await fetch(`${getWasUrl()}/api/twosday/reference`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`,
+        },
         body: JSON.stringify({ url }),
       });
 

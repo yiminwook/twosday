@@ -11,12 +11,17 @@ export default function Card() {
       <div className={css.imageBox}>
         <img className={css.image} src={randomImg} alt="placeholder_image" />
       </div>
-      <div className={css.desc}>
+      <div className={css.descBox}>
         <h4 className={css.title}>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae accusantium, nostrum
           odit molestias, nemo eaque beatae adipisci maxime ut necessitatibus quod, amet itaque
           deserunt atque quisquam vitae esse officiis a.
         </h4>
+        <desc className={css.desc}>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae accusantium, nostrum
+          odit molestias, nemo eaque beatae adipisci maxime ut necessitatibus quod, amet itaque
+          deserunt atque quisquam vitae esse officiis a.
+        </desc>
         <div className={css.tagBox}>
           <Tag name="태그1" />
           <Tag name="태그2" />

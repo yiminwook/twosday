@@ -1,6 +1,6 @@
 import { style } from "@vanilla-extract/css";
 
-export const wrap = style({
+export const cardList = style({
   display: "flex",
   flexWrap: "wrap",
   gap: "1em",

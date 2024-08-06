@@ -71,7 +71,7 @@ export default function Home({ session }: HomeProps) {
 
   const openTagsModal = async () => {
     const newTag: string[] = await modalStore.push(TagsModal, {
-      props: { tags },
+      props: { tags, session },
     });
     setTags(() => newTag);
   };
