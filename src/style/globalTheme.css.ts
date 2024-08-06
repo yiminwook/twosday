@@ -1,4 +1,9 @@
-import { createGlobalTheme, createGlobalThemeContract } from "@vanilla-extract/css";
+import {
+  assignVars,
+  createGlobalTheme,
+  createGlobalThemeContract,
+  globalStyle,
+} from "@vanilla-extract/css";
 
 export const globalVar = createGlobalThemeContract({
   blueActive: "blueActive",
@@ -34,21 +39,29 @@ export const whiteGlobalTheme = {
   purpleDisabled: "#997FFF", // -10%
 };
 
-// const darkGlobalTheme = {
-//   background: {
-//     color: 'rgb(0, 0, 0)',
-//   },
-//   foreground: {
-//     color: 'rgb(255, 255, 255)',
-//   },
-// };
+const darkGlobalTheme = {
+  blueActive: "#000", // 20%
+  blueHover: "#000", // 10%
+  blueDefault: "#000", // 0%
+  blueDisabled: "#000", // -10%
+
+  grayActive: "#000", // 10%
+  grayHover: "#000", // 5%
+  grayDefault: "#000", // 0%
+  grayDisabled: "#000", // -10%
+
+  purpleActive: "#000", // 20%
+  purpleHover: "#000", // 10%
+  purpleDefault: "#000", // 0%
+  purpleDisabled: "#000", // -10%
+};
 
 createGlobalTheme(":root", globalVar, whiteGlobalTheme);
 
-// globalStyle(':root', {
-//   '@media': {
-//     '(prefers-color-scheme: dark)': {
-//       vars: assignVars(global, darkGlobalTheme),
-//     },
-//   },
-// });
+globalStyle(":root", {
+  "@media": {
+    "(prefers-color-scheme: dark)": {
+      vars: assignVars(globalVar, darkGlobalTheme),
+    },
+  },
+});

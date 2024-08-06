@@ -12,6 +12,7 @@ type Action = {
   actions: {
     logout: () => void;
     login: () => void;
+    setTheme: () => void;
   };
 };
 
@@ -33,6 +34,12 @@ export const createAppStore = (initState: State) => {
       logout: () => {
         localStorage.setItem(SESSION_STORAGE_KEY, "guest");
         set({ session: "guest" });
+      },
+      setTheme: () => {
+        localStorage.setItem(SESSION_STORAGE_KEY, initState.theme === "light" ? "dark" : "light");
+        set((state) => {
+          return { theme: state.theme === "light" ? "dark" : "light" };
+        });
       },
     },
   }));

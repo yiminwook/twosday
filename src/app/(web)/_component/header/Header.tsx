@@ -1,9 +1,10 @@
 import { getServerSession } from "@/app/_lib/getServerSession";
 import { redirect } from "next/navigation";
-import { fixed, link, right, title, wrap } from "./header.css";
+import { fixed, link, right, title, wrap, upload } from "./header.css";
 import Link from "next/link";
 import Pencil from "@/asset/svg/pencil.svg?react";
 import LoginBtn from "../LoginBtn";
+import ThemeBtn from "../ThemeBtn";
 
 export default async function Header() {
   const session = await getServerSession();
@@ -12,10 +13,15 @@ export default async function Header() {
     <header className={wrap}>
       <div className={fixed}>
         <div>
-          <h1 className={title}>twosday</h1>
+          <Link className={title} href={"/"}>
+            twosday
+          </Link>
         </div>
         <ul className={right}>
           <li>
+            <ThemeBtn />
+          </li>
+          <li className={upload}>
             <Link href="/upload" className={link}>
               <Pencil />
               <span>글쓰기</span>

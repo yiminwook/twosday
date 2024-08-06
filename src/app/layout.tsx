@@ -24,7 +24,7 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang="ko" color-theme="light">
+    <html lang="ko" color-theme="dark">
       <body className={font.className}>
         <Configs>{children}</Configs>
       </body>
