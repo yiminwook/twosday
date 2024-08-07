@@ -1,10 +1,12 @@
 import { responsive, zIndex } from "@/style/var";
 import { globalStyle, style } from "@vanilla-extract/css";
 
+const HEADER_HEIGHT = 52;
+
 export const wrap = style([
   {
     width: "100%",
-    height: 52,
+    height: HEADER_HEIGHT,
   },
   responsive({
     md: {
@@ -16,20 +18,27 @@ export const wrap = style([
 export const fixed = style([
   zIndex.header,
   {
-    height: 52,
     position: "fixed",
+    height: HEADER_HEIGHT,
     width: "100%",
-    display: "flex",
-    alignItems: "center",
-    padding: "0 20px",
     backgroundColor: "#fff",
     boxShadow: "rgba(17, 17, 26, 0.1) 0px 1px 0px",
-    justifyContent: "space-between",
     opacity: 0.85,
   },
 ]);
 
-globalStyle(`${fixed} > div`, {
+export const inner = style({
+  display: "flex",
+  alignItems: "center",
+  padding: "0 20px",
+  width: "100%",
+  height: "100%",
+  justifyContent: "space-between",
+  maxWidth: 1280,
+  margin: "0 auto",
+});
+
+globalStyle(`${inner} > div`, {
   display: "flex",
   alignItems: "center",
   gap: 7,

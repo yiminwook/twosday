@@ -41,7 +41,7 @@ export const subtitle = style({
 export const section = style({
   padding: "0 20px",
   maxWidth: 1280,
-  margin: "40px auto 80px",
+  margin: "40px auto 100px",
 });
 
 export const sectionTitleBox = style({

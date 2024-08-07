@@ -1,5 +1,5 @@
 import { getServerSession } from "@/app/_lib/getServerSession";
-import { fixed, link, right, title, wrap, upload } from "./header.css";
+import { fixed, link, right, title, wrap, upload, inner } from "./header.css";
 import Link from "next/link";
 import Pencil from "@/asset/svg/pencil.svg?react";
 import LoginBtn from "../LoginBtn";
@@ -11,25 +11,27 @@ export default async function Header() {
   return (
     <header className={wrap}>
       <div className={fixed}>
-        <div>
-          <Link className={title} href={"/"}>
-            twosday
-          </Link>
-        </div>
-        <ul className={right}>
-          <li>
-            <ThemeBtn />
-          </li>
-          <li className={upload}>
-            <Link href="/upload" className={link}>
-              <Pencil />
-              <span>글쓰기</span>
+        <div className={inner}>
+          <div>
+            <Link className={title} href={"/"}>
+              twosday
             </Link>
-          </li>
-          <li>
-            <LoginBtn />
-          </li>
-        </ul>
+          </div>
+          <ul className={right}>
+            <li>
+              <ThemeBtn />
+            </li>
+            <li className={upload}>
+              <Link href="/upload" className={link}>
+                <Pencil />
+                <span>글쓰기</span>
+              </Link>
+            </li>
+            <li>
+              <LoginBtn />
+            </li>
+          </ul>
+        </div>
       </div>
     </header>
   );

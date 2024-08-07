@@ -1,11 +1,19 @@
-import { textLine } from "@/style/var";
+import { responsive, textLine } from "@/style/var";
 import { style } from "@vanilla-extract/css";
 
-export const wrap = style({
-  width: "300px",
-  padding: "1em",
-  boxShadow: "rgba(0, 0, 0, 0.15) 0px 0px 0px 1px",
-});
+export const wrap = style([
+  {
+    flex: "1 1 auto",
+    maxWidth: "100%",
+    padding: "2em 1em",
+    boxShadow: "rgba(0, 0, 0, 0.15) 0px 0px 0px 1px",
+  },
+  responsive({
+    // sm: { flex: "0 1 auto" },
+    sm: { maxWidth: 200 },
+    md: { maxWidth: 295 },
+  }),
+]);
 
 export const imgBox = style({
   display: "inline-block",
@@ -13,6 +21,7 @@ export const imgBox = style({
   marginBottom: "1em",
   aspectRatio: "16 / 9",
   cursor: "pointer",
+  width: "100%",
 });
 
 export const img = style({
@@ -37,5 +46,6 @@ export const desc = style([
   textLine(1.4, 2),
   {
     fontSize: 12,
+    color: "#767676",
   },
 ]);

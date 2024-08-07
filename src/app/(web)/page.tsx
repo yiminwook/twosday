@@ -44,7 +44,7 @@ export default async function Page() {
       <section className={css.section}>
         <div className={css.sectionTitleBox}>
           <h2>레퍼런스</h2>
-          <Link href="/reference">더보기 +</Link>
+          <Link href="/reference">+ 더보기</Link>
         </div>
         <div className={cardList}>
           {body.data.reference.map((reference) => (

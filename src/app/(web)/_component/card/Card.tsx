@@ -1,3 +1,5 @@
+"use client";
+import Gravatar from "react-gravatar";
 import Tag from "../tag/Tag";
 import * as css from "./card.css";
 import { faker } from "@faker-js/faker";
@@ -22,7 +24,11 @@ export default function Card() {
           odit molestias, nemo eaque beatae adipisci maxime ut necessitatibus quod, amet itaque
           deserunt atque quisquam vitae esse officiis a.
         </desc>
-        <div className={css.tagBox}>
+        <div>
+          <Gravatar email="grs0412@gmail.com" size={20} />
+          <span className={css.editor}>작성자</span>
+        </div>
+        {/* <div className={css.tagBox}>
           <Tag name="태그1" />
           <Tag name="태그2" />
           <Tag name="태그3" />
@@ -41,7 +47,7 @@ export default function Card() {
           <Tag name="태그1" />
           <Tag name="태그2" />
           <Tag name="태그3" />
-        </div>
+        </div> */}
       </div>
     </article>
   );

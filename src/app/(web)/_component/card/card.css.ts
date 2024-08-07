@@ -45,7 +45,7 @@ export const title = style([
 export const desc = style([
   textLine(1.4, 2),
   {
-    color: "#9d9d9d",
+    color: "#767676",
     marginBottom: 10,
   },
 ]);
@@ -61,4 +61,8 @@ export const tagBox = style({
 
 globalStyle(`${tagBox} > span:not(:last-of-type)`, {
   marginRight: "0.5em",
+});
+
+export const editor = style({
+  color: "#FFAC9A",
 });

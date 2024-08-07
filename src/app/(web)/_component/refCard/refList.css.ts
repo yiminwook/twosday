@@ -5,5 +5,5 @@ export const cardList = style({
   flexWrap: "wrap",
   gap: "1em",
   margin: "0 auto",
-  justifyContent: "flex-start",
+  justifyContent: "center",
 });

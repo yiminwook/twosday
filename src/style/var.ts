@@ -43,7 +43,7 @@ export const zIndex = {
   },
 };
 
-export const BREAK_POINT = { sm: 640, md: 768, lg: 1024, xl: 1280, "2xl": 1536, full: 1900 };
+export const BREAK_POINT = { sm: 480, md: 768, lg: 1024, xl: 1280, "2xl": 1536, full: 1900 };
 
 type ResponsiveArgs = Partial<Record<keyof typeof BREAK_POINT, CSSPropertiesWithVars>>;
 export const responsive = (styles: ResponsiveArgs) => {
