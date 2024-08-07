@@ -5,7 +5,6 @@ export const wrap = style([
   {
     width: "100%",
     height: 52,
-    backgroundColor: "red",
   },
   responsive({
     md: {

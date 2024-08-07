@@ -1,5 +1,4 @@
 import { getServerSession } from "@/app/_lib/getServerSession";
-import { redirect } from "next/navigation";
 import { fixed, link, right, title, wrap, upload } from "./header.css";
 import Link from "next/link";
 import Pencil from "@/asset/svg/pencil.svg?react";

@@ -18,9 +18,10 @@ export default async function Page() {
   } = await response.json();
 
   return (
-    <div className={css.wrap}>
+    <main className={css.wrap}>
       <section className={css.heroSection}>
-        <span className={css.heroText}>Hello World!</span>
+        <span className={css.heroText}>Hello, World!</span>
+        <span className={css.subtitle}>개발자로 성장하는 나의 여정</span>
       </section>
       <section className={css.section}>
         <div className={css.sectionTitleBox}>
@@ -51,7 +52,7 @@ export default async function Page() {
           ))}
         </div>
       </section>
-    </div>
+    </main>
   );
 }
 

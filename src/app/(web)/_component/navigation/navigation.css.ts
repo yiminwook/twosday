@@ -5,6 +5,15 @@ import { style } from "@vanilla-extract/css";
 export const NAV_HEIGHT = 52;
 
 export const wrap = style([
+  {
+    height: NAV_HEIGHT,
+  },
+  responsive({
+    md: { display: "none" },
+  }),
+]);
+
+export const inner = style([
   zIndex.navigation,
   {
     display: "block",
@@ -15,11 +24,6 @@ export const wrap = style([
     backgroundColor: "#fff",
     boxShadow: "rgba(17, 17, 26, 0.1) 0 -2px 4px 0",
   },
-  responsive({
-    md: {
-      display: "none",
-    },
-  }),
 ]);
 
 export const list = style({

@@ -17,12 +17,12 @@ globalStyle("::-webkit-scrollbar", {
 });
 
 globalStyle("::-webkit-scrollbar-track", {
-  backgroundColor: "rgba(0, 0, 0, 0.1)",
+  // backgroundColor: "rgba(0, 0, 0, 0.1)",
 });
 
 globalStyle("::-webkit-scrollbar-thumb", {
-  backgroundColor: "rgba(0, 0, 0, 0.25)",
-  borderRadius: 10,
+  backgroundColor: "#989898",
+  borderRadius: 2.5,
   cursor: "pointer",
 });
 
