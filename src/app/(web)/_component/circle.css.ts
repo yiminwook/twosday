@@ -21,6 +21,7 @@ export const wrap = style([
     width: "100%",
     height: "100%",
     position: "relative",
+    transform: "rotateZ(0)", // gpu 가속
   },
 ]);
 
@@ -31,7 +32,7 @@ export const circle = style({
   borderRadius: "100%",
   position: "absolute",
   animationName: rotate,
-  animationDuration: "10s",
+  animationDuration: "5s",
   animationDelay: "1.5s",
   animationIterationCount: "infinite",
   selectors: {

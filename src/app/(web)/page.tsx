@@ -5,7 +5,8 @@ import Link from "next/link";
 import CardSlider from "./_component/card/CardSlider";
 import { Reference } from "./reference/_lib/ref.type";
 import * as css from "./page.css";
-import Circle from "./_component/Circle";
+import TechBelt from "./_component/TechBelt";
+import HeroSection from "./_component/HeroSection";
 
 export default async function Page() {
   const response = await fetch(`${getWasUrl()}/api/twosday/reference?page=1`, {
@@ -20,13 +21,7 @@ export default async function Page() {
 
   return (
     <main className={css.wrap}>
-      <section className={css.heroSection}>
-        <div className={css.circleBox}>
-          <Circle />
-        </div>
-        <span className={css.heroText}>Hello, World!</span>
-        <span className={css.subtitle}>개발자로 성장하는 나의 여정</span>
-      </section>
+      <HeroSection />
       <section className={css.section}>
         <div className={css.sectionTitleBox}>
           <h2>인기 게시글</h2>
@@ -45,6 +40,9 @@ export default async function Page() {
           <CardSlider />
         </div>
       </section>
+      <div className={css.beltBox}>
+        <TechBelt />
+      </div>
       <section className={css.section}>
         <div className={css.sectionTitleBox}>
           <h2>레퍼런스</h2>
