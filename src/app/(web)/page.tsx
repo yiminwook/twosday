@@ -5,6 +5,7 @@ import Link from "next/link";
 import CardSlider from "./_component/card/CardSlider";
 import { Reference } from "./reference/_lib/ref.type";
 import * as css from "./page.css";
+import Circle from "./_component/Circle";
 
 export default async function Page() {
   const response = await fetch(`${getWasUrl()}/api/twosday/reference?page=1`, {
@@ -20,6 +21,9 @@ export default async function Page() {
   return (
     <main className={css.wrap}>
       <section className={css.heroSection}>
+        <div className={css.circleBox}>
+          <Circle />
+        </div>
         <span className={css.heroText}>Hello, World!</span>
         <span className={css.subtitle}>개발자로 성장하는 나의 여정</span>
       </section>

@@ -8,15 +8,35 @@ export const wrap = style({
 export const heroSection = style([
   flexCenter,
   {
+    position: "relative",
     height: 450,
     width: "100%",
     backgroundColor: "#1f1212",
     flexDirection: "column",
+    overflow: "hidden",
   },
+]);
+
+export const circleBox = style([
+  {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(0%, -75%)",
+    height: "50%",
+    aspectRatio: "1 / 1",
+  },
+  responsive({
+    sm: {
+      height: "75%",
+      transform: "translate(-50%, -50%)",
+    },
+  }),
 ]);
 
 export const heroText = style([
   {
+    position: "relative",
     fontSize: 58,
     fontWeight: 600,
     marginLeft: 20,
@@ -33,6 +53,7 @@ export const heroText = style([
 ]);
 
 export const subtitle = style({
+  position: "relative",
   color: "#E1DBD1",
   fontSize: 24,
   marginTop: 24,
