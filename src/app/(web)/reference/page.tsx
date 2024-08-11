@@ -33,7 +33,12 @@ export default async function Page({ searchParams }: PageProps) {
     <div>
       <Nav session={session} />
       <div>
-        <RefList references={body.data.reference} currentPage={page} total={body.data.total} />
+        <RefList
+          references={body.data.reference}
+          currentPage={page}
+          total={body.data.total}
+          size={body.data.size}
+        />
       </div>
     </div>
   );

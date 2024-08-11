@@ -9,9 +9,10 @@ interface RefListProps {
   references: Reference[];
   currentPage: number;
   total: number;
+  size: number;
 }
 
-export default function RefList({ references, total, currentPage }: RefListProps) {
+export default function RefList({ references, total, currentPage, size }: RefListProps) {
   const router = useRouter();
   return (
     <>
@@ -23,6 +24,7 @@ export default function RefList({ references, total, currentPage }: RefListProps
       <PagePagination
         currentPage={currentPage}
         totalCnt={total}
+        pgSize={size}
         onChange={(page) => router.push(`/reference?page=${page}`)}
       />
     </>
