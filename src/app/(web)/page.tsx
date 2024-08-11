@@ -11,7 +11,7 @@ import { Post } from "@/type/api";
 
 export default async function Page() {
   const [popularPostResponse, recentPostResponse, referenceResponse] = await Promise.all([
-    fetch(`${getWasUrl()}/api/twosday/reference?page=1&size=6&order=popular`, {
+    fetch(`${getWasUrl()}/api/twosday/post?page=1&size=6&order=popular`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
@@ -29,12 +29,12 @@ export default async function Page() {
   ]);
 
   const popularBody: {
-    data: { reference: Post[]; total: number; size: number };
+    data: { post: Post[]; total: number; size: number };
     message: string[];
   } = await popularPostResponse.json();
 
   const recentBody: {
-    data: { reference: Post[]; total: number; size: number };
+    data: { post: Post[]; total: number; size: number };
     message: string[];
   } = await recentPostResponse.json();
 
@@ -52,7 +52,7 @@ export default async function Page() {
           <Link href="/post?order=popluar">+ 더보기</Link>
         </div>
         <div className={css.cardSliderBox}>
-          <CardSlider />
+          <CardSlider order="popular" post={popularBody.data.post} />
         </div>
       </section>
       <section className={css.section}>
@@ -61,7 +61,7 @@ export default async function Page() {
           <Link href="/post">+ 더보기</Link>
         </div>
         <div>
-          <CardSlider />
+          <CardSlider order="recent" post={recentBody.data.post} />
         </div>
       </section>
       <div className={css.beltBox}>

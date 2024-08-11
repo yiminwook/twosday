@@ -1,16 +1,18 @@
 import { cardSlider } from "./cardSlider.css";
 import Card from "./Card";
+import { Post } from "@/type/api";
 
-export default function CardSlider() {
+interface CardSliderProps {
+  post: Post[];
+  order: "popular" | "recent";
+}
+
+export default function CardSlider({ post, order }: CardSliderProps) {
   return (
     <section className={cardSlider}>
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
+      {post.map((item) => (
+        <Card key={`${item.id}_order`} post={item} />
+      ))}
     </section>
   );
 }

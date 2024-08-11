@@ -72,7 +72,7 @@ export const textLine = (lineHeight: string | number, clamp: number): CSSPropert
   WebkitBoxOrient: "vertical",
   WebkitLineClamp: clamp,
   lineHeight,
-  height: calc.multiply(clamp, lineHeight),
+  height: calc.multiply(typeof clamp === "number" ? `${clamp}em` : clamp, lineHeight),
 });
 
 export const preventUserSelect: CSSPropertiesWithVars = {
