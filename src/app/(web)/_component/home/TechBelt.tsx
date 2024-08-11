@@ -1,17 +1,17 @@
-import Belt from "./Belt";
-import typescript from "@/asset/svg/typescript.svg?url";
-import nextJS from "@/asset/svg/nextjs.svg?url";
-import vanillaExtract from "@/asset/svg/vanilla-extract.svg?url";
-import reactQuery from "@/asset/svg/react-query.svg?url";
-import zustand from "@/asset/svg/zustand.svg?url";
-import jest from "@/asset/svg/jest.svg?url";
-import playwright from "@/asset/svg/playwright.svg?url";
-import storybook from "@/asset/svg/storybook.svg?url";
-import nestJS from "@/asset/svg/nestjs.svg?url";
-import postgres from "@/asset/svg/postgres.svg?url";
 import aws from "@/asset/svg/aws.svg?url";
+import jest from "@/asset/svg/jest.svg?url";
+import nestJS from "@/asset/svg/nestjs.svg?url";
+import nextJS from "@/asset/svg/nextjs.svg?url";
+import playwright from "@/asset/svg/playwright.svg?url";
+import postgres from "@/asset/svg/postgres.svg?url";
+import reactQuery from "@/asset/svg/react-query.svg?url";
+import storybook from "@/asset/svg/storybook.svg?url";
+import typescript from "@/asset/svg/typescript.svg?url";
+import vanillaExtract from "@/asset/svg/vanilla-extract.svg?url";
+import zustand from "@/asset/svg/zustand.svg?url";
 import Image from "next/image";
-import { techBeltItem } from "./belt.css";
+import Belt from "../Belt";
+import { techBeltItem } from "../belt.css";
 
 const items = [
   { name: "TypeScript", src: typescript, color: "#017ACB" },

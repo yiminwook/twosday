@@ -23,8 +23,6 @@ export default function RefList({ references, total, currentPage }: RefListProps
       <PagePagination
         currentPage={currentPage}
         totalCnt={total}
-        pgSize={10}
-        groupSize={10}
         onChange={(page) => router.push(`/reference?page=${page}`)}
       />
     </>

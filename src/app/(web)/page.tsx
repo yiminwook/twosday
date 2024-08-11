@@ -3,19 +3,20 @@ import RefCard from "@web/_component/refCard/RefCard";
 import { cardList } from "@web/_component/refCard/refList.css";
 import Link from "next/link";
 import CardSlider from "./_component/card/CardSlider";
-import { Reference } from "./reference/_lib/ref.type";
+import HeroSection from "./_component/home/HeroSection";
+import TechBelt from "./_component/home/TechBelt";
 import * as css from "./page.css";
-import TechBelt from "./_component/TechBelt";
-import HeroSection from "./_component/HeroSection";
+import { Reference } from "./reference/_lib/ref.type";
 
 export default async function Page() {
-  const response = await fetch(`${getWasUrl()}/api/twosday/reference?page=1`, {
+  const response = await fetch(`${getWasUrl()}/api/twosday/reference?page=1&size=4`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
+    next: { revalidate: 300, tags: ["home", "reference"] }, //1분 간격으로 캐시 갱신
   });
 
   const body: {
-    data: { reference: Reference[]; total: number; length: number };
+    data: { reference: Reference[]; total: number; size: number };
     message: string[];
   } = await response.json();
 
@@ -59,4 +60,4 @@ export default async function Page() {
 }
 
 // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
-export const fetchCache = "default-no-store";
+// export const fetchCache = "default-no-store";

@@ -39,6 +39,10 @@ export default function PostModal({ onClose, onSuccess, session }: ModalProps<Po
       router.refresh();
       onSuccess(true);
     },
+    onSettled: async () => {
+      // https://nextjs.org/docs/app/api-reference/functions/revalidateTag
+      await fetch("/api/revalidate/tag?name=reference");
+    },
   });
 
   const onSubmit = async (e: React.FormEvent) => {

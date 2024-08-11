@@ -33,4 +33,6 @@ export const moreLink = style({});
 
 export const cardSliderBox = style({});
 
-export const beltBox = style({});
+export const beltBox = style({
+  marginBottom: 100,
+});

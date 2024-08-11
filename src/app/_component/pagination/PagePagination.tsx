@@ -14,12 +14,12 @@ interface PaginationProps {
   /** 최대 아이템 수 */
   totalCnt: number;
   /** 페이지당 아이템 수
-   *  @default - 20
+   *  @default - 10
    */
   pgSize?: number;
   /**
    * Pagination 버튼 수
-   * @default - 10
+   * @default - 5
    */
   groupSize?: number;
 }
