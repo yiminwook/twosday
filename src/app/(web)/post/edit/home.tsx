@@ -55,6 +55,9 @@ export default function Home({ session }: HomeProps) {
       toast.success("업로드 성공");
       router.push(`/post/${body.data.id}`);
     },
+    onSettled: async () => {
+      await fetch("/api/revalidate/tag?name=post");
+    },
   });
 
   const onChange = (value: string) => {
