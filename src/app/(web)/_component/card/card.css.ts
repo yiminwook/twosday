@@ -13,6 +13,7 @@ export const imageBox = style({
   overflow: "hidden",
   aspectRatio: "5 / 4",
   backgroundColor: "#1f1212",
+  cursor: "pointer",
 });
 
 export const image = style({
@@ -58,6 +59,7 @@ export const descBox = style({
 
 export const title = style([
   {
+    cursor: "pointer",
     marginBottom: 20,
     fontWeight: 500,
     fontSize: "1em",

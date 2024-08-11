@@ -40,6 +40,7 @@ export default async function Page({ params }: PageProps) {
     headers: {
       "Content-Type": "application/json",
     },
+    next: { revalidate: 300, tags: [`post_${params.id}`] },
   });
 
   const body: { data: Post; message: string[] } = await response.json();

@@ -3,6 +3,7 @@ import Gravatar from "react-gravatar";
 import * as css from "./card.css";
 import { Post } from "@/type/api";
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 
 interface CardProps {
   post: Post;
@@ -10,10 +11,12 @@ interface CardProps {
 
 /* eslint-disable @next/next/no-img-element */
 export default function Card({ post }: CardProps) {
+  const router = useRouter();
   const updateTime = format(new Date(post.updatedAt), "yy년 MM월 dd일");
+  const onClick = () => router.push(`/post/${post.id}`);
   return (
     <article className={css.wrap}>
-      <div className={css.imageBox}>
+      <div className={css.imageBox} onClick={onClick}>
         {post.thumbnail ? (
           <img className={css.image} src={post.thumbnail} alt="placeholder_image" />
         ) : (
@@ -23,7 +26,9 @@ export default function Card({ post }: CardProps) {
         )}
       </div>
       <div className={css.descBox}>
-        <h4 className={css.title}>{post.title}</h4>
+        <h4 className={css.title} onClick={onClick}>
+          {post.title}
+        </h4>
         <div className={css.editorBox}>
           <div className={css.avatarBox}>
             {post.author.avatar ? (
