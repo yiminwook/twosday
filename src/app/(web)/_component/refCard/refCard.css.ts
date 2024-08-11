@@ -3,14 +3,13 @@ import { style } from "@vanilla-extract/css";
 
 export const wrap = style([
   {
-    flex: "1 1 auto",
-    maxWidth: "100%",
+    flex: "0 1 100%",
+    flexGrow: 0,
     padding: "2em 1em",
     boxShadow: "rgba(0, 0, 0, 0.15) 0px 0px 0px 1px",
   },
   responsive({
-    // sm: { flex: "0 1 auto" },
-    sm: { maxWidth: 200 },
+    sm: { flex: "1 1 300px" },
     md: { maxWidth: 295 },
   }),
 ]);
