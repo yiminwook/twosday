@@ -8,6 +8,8 @@ import TechBelt from "./_component/home/TechBelt";
 import * as css from "./page.css";
 import { Reference } from "./reference/_lib/ref.type";
 import { Post } from "@/type/api";
+import Image from "next/image";
+import AdBanner from "./_component/adBanner/AdBanner";
 
 export default async function Page() {
   const [popularPostResponse, recentPostResponse, referenceResponse] = await Promise.all([
@@ -78,6 +80,7 @@ export default async function Page() {
           ))}
         </div>
       </section>
+      <AdBanner />
     </main>
   );
 }
