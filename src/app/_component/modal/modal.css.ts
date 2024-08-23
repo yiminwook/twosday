@@ -1,16 +1,43 @@
 import { fixedMaxSize, flexCenter, responsive, zIndex } from "@/style/var";
-import { globalStyle, style } from "@vanilla-extract/css";
+import { globalStyle, keyframes, style } from "@vanilla-extract/css";
+
+const enter = keyframes({
+  from: {
+    transform: "translateY(25px)",
+    opacity: 0,
+  },
+  to: {
+    transform: "translateY(0)",
+    opacity: 1,
+  },
+});
 
 export const modalLayout = style([
   zIndex.modal,
   flexCenter,
   fixedMaxSize,
   {
-    "::-webkit-scrollbar": {
-      width: 3, // 스크롤바 너비
+    selectors: {
+      "&::-webkit-scrollbar": {
+        width: 3, // 스크롤바 너비
+      },
     },
   },
 ]);
+
+globalStyle(`${modalLayout} .enter`, {
+  animation: `${enter} 0.3s forwards`,
+});
+
+globalStyle(`${modalLayout} .show`, {
+  opacity: 1,
+  transform: "translateY(0)",
+});
+
+globalStyle(`${modalLayout} .exit`, {
+  animation: `${enter} 0.3s forwards`,
+  animationDirection: "reverse",
+});
 
 export const modalCenterContent = style({
   position: "relative",

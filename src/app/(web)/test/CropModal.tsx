@@ -7,6 +7,8 @@ import { useEffect, useRef } from "react";
 import * as modal from "./cropModal.css";
 import Cropper from "cropperjs";
 import { readFile } from "./readFile";
+import { useTransition } from "@/app/_lib/useTransition";
+import classNames from "classnames";
 
 export type CroppedData = {
   data: {
@@ -32,6 +34,7 @@ export default function CropModal({
 }: ModalProps<CropModalProps>) {
   const imageRef = useRef<HTMLImageElement>(null);
   const cropperRef = useRef<Cropper | null>(null);
+  const { modifier, exit, onAnimationEnd } = useTransition();
 
   const save = () => {
     const crop = cropperRef.current;
@@ -41,7 +44,7 @@ export default function CropModal({
       if (!blob) return;
       const newfile = new File([blob], file.name, { ...file });
       const url = await readFile(newfile);
-      onSuccess({ data: { url, width, height }, file: newfile });
+      exit(() => onSuccess({ data: { url, width, height }, file: newfile }));
     });
   };
 
@@ -75,7 +78,7 @@ export default function CropModal({
 
   return (
     <Modal id={ID}>
-      <div className={modal.content}>
+      <div className={classNames(modal.content, modifier)} onAnimationEnd={onAnimationEnd}>
         <div>
           <div className={css.modalHeader}>
             <h3 className={modal.title}>이미지 업로드</h3>
@@ -90,7 +93,7 @@ export default function CropModal({
           <button className={modalDefaultBtn} type="button" onClick={save}>
             업로드
           </button>
-          <button className={modalCancelBtn} type="button" onClick={onClose}>
+          <button className={modalCancelBtn} type="button" onClick={() => exit(() => onClose())}>
             취소
           </button>
         </div>
