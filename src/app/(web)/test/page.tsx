@@ -9,6 +9,7 @@ import classNames from "classnames";
 import Youtube from "@tiptap/extension-youtube";
 import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
+import ImageResize from "tiptap-extension-resize-image";
 import "@/style/cropper.css";
 
 export default function Page() {
@@ -19,6 +20,7 @@ export default function Page() {
       StarterKit.configure({}),
       Youtube,
       Image,
+      ImageResize,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
     ],
     immediatelyRender: false, // Prevents the editor from rendering immediately
@@ -39,9 +41,21 @@ export default function Page() {
   }
 
   return (
-    <div className={classNames(css.lightTheme, css.editor)}>
-      <Control editor={editor} />
-      <EditorContent className={css.body} editor={editor} />
+    <div
+      style={{
+        maxWidth: 1280,
+        margin: "0 auto",
+        padding: 10,
+        width: "100%",
+        minHeight: "100vh",
+      }}
+    >
+      {/* <div style={{ margin: "0 auto" }}> */}
+      <div className={classNames(css.lightTheme, css.editor)}>
+        <Control editor={editor} />
+        <EditorContent className={css.body} editor={editor} />
+      </div>
+      {/* </div> */}
     </div>
   );
 }

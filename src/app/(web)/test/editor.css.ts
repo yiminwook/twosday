@@ -26,8 +26,6 @@ export const editor = style({
   position: "relative",
   display: "flex",
   flexDirection: "column",
-  margin: 10,
-  width: 1200,
   border: "1px solid",
   borderColor: editorVar.border.color,
   borderRadius: editorVar.border.radius,
@@ -91,7 +89,7 @@ globalStyle(`${editor} strong`, {
 globalStyle(`${editor} img`, {
   display: "block",
   height: "auto",
-  margin: "1.5rem auto",
+  margin: "0 auto",
   maxWidth: "100%",
 });
 
@@ -99,7 +97,7 @@ globalStyle(`${editor} iframe`, {
   display: "block",
   height: "auto",
   aspectRatio: "16 / 9",
-  margin: "1.5rem auto",
+  margin: "0 auto",
   maxWidth: "100%",
 });
 
