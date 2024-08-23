@@ -29,6 +29,7 @@ export const editor = style({
   border: "1px solid",
   borderColor: editorVar.border.color,
   borderRadius: editorVar.border.radius,
+  caretColor: editorVar.border.active,
 });
 
 export const control = style({
@@ -36,7 +37,7 @@ export const control = style({
   flexWrap: "wrap",
   display: "flex",
   alignItems: "center",
-  position: "sticky",
+  // position: "sticky",
   top: 51, // header height - 1
   zIndex: 1,
   backgroundColor: editorVar.background.color,
@@ -105,3 +106,14 @@ globalStyle(`${editor} img.ProseMirror-selectednode`, {
   outline: "2px solid",
   outlineColor: editorVar.border.active,
 });
+
+globalStyle(`${editor} pre`, {
+  position: "relative",
+  borderRadius: "0.5rem",
+  margin: "1.5rem 0",
+  padding: "0.75rem 1rem",
+  background: "#444444",
+  color: "#dddddd",
+});
+
+globalStyle(`${editor} code`, {});

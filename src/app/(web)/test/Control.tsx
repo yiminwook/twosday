@@ -84,7 +84,7 @@ export default function Control({ editor }: ControlProps) {
       <div className={css.buttonGroup}>
         <button
           className={classNames(css.button, { active: editor.isActive("code") })}
-          onClick={() => editor.chain().focus().toggleCode().run()}
+          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
         >
           <IoCodeSlashOutline size={16} />
         </button>
