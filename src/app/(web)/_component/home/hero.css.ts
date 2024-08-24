@@ -1,7 +1,7 @@
 import { flexCenter, responsive } from "@/style/var";
 import { style } from "@vanilla-extract/css";
 
-export const heroSection = style([
+export const wrap = style([
   flexCenter,
   {
     position: "relative",
