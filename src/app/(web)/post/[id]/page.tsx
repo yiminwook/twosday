@@ -3,6 +3,7 @@ import "@/style/editor.css";
 import { getWasUrl } from "@/app/_lib/getWasUrl";
 import Viewer from "@web/post/edit/_component/Viewer";
 import { notFound } from "next/navigation";
+import Comment from "../_component/Comment";
 
 type Author = {
   id: number;
@@ -62,6 +63,7 @@ export default async function Page({ params }: PageProps) {
           <p>{body.data.updatedAt}</p>
         </div>
         <Viewer content={body.data.content} />
+        <Comment />
       </div>
     </div>
   );
