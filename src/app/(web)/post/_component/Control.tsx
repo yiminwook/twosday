@@ -32,6 +32,7 @@ export default function Control({ editor }: ControlProps) {
       if (input.files && input.files.length > 0) {
         const file = input.files[0];
         const url = await readFile(file);
+        console.log("url", url);
         const result: CroppedData | undefined = await modalStore.push(CropModal, {
           props: { file, imageUrl: url },
         });
@@ -47,6 +48,7 @@ export default function Control({ editor }: ControlProps) {
     <div className={css.control}>
       <div className={css.buttonGroup}>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={classNames(css.button, { active: editor.isActive("bold") })}
         >
@@ -56,24 +58,28 @@ export default function Control({ editor }: ControlProps) {
 
       <div className={css.buttonGroup}>
         <button
+          type="button"
           onClick={() => editor.chain().focus().setTextAlign("left").run()}
           className={classNames(css.button, { active: editor.isActive({ textAlign: "left" }) })}
         >
           <TfiAlignLeft size={16} />
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().setTextAlign("center").run()}
           className={classNames(css.button, { active: editor.isActive({ textAlign: "center" }) })}
         >
           <TfiAlignCenter size={16} />
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().setTextAlign("right").run()}
           className={classNames(css.button, { active: editor.isActive({ textAlign: "right" }) })}
         >
           <TfiAlignRight size={16} />
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().setTextAlign("justify").run()}
           className={classNames(css.button, { active: editor.isActive({ textAlign: "justify" }) })}
         >
@@ -83,17 +89,18 @@ export default function Control({ editor }: ControlProps) {
 
       <div className={css.buttonGroup}>
         <button
+          type="button"
           className={classNames(css.button, { active: editor.isActive("code") })}
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
         >
           <IoCodeSlashOutline size={16} />
         </button>
 
-        <button className={classNames(css.button)} onClick={upload}>
+        <button type="button" className={classNames(css.button)} onClick={upload}>
           <LuImage size={16} />
         </button>
 
-        <button className={classNames(css.button)} onClick={addYoutubeVideo}>
+        <button type="button" className={classNames(css.button)} onClick={addYoutubeVideo}>
           <FaYoutube size={16} />
         </button>
       </div>

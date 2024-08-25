@@ -1,13 +1,18 @@
+"use client";
 import parse from "html-react-parser";
+import hljs from "highlight.js";
+import { useEffect } from "react";
+import * as css from "../../_component/editor.css";
+import classNames from "classnames";
 
 interface ViewerProps {
   content: string;
 }
 
 export default function Viewer({ content }: ViewerProps) {
-  return (
-    <div className="ql-snow">
-      <div className="ql-editor">{parse(content)}</div>
-    </div>
-  );
+  useEffect(() => {
+    hljs.highlightAll();
+  }, [content]);
+
+  return <div className={classNames(css.lightTheme, css.editor)}>{parse(content)}</div>;
 }

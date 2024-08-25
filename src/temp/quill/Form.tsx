@@ -1,10 +1,11 @@
 import Removable from "@web/_component/tagInput/Removable";
-import EditorPlaceholder from "../../_component/EditorPlaceholder";
+import EditorPlaceholder from "./EditorPlaceholder";
 import dynamic from "next/dynamic";
 import * as css from "./form.css";
-import { Editor as EditorType } from "@tiptap/react";
+import ReactQuill from "react-quill";
+import { RefObject } from "react";
 
-const Editor = dynamic(() => import("../../_component/Editor"), {
+const Editor = dynamic(() => import("./Editor"), {
   ssr: false,
   loading: () => <EditorPlaceholder />,
 });
@@ -16,7 +17,7 @@ interface FormProps {
   tags: string[];
   value: string;
   onChange: (value: string) => void;
-  editor: EditorType | null;
+  quillRef: RefObject<ReactQuill>;
   session: Session;
 }
 
@@ -27,7 +28,7 @@ export default function Form({
   onChange,
   openTagsModal,
   tags,
-  editor,
+  quillRef,
   session,
 }: FormProps) {
   return (
@@ -48,7 +49,7 @@ export default function Form({
         ))}
         {tags.length === 0 && <span>태그를 추가해주세요</span>}
       </div>
-      <Editor editor={editor} />
+      <Editor value={value} onChange={onChange} editorRef={quillRef} session={session} />
     </form>
   );
 }

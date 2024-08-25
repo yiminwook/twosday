@@ -1,4 +1,3 @@
-import Image from "next/image";
 import * as css from "./adBanner.css";
 
 export default function AdBanner() {

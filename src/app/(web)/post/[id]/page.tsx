@@ -1,9 +1,9 @@
-import "@/style/highlight.css"; // 코드박스 하이라이트 스타일
-import "@/style/editor.css";
 import { getWasUrl } from "@/app/_lib/getWasUrl";
 import Viewer from "@web/post/edit/_component/Viewer";
 import { notFound } from "next/navigation";
 import Comment from "../_component/Comment";
+import * as css from "./page.css";
+import AdBanner from "@web/_component/adBanner/AdBanner";
 
 type Author = {
   id: number;
@@ -41,7 +41,6 @@ export default async function Page({ params }: PageProps) {
     headers: {
       "Content-Type": "application/json",
     },
-    next: { revalidate: 300, tags: [`post_${params.id}`] },
   });
 
   const body: { data: Post; message: string[] } = await response.json();
@@ -54,15 +53,18 @@ export default async function Page({ params }: PageProps) {
   }
 
   return (
-    <div>
-      <h1>단건 조회 페이지</h1>
-      <div>
-        <div>
+    <div className={css.wrap}>
+      <h1 className="blind">단건 조회 페이지</h1>
+      <div className={css.viewerBox}>
+        <div className={css.viewerHead}>
           <h2>{body.data.title}</h2>
           <p>{body.data.createdAt}</p>
           <p>{body.data.updatedAt}</p>
         </div>
         <Viewer content={body.data.content} />
+      </div>
+      <AdBanner />
+      <div className={css.commentBox}>
         <Comment />
       </div>
     </div>

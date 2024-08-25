@@ -79,6 +79,10 @@ export const body = style({
   padding: 5,
 });
 
+globalStyle(`.ProseMirror`, {
+  minHeight: 500,
+});
+
 globalStyle(`${editor} .ProseMirror-focused`, {
   outline: "none",
 });
@@ -116,4 +120,7 @@ globalStyle(`${editor} pre`, {
   color: "#dddddd",
 });
 
-globalStyle(`${editor} code`, {});
+globalStyle(`${editor} code.hljs`, {
+  background: "none",
+  color: "inherit",
+});

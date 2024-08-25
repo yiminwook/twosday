@@ -1,6 +1,5 @@
 "use client";
 import { MouseEvent, useRef, useState } from "react";
-import ReactQuill from "react-quill";
 import Viewer from "./_component/Viewer";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -11,6 +10,8 @@ import { useSetModalStore } from "@/app/_lib/modalStore";
 import TagsModal from "./_component/TagsModal";
 import Form from "./_component/Form";
 import { excuteThumnail } from "./_lib/excuteThumbnail";
+import { useEditor } from "@tiptap/react";
+import { extensions } from "../_lib/extentions";
 
 interface HomeProps {
   session: Session;
@@ -19,14 +20,22 @@ interface HomeProps {
 export default function Home({ session }: HomeProps) {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
-  const quillRef = useRef<ReactQuill>(null);
   const [tags, setTags] = useState<string[]>([]);
   const router = useRouter();
   const modalStore = useSetModalStore();
   const [togglePreview, setTogglePreview] = useState(false);
 
+  const editor = useEditor({
+    extensions,
+    immediatelyRender: false, // Prevents the editor from rendering immediately
+    content: `
+      <p>Hello! This is a <code>tiptap</code> editor.</p>
+      `,
+  });
+
   const mutation = useMutation({
     mutationFn: async (e: MouseEvent) => {
+      if (!editor) return;
       const response = await fetch(`${getWasUrl()}/api/twosday/post`, {
         method: "POST",
         headers: {
@@ -35,7 +44,7 @@ export default function Home({ session }: HomeProps) {
         },
         body: JSON.stringify({
           title,
-          content: value,
+          content: editor.getHTML(),
           tags: [],
           isPublic: true,
           thumbnail: excuteThumnail(value),
@@ -53,7 +62,7 @@ export default function Home({ session }: HomeProps) {
     },
     onSuccess: (body) => {
       toast.success("업로드 성공");
-      router.push(`/post/${body.data.id}`);
+      router.push(`/post/${body?.data.id}`);
     },
     onSettled: async () => {
       await fetch("/api/revalidate/tag?name=post");
@@ -115,7 +124,7 @@ export default function Home({ session }: HomeProps) {
               onChange={onChange}
               tags={tags}
               openTagsModal={openTagsModal}
-              quillRef={quillRef}
+              editor={editor}
               session={session}
             />
           )}

@@ -16,7 +16,7 @@ export default function RefCard({ reference }: RefCardProps) {
         <a target="_blank" href={reference.url}>
           <h4 className={css.title}>{reference.title}</h4>
         </a>
-        <desc className={css.desc}>{reference.description}</desc>
+        <p className={css.desc}>{reference.description}</p>
       </div>
     </article>
   );

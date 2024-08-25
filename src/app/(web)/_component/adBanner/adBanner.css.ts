@@ -3,6 +3,9 @@ import { style } from "@vanilla-extract/css";
 export const wrap = style([
   {
     textAlign: "center",
-    paddingBottom: 10,
+    padding: 7,
+    display: "flex",
+    maxWidth: "100%",
+    justifyContent: "center",
   },
 ]);
