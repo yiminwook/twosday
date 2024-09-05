@@ -69,7 +69,7 @@ export default function Form({
         isMulti
         options={colourOptions}
         styles={{
-          container: (styles) => ({ ...styles, marginBottom: 10 }),
+          container: (styles) => ({ ...styles, marginBottom: 10, position: "relative", zIndex: 2 }),
           control: (styles) => ({
             ...styles,
             boxShadow: "none",

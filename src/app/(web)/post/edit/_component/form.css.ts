@@ -8,8 +8,6 @@ export const inputBox = style({
   display: "flex",
   marginBottom: 10,
   alignItems: "center",
-  position: "relative",
-  zIndex: 2,
 });
 
 export const input = style({
