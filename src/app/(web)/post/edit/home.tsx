@@ -91,7 +91,7 @@ export default function Home({ session }: HomeProps) {
   return (
     <div className={css.main}>
       <h1 className="blind">게시글 업로드 페이지</h1>
-      <section>
+      <section className={css.section}>
         <h2 className="blind">{togglePreview ? "미리보기" : "게시글 작성"}</h2>
         <div className={css.nav}>
           <button

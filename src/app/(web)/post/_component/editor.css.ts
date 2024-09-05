@@ -133,3 +133,81 @@ globalStyle(`${editor} code.hljs`, {
   background: "none",
   color: "inherit",
 });
+
+globalStyle(
+  `
+  ${editor} h1, 
+  ${editor} h2, 
+  ${editor} h3
+  `,
+  {
+    lineHeight: 1.1,
+    marginTop: "2.5rem",
+    textWrap: "pretty",
+  },
+);
+
+globalStyle(
+  `
+  ${editor} h1,
+  ${editor} h2
+  `,
+  {
+    marginBottom: "1.5rem",
+  },
+);
+
+globalStyle(`${editor} h1`, {
+  fontSize: "1.4rem",
+});
+
+globalStyle(`${editor} h2`, {
+  fontSize: "1.2rem",
+});
+
+globalStyle(`${editor} h3`, {
+  fontSize: "1rem",
+});
+
+globalStyle(`${editor} hr`, {
+  border: "none",
+  borderTop: `2px solid ${editorVar.border.color}`,
+  cursor: "pointer",
+  margin: "2rem 0",
+});
+
+globalStyle(`${editor} .ProseMirror-selectednode`, {
+  borderTop: `2px solid ${editorVar.border.active}`,
+});
+
+globalStyle(
+  `
+  ${editor} ol,
+  ${editor} ul
+  `,
+  {
+    padding: "0 1rem",
+    margin: "1.25rem 1rem 1.25rem 0.4rem",
+  },
+);
+
+globalStyle(`${editor} ol`, {
+  listStyleType: "decimal",
+});
+
+globalStyle(`${editor} ul`, {
+  listStyleType: "disc",
+});
+
+globalStyle(`${editor} li p`, {
+  marginTop: "0.25em",
+  marginBottom: "0.25em",
+});
+
+globalStyle(`${editor} :first-child`, {
+  marginTop: 0, // 첫번째 자식의 margin-top 제거
+});
+
+globalStyle(`${editor} a`, {
+  color: editorVar.border.active,
+});
