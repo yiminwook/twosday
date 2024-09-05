@@ -8,11 +8,13 @@ export const inputBox = style({
   display: "flex",
   marginBottom: 10,
   alignItems: "center",
-  paddingInline: 4,
+  position: "relative",
+  zIndex: 2,
 });
 
 export const input = style({
   width: "100%",
+  padding: "2px 8px",
   fontSize: 16,
   ":focus-visible": {
     outline: "none",
