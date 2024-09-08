@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { getWasUrl } from "./getWasUrl";
 
 export const getServerSession = async (): Promise<Session | null> => {
-  const refreshToken = cookies().get("refreshToken")?.value;
+  const refreshToken = cookies().get("refresh_token")?.value;
   if (!refreshToken) return null;
 
   const res = await fetch(`${getWasUrl()}/api/auth/session`, {
