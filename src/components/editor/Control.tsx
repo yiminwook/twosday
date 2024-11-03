@@ -17,12 +17,15 @@ import { GoListOrdered, GoListUnordered } from "react-icons/go";
 import { LuListX } from "react-icons/lu";
 import { RiH1, RiH2, RiH3 } from "react-icons/ri";
 import { RichTextEditor } from "@mantine/tiptap";
+import { getWasUrl } from "@/utils/getWasUrl";
+import { get } from "http";
 
 interface ControlProps {
   editor: Editor;
+  session: Session;
 }
 
-export default function Control({ editor }: ControlProps) {
+export default function Control({ editor, session }: ControlProps) {
   const modalStore = useSetModalStore();
 
   const addYoutubeVideo = () => {
@@ -40,14 +43,44 @@ export default function Control({ editor }: ControlProps) {
       if (input.files && input.files.length > 0) {
         const file = input.files[0];
         const url = await readFile(file);
-        console.log("url", url);
+
         const result: CroppedData | undefined = await modalStore.push(CropModal, {
           props: { file, imageUrl: url },
         });
+
         if (!result) return;
-        console.log("result", result);
-        editor.chain().focus().setImage({ src: result.data.url }).run();
+
+        const uploadUrl = getWasUrl() + "/api/image/sign";
+        const wasRes = await fetch(uploadUrl, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${session.accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ fileName: file.name, projectName: "twosday" }),
+          cache: "no-cache",
+        });
+
+        if (!wasRes.ok) throw new Error("업로드중 오류가 발생했습니다.");
+
+        const body: { url: string } = await wasRes.json();
+
+        const awsRes = await fetch(body.url, {
+          method: "PUT",
+          body: file,
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
+
+        const pathname = new URL(body.url).pathname;
+
+        if (!awsRes.ok) throw new Error("업로드중 오류가 발생했습니다.");
+
+        const imgUrl = process.env.NEXT_PUBLIC_AWS_CLOUD_FRONT_URL + pathname;
+        editor.chain().focus().setImage({ src: imgUrl }).run();
       }
+      input.remove();
     });
     input.click();
   };
@@ -108,7 +141,6 @@ export default function Control({ editor }: ControlProps) {
         <RichTextEditor.Control onClick={addYoutubeVideo}>
           <FaYoutube size={16} />
         </RichTextEditor.Control>
-        <RichTextEditor.Control></RichTextEditor.Control>
       </RichTextEditor.ControlsGroup>
 
       <RichTextEditor.ControlsGroup>

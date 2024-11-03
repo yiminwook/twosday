@@ -73,7 +73,7 @@ export default function Form({
           return filtered;
         }}
       />
-      <Editor editor={editor} />
+      <Editor editor={editor} session={session} />
     </Stack>
   );
 }

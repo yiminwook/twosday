@@ -5,9 +5,10 @@ import Control from "./Control";
 
 interface EditorProps {
   editor: TEditor | null;
+  session: Session;
 }
 
-export default function Editor({ editor }: EditorProps) {
+export default function Editor({ editor, session }: EditorProps) {
   useEffect(() => {
     if (!editor) return;
     editor.on("transaction", (e) => {
@@ -22,7 +23,7 @@ export default function Editor({ editor }: EditorProps) {
 
   return (
     <RichTextEditor editor={editor}>
-      <Control editor={editor} />
+      <Control editor={editor} session={session} />
       <RichTextEditor.Content />
     </RichTextEditor>
   );
