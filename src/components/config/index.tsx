@@ -11,7 +11,12 @@ const ModalContainer = dynamic(() => import("@/components/common/modal/ModalCont
   ssr: false,
 });
 
-export default async function Configs({ children }: PropsWithChildren) {
+interface ConfigsProps {
+  defaultColorScheme: "light" | "dark";
+  children: React.ReactNode;
+}
+
+export default async function Configs({ children, defaultColorScheme }: ConfigsProps) {
   const session = await getServerSession();
 
   return (

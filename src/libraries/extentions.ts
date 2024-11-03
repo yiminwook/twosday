@@ -1,14 +1,17 @@
-import { Extensions } from "@tiptap/react";
-import { common, createLowlight } from "lowlight";
-import Youtube from "@tiptap/extension-youtube";
-import Image from "@tiptap/extension-image";
-import TextAlign from "@tiptap/extension-text-align";
-import ImageResize from "tiptap-extension-resize-image";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import StarterKit from "@tiptap/starter-kit";
-import { v1 as uuid } from "uuid";
+import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
 import Underline from "@tiptap/extension-underline";
+import Youtube from "@tiptap/extension-youtube";
+import { Extensions } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { common, createLowlight } from "lowlight";
+import ImageResize from "tiptap-extension-resize-image";
+import { v1 as uuid } from "uuid";
+import Superscript from "@tiptap/extension-superscript";
+import SubScript from "@tiptap/extension-subscript";
+import Highlight from "@tiptap/extension-highlight";
 
 // .extend({
 //   addNodeView() {
@@ -28,12 +31,15 @@ export const extensions: Extensions = [
       },
     },
   }),
-  Youtube,
+  Underline,
+  Superscript,
+  SubScript,
+  Highlight,
   Image,
   ImageResize,
-  Underline,
   CodeBlockLowlight.configure({ lowlight }),
   TextAlign.configure({ types: ["heading", "paragraph"] }),
+  Youtube,
   Link.configure({
     openOnClick: false, //편집기중은 비활성화
     autolink: true,

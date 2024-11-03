@@ -1,5 +1,3 @@
-import "@/styles/highlight.css"; // 코드박스 하이라이트 스타일
-import "@/styles/editor.css";
 import Home from "@/components/editor/Home";
 import { getServerSession } from "@/apis/getServerSession";
 import { redirect } from "next/navigation";

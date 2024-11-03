@@ -1,9 +1,14 @@
+import "@/styles/global.scss";
+import "@/styles/theme.scss";
+import "@/styles/editor.css";
+
 import "@/styles/global.css";
 import "@/styles/globalTheme.css";
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import { PropsWithChildren } from "react";
 import Configs from "@/components/config";
+import { ColorSchemeScript } from "@mantine/core";
 
 const font = Noto_Sans_KR({
   weight: ["300", "400", "500", "700"],
@@ -24,9 +29,13 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang="ko" color-theme="dark">
+    // https://github.com/mantinedev/mantine/issues/7008
+    <html lang="ko" suppressContentEditableWarning>
+      <head>
+        <ColorSchemeScript defaultColorScheme="light" />
+      </head>
       <body className={font.className}>
-        <Configs>{children}</Configs>
+        <Configs defaultColorScheme={"light"}>{children}</Configs>
       </body>
     </html>
   );

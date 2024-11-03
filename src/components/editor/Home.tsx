@@ -10,8 +10,8 @@ import { useSetModalStore } from "@/stores/modalStore";
 import TagsModal from "./TagsModal";
 import Form from "./Form";
 import { excuteThumnail } from "@/utils/excuteThumbnail";
-import { useEditor } from "@tiptap/react";
 import { extensions } from "@/libraries/extentions";
+import { useEditor } from "@tiptap/react";
 
 interface HomeProps {
   session: Session;
@@ -27,7 +27,10 @@ export default function Home({ session }: HomeProps) {
 
   const editor = useEditor({
     extensions,
-    immediatelyRender: false, // Prevents the editor from rendering immediately
+    /** 에디터가 초기화될 때 기다리지 않고 바로 콘텐츠를 렌더링 **/
+    immediatelyRender: false,
+    /** 에디터 내부에서 트랜잭션 발생시 리렌더링 **/
+    shouldRerenderOnTransaction: false,
     content: `
       <p>Hello! This is a <code>tiptap</code> editor.</p>
       `,

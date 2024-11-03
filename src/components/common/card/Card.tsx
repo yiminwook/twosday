@@ -2,8 +2,8 @@
 import Gravatar from "react-gravatar";
 import * as css from "./card.css";
 import { Post } from "@/types/api";
-import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import dayjs from "@/libraries/dayjs";
 
 interface CardProps {
   post: Post;
@@ -12,7 +12,7 @@ interface CardProps {
 /* eslint-disable @next/next/no-img-element */
 export default function Card({ post }: CardProps) {
   const router = useRouter();
-  const updateTime = format(new Date(post.updatedAt), "yy년 MM월 dd일");
+  const updateTime = dayjs(post.updatedAt).format("yy년 MM월 dd일");
   const onClick = () => router.push(`/post/${post.id}`);
   return (
     <article className={css.wrap}>
