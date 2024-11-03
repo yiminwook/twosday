@@ -1,14 +1,11 @@
-import Removable from "@/components/tagInput/Removable";
-import EditorPlaceholder from "@/components/editor/EditorPlaceholder";
-import dynamic from "next/dynamic";
-import * as css from "./form.css";
 import { Editor as EditorType } from "@tiptap/react";
-import Select from "react-select";
+import { ComboboxData, ComboboxItem, Input, Space, Stack, TagsInput } from "@mantine/core";
+import Editor from "./Editor";
 
-const Editor = dynamic(() => import("@/components/editor/Editor"), {
-  ssr: false,
-  loading: () => <EditorPlaceholder />,
-});
+// const Editor = dynamic(() => import("@/components/editor/Editor"), {
+//   ssr: false,
+//   loading: () => <EditorPlaceholder />,
+// });
 
 export interface ColourOption {
   readonly value: string;
@@ -21,7 +18,6 @@ export interface ColourOption {
 interface FormProps {
   title: string;
   onChangeTitle: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  openTagsModal: () => void;
   tags: string[];
   value: string;
   onChange: (value: string) => void;
@@ -34,59 +30,50 @@ export default function Form({
   value,
   onChangeTitle,
   onChange,
-  openTagsModal,
   tags,
   editor,
   session,
 }: FormProps) {
-  const colourOptions: readonly ColourOption[] = [
-    { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
-    { value: "blue", label: "Blue", color: "#0052CC", isDisabled: true },
-    { value: "purple", label: "Purple", color: "#5243AA" },
-    { value: "red", label: "Red", color: "#FF5630", isFixed: true },
-    { value: "orange", label: "Orange", color: "#FF8B00" },
-    { value: "yellow", label: "Yellow", color: "#FFC400" },
-    { value: "green", label: "Green", color: "#36B37E" },
-    { value: "forest", label: "Forest", color: "#00875A" },
-    { value: "slate", label: "Slate", color: "#253858" },
-    { value: "silver", label: "Silver", color: "#666666" },
+  const colourOptions: ComboboxData = [
+    { value: "ocean", label: "Ocean" },
+    { value: "blue", label: "Blue" },
+    { value: "purple", label: "Purple" },
+    { value: "red", label: "Red" },
+    { value: "orange", label: "Orange" },
+    { value: "yellow", label: "Yellow" },
+    { value: "green", label: "Green" },
+    { value: "forest", label: "Forest" },
+    { value: "slate", label: "Slate" },
+    { value: "silver", label: "Silver" },
   ];
 
   return (
-    <form className={css.form}>
-      <div className={css.inputBox}>
-        <input
-          className={css.input}
-          type="text"
-          value={title}
-          onChange={onChangeTitle}
-          placeholder="제목을 입력해주세요"
-          id="upload-title"
-        />
-      </div>
-      <Select
-        defaultValue={[colourOptions[2], colourOptions[3]]}
-        isMulti
-        options={colourOptions}
-        styles={{
-          container: (styles) => ({ ...styles, marginBottom: 10, position: "relative", zIndex: 2 }),
-          control: (styles) => ({
-            ...styles,
-            boxShadow: "none",
-            borderColor: "#cdcdcd",
-            height: "100%",
-            borderRadius: 0,
-            ":hover": {
-              borderColor: "#cdcdcd", // hover시 border 안바뀌게
-              boxShadow: "none",
-            },
-          }),
-          menuList: (styles) => ({ ...styles, "::-webkit-scrollbar": { width: 3 } }),
+    <Stack gap="md" component="form">
+      <Input
+        size="md"
+        type="text"
+        placeholder="제목을 입력해주세요"
+        id="upload-tag"
+        onChange={onChangeTitle}
+        value={title}
+      />
+      <TagsInput
+        size="md"
+        onChange={(e) => console.log(e)}
+        data={colourOptions}
+        splitChars={[",", " ", "|"]}
+        acceptValueOnBlur
+        clearable
+        filter={({ options, search }) => {
+          const filtered = (options as ComboboxItem[]).filter((option) =>
+            option.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+          );
+          // 알파벳 순서로 정렬
+          filtered.sort((a, b) => a.label.localeCompare(b.label));
+          return filtered;
         }}
-        onChange={(selected) => console.log(selected)}
-        onInputChange={(inputValue) => console.log(inputValue)}
       />
       <Editor editor={editor} />
-    </form>
+    </Stack>
   );
 }

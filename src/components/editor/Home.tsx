@@ -6,8 +6,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { getWasUrl } from "@/utils/getWasUrl";
 import * as css from "./home.css";
-import { useSetModalStore } from "@/stores/modalStore";
-import TagsModal from "./TagsModal";
 import Form from "./Form";
 import { excuteThumnail } from "@/utils/excuteThumbnail";
 import { extensions } from "@/libraries/extentions";
@@ -22,7 +20,6 @@ export default function Home({ session }: HomeProps) {
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const router = useRouter();
-  const modalStore = useSetModalStore();
   const [togglePreview, setTogglePreview] = useState(false);
 
   const editor = useEditor({
@@ -84,13 +81,6 @@ export default function Home({ session }: HomeProps) {
     setTags((prev) => [...prev, tag]);
   };
 
-  const openTagsModal = async () => {
-    const newTag: string[] = await modalStore.push(TagsModal, {
-      props: { tags, session },
-    });
-    setTags(() => newTag);
-  };
-
   return (
     <div className={css.main}>
       <h1 className="blind">게시글 업로드 페이지</h1>
@@ -126,7 +116,6 @@ export default function Home({ session }: HomeProps) {
               value={value}
               onChange={onChange}
               tags={tags}
-              openTagsModal={openTagsModal}
               editor={editor}
               session={session}
             />

@@ -6,6 +6,7 @@ import Devtools from "@/components/config/Devtools";
 import Hotkeys from "@/components/config/Hotkeys";
 import ReactQuery from "./ReactQuery";
 import { getServerSession } from "@/apis/getServerSession";
+import MantineProvider from "./MantainProvider";
 
 const ModalContainer = dynamic(() => import("@/components/common/modal/ModalContainer"), {
   ssr: false,
@@ -23,10 +24,12 @@ export default async function Configs({ children, defaultColorScheme }: ConfigsP
     <App session={session}>
       <Hotkeys>
         <ReactQuery>
-          {children}
-          <Devtools />
-          <ModalContainer />
-          <Toaster />
+          <MantineProvider defaultColorScheme={defaultColorScheme}>
+            {children}
+            <Devtools />
+            <ModalContainer />
+            <Toaster />
+          </MantineProvider>
         </ReactQuery>
       </Hotkeys>
     </App>

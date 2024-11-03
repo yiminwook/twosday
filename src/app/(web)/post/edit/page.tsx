@@ -8,6 +8,6 @@ export default async function Page() {
   const query = new URLSearchParams({
     redirect: process.env.NEXT_PUBLIC_API_URL + "/post/edit",
   }).toString();
-  if (!session) return redirect(`${getWasUrl()}/login?${query}`);
+  if (!session) redirect(`${getWasUrl()}/login?${query}`);
   return <Home session={session} />;
 }

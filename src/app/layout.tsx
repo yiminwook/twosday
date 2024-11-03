@@ -1,3 +1,6 @@
+import "@mantine/carousel/styles.css";
+import "@mantine/code-highlight/styles.css";
+
 import "@/styles/global.scss";
 import "@/styles/theme.scss";
 import "@/styles/editor.css";

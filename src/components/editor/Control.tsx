@@ -16,6 +16,7 @@ import { BiUnderline, BiLink, BiUnlink } from "react-icons/bi";
 import { GoListOrdered, GoListUnordered } from "react-icons/go";
 import { LuListX } from "react-icons/lu";
 import { RiH1, RiH2, RiH3 } from "react-icons/ri";
+import { RichTextEditor } from "@mantine/tiptap";
 
 interface ControlProps {
   editor: Editor;
@@ -71,150 +72,56 @@ export default function Control({ editor }: ControlProps) {
   };
 
   return (
-    <div className={css.control}>
-      <div className={css.buttonGroup}>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={classNames(css.button, { active: editor.isActive("heading", { level: 1 }) })}
-        >
-          <RiH1 size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={classNames(css.button, { active: editor.isActive("heading", { level: 2 }) })}
-        >
-          <RiH2 size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={classNames(css.button, { active: editor.isActive("heading", { level: 3 }) })}
-        >
-          <RiH3 size={16} />
-        </button>
-      </div>
-      <div className={css.buttonGroup}>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className={classNames(css.button, { active: editor.isActive("bold") })}
-        >
-          <VscBold size={16} />
-        </button>
+    <RichTextEditor.Toolbar>
+      <RichTextEditor.ControlsGroup>
+        <RichTextEditor.Bold />
+        <RichTextEditor.Italic />
+        <RichTextEditor.Underline />
+        <RichTextEditor.Strikethrough />
+        <RichTextEditor.ClearFormatting />
+        <RichTextEditor.Highlight />
+        <RichTextEditor.CodeBlock />
+      </RichTextEditor.ControlsGroup>
 
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={classNames(css.button, { active: editor.isActive("italic") })}
-        >
-          <CgFormatItalic size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={classNames(css.button, { active: editor.isActive("strike") })}
-        >
-          <BsTypeStrikethrough size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={classNames(css.button, { active: editor.isActive("underline") })}
-        >
-          <BiUnderline size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={setLink}
-          className={classNames(css.button, { active: editor.isActive("link") })}
-        >
-          <BiLink size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().unsetLink().run()}
-          className={classNames(css.button, { active: !editor.isActive("link") })}
-          disabled={!editor.isActive("link")}
-        >
-          <BiUnlink size={16} />
-        </button>
-      </div>
+      <RichTextEditor.ControlsGroup>
+        <RichTextEditor.H1 />
+        <RichTextEditor.H2 />
+        <RichTextEditor.H3 />
+        <RichTextEditor.H4 />
+      </RichTextEditor.ControlsGroup>
 
-      <div className={css.buttonGroup}>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={classNames(css.button, { active: editor.isActive("bulletList") })}
-        >
-          <GoListUnordered size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={classNames(css.button, { active: editor.isActive("orderedList") })}
-        >
-          <GoListOrdered size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().liftListItem("listItem").run()}
-          className={classNames(css.button, { active: !editor.can().liftListItem("listItem") })}
-          disabled={!editor.can().liftListItem("listItem")}
-        >
-          <LuListX size={16} />
-        </button>
-      </div>
+      <RichTextEditor.ControlsGroup>
+        <RichTextEditor.Blockquote />
+        <RichTextEditor.Hr />
+        <RichTextEditor.BulletList />
+        <RichTextEditor.OrderedList />
+        <RichTextEditor.Subscript />
+        <RichTextEditor.Superscript />
+      </RichTextEditor.ControlsGroup>
 
-      <div className={css.buttonGroup}>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setTextAlign("left").run()}
-          className={classNames(css.button, { active: editor.isActive({ textAlign: "left" }) })}
-        >
-          <TfiAlignLeft size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setTextAlign("center").run()}
-          className={classNames(css.button, { active: editor.isActive({ textAlign: "center" }) })}
-        >
-          <TfiAlignCenter size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setTextAlign("right").run()}
-          className={classNames(css.button, { active: editor.isActive({ textAlign: "right" }) })}
-        >
-          <TfiAlignRight size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setTextAlign("justify").run()}
-          className={classNames(css.button, { active: editor.isActive({ textAlign: "justify" }) })}
-        >
-          <TfiAlignJustify size={16} />
-        </button>
-      </div>
-
-      <div className={css.buttonGroup}>
-        <button
-          type="button"
-          className={classNames(css.button, { active: editor.isActive("code") })}
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        >
-          <IoCodeSlashOutline size={16} />
-        </button>
-
-        <button type="button" className={classNames(css.button)} onClick={upload}>
+      <RichTextEditor.ControlsGroup>
+        <RichTextEditor.Link />
+        <RichTextEditor.Unlink />
+        <RichTextEditor.Control onClick={upload}>
           <LuImage size={16} />
-        </button>
-
-        <button type="button" className={classNames(css.button)} onClick={addYoutubeVideo}>
+        </RichTextEditor.Control>
+        <RichTextEditor.Control onClick={addYoutubeVideo}>
           <FaYoutube size={16} />
-        </button>
-      </div>
-    </div>
+        </RichTextEditor.Control>
+        <RichTextEditor.Control></RichTextEditor.Control>
+      </RichTextEditor.ControlsGroup>
+
+      <RichTextEditor.ControlsGroup>
+        <RichTextEditor.AlignLeft />
+        <RichTextEditor.AlignCenter />
+        <RichTextEditor.AlignJustify />
+        <RichTextEditor.AlignRight />
+      </RichTextEditor.ControlsGroup>
+
+      <RichTextEditor.ControlsGroup>
+        <RichTextEditor.Undo />
+        <RichTextEditor.Redo />
+      </RichTextEditor.ControlsGroup>
+    </RichTextEditor.Toolbar>
   );
 }

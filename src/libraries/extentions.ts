@@ -1,3 +1,4 @@
+"use client";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -19,12 +20,10 @@ import Highlight from "@tiptap/extension-highlight";
 //   },
 // })
 
-const lowlight = createLowlight(common);
-
 export const extensions: Extensions = [
   StarterKit.configure({
-    // codeBlock: false,
-    code: false,
+    codeBlock: false,
+    // code: false,
     heading: {
       HTMLAttributes: {
         id: uuid(),
@@ -35,9 +34,8 @@ export const extensions: Extensions = [
   Superscript,
   SubScript,
   Highlight,
-  Image,
   ImageResize,
-  CodeBlockLowlight.configure({ lowlight }),
+  CodeBlockLowlight.configure({ lowlight: createLowlight(common) }),
   TextAlign.configure({ types: ["heading", "paragraph"] }),
   Youtube,
   Link.configure({
