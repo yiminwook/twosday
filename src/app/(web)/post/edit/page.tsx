@@ -1,9 +1,9 @@
-import "@/style/highlight.css"; // 코드박스 하이라이트 스타일
-import "@/style/editor.css";
-import Home from "./home";
-import { getServerSession } from "@/app/_lib/getServerSession";
+import "@/styles/highlight.css"; // 코드박스 하이라이트 스타일
+import "@/styles/editor.css";
+import Home from "@/components/editor/Home";
+import { getServerSession } from "@/apis/getServerSession";
 import { redirect } from "next/navigation";
-import { getWasUrl } from "@/app/_lib/getWasUrl";
+import { getWasUrl } from "@/utils/getWasUrl";
 
 export default async function Page() {
   const session = await getServerSession();

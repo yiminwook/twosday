@@ -1,10 +1,10 @@
 /* eslint-disable react/display-name */
 import { render } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import App from "@/app/_component/App";
+import App from "@/components/config/App";
 import { Toaster } from "sonner";
-import Hotkeys from "@/app/_component/Hotkeys";
-import ModalContainer from "@/app/_component/modal/ModalContainer";
+import Hotkeys from "@/components/config/Hotkeys";
+import ModalContainer from "@/components/common/modal/ModalContainer";
 
 const createTestQueryClient = () =>
   new QueryClient({

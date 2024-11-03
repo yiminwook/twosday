@@ -1,4 +1,4 @@
-import { pgClient } from "@/model/pg";
+import { pgClient } from "@/libraries/pg";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {

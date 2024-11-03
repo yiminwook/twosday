@@ -1,18 +1,18 @@
-import { getWasUrl } from "@/app/_lib/getWasUrl";
-import { Post } from "@/type/api";
-import RefCard from "@web/_component/refCard/RefCard";
+import { getWasUrl } from "@/utils/getWasUrl";
+import { Post } from "@/types/api";
+import RefCard from "@/components/refCard/RefCard";
 import Link from "next/link";
-import AdBanner from "./_component/adBanner/AdBanner";
-import CardSlider from "./_component/card/CardSlider";
-import HeroSection from "./_component/home/HeroSection";
-import TechBelt from "./_component/home/TechBelt";
-import { Reference } from "./reference/_lib/ref.type";
+import AdBanner from "@/components/adBanner/AdBanner";
+import CardSlider from "@/components/common/card/CardSlider";
+import HeroSection from "@/components/home/HeroSection";
+import TechBelt from "@/components/home/TechBelt";
+import { Reference } from "@/types/ref";
 
 // css
-import "@/style/swiper/swiper.css";
-import "@/style/swiper/pagination.css";
+import "@/styles/swiper/swiper.css";
+import "@/styles/swiper/pagination.css";
 import * as css from "./page.css";
-import { cardList } from "@web/_component/refCard/refList.css";
+import { cardList } from "@/components/refCard/refList.css";
 
 export default async function Page() {
   const [popularPostResponse, recentPostResponse, referenceResponse] = await Promise.all([

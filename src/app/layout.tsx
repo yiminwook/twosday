@@ -1,9 +1,9 @@
-import "@/style/global.css";
-import "@/style/globalTheme.css";
+import "@/styles/global.css";
+import "@/styles/globalTheme.css";
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import { PropsWithChildren } from "react";
-import Configs from "./_component";
+import Configs from "@/components/config";
 
 const font = Noto_Sans_KR({
   weight: ["300", "400", "500", "700"],

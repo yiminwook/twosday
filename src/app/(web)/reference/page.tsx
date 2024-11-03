@@ -1,8 +1,8 @@
-import { getServerSession } from "@/app/_lib/getServerSession";
-import { getWasUrl } from "@/app/_lib/getWasUrl";
-import RefList from "@web/_component/refCard/RefList";
-import Nav from "./_component/Nav";
-import { Reference } from "./_lib/ref.type";
+import { getServerSession } from "@/apis/getServerSession";
+import { getWasUrl } from "@/utils/getWasUrl";
+import RefList from "@/components/refCard/RefList";
+import Nav from "@/components/reference/Nav";
+import { Reference } from "@/types/ref";
 
 interface PageProps {
   searchParams: {

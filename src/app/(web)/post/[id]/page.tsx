@@ -1,9 +1,9 @@
-import { getWasUrl } from "@/app/_lib/getWasUrl";
-import Viewer from "@web/post/edit/_component/Viewer";
+import { getWasUrl } from "@/utils/getWasUrl";
+import Viewer from "@/components/editor/Viewer";
 import { notFound } from "next/navigation";
-import Comment from "../_component/Comment";
+import Comment from "@/components/editor/Comment";
 import * as css from "./page.css";
-import AdBanner from "@web/_component/adBanner/AdBanner";
+import AdBanner from "@/components/adBanner/AdBanner";
 
 type Author = {
   id: number;

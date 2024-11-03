@@ -1,7 +1,7 @@
-import { getWasUrl } from "@/app/_lib/getWasUrl";
-import List from "./_component/List";
-import { getServerSession } from "@/app/_lib/getServerSession";
-import { Post } from "@/type/api";
+import { getWasUrl } from "@/utils/getWasUrl";
+import List from "@/components/editor/List";
+import { getServerSession } from "@/apis/getServerSession";
+import { Post } from "@/types/api";
 import Link from "next/link";
 
 interface PostProps {
