@@ -13,15 +13,16 @@ export default function Client() {
   const mutation = useMutation({
     mutationFn: async (arg: { email: string; password: string }) => {
       const token = btoa(arg.email + ":" + arg.password);
-      console.log(token);
       const req = await fetch(getWasUrl() + "/api/auth/email-test", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Basic ${token}` },
       });
-      const body = await req.json();
-      return body;
+      const body: { data: { token: string }; message: string[] } = await req.json();
+      return body.data.token;
     },
-    onSuccess: () => {
+    onSuccess: (token) => {
+      const threeDays = 1000 * 60 * 60 * 24 * 3;
+      document.cookie = `refresh_token=${token}; Max-age=${threeDays}; path=/;`;
       window.location.href = "/";
     },
   });
