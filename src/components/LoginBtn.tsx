@@ -4,6 +4,10 @@ import { loginBtn } from "./loginBtn.css";
 
 export default function LoginBtn() {
   const onClick = () => {
+    if (!process.env.NEXT_PUBLIC_VERCEL_URL) {
+      window.location.href = "/login";
+      return;
+    }
     const redirect = encodeURIComponent(window.location.href);
     window.location.href = getWasUrl() + "/login?redirect=" + redirect;
   };

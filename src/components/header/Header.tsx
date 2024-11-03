@@ -4,6 +4,7 @@ import Link from "next/link";
 import Pencil from "@/assets/svg/pencil.svg?react";
 import LoginBtn from "../LoginBtn";
 import ThemeBtn from "../ThemeBtn";
+import LogoutBtn from "../LogoutBtn";
 
 export default async function Header() {
   const session = await getServerSession();
@@ -27,9 +28,8 @@ export default async function Header() {
                 <span>글쓰기</span>
               </Link>
             </li>
-            <li>
-              <LoginBtn />
-            </li>
+
+            <li>{!session ? <LoginBtn /> : <LogoutBtn />}</li>
           </ul>
         </div>
       </div>
