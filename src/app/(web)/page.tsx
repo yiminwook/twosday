@@ -69,9 +69,7 @@ export default async function Page() {
           <CardSlider order="recent" post={recentBody.data.post} />
         </div>
       </section>
-      <div className={css.beltBox}>
-        <TechBelt />
-      </div>
+
       <section className={css.section}>
         <div className={css.sectionTitleBox}>
           <h2>레퍼런스</h2>
@@ -83,6 +81,11 @@ export default async function Page() {
           ))}
         </div>
       </section>
+
+      <div className={css.beltBox}>
+        <TechBelt />
+      </div>
+
       <AdBanner />
     </main>
   );
