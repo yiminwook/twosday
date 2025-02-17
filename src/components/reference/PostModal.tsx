@@ -20,20 +20,18 @@ export default function PostModal({ onClose, onSuccess, session }: ModalProps<Po
   const mutation = useMutation({
     mutationKey: ["post:reference"],
     mutationFn: async () => {
-      const response = await fetch(`${getWasUrl()}/api/twosday/reference`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.accessToken}`,
-        },
-        body: JSON.stringify({ url }),
-      });
-
-      const body: { message: string[] } = await response.json();
-
-      if (!response.ok) {
-        throw new Error(body.message[0]);
-      }
+      // const response = await fetch(`${getWasUrl()}/api/twosday/reference`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: `Bearer ${session.accessToken}`,
+      //   },
+      //   body: JSON.stringify({ url }),
+      // });
+      // const body: { message: string[] } = await response.json();
+      // if (!response.ok) {
+      //   throw new Error(body.message[0]);
+      // }
     },
     onSuccess: () => {
       router.refresh();

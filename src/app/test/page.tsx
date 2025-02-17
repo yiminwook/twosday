@@ -6,20 +6,21 @@ export default function Page() {
   const [file, setFile] = useState<File | null>(null);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData();
-    if (!file) return;
-    formData.append("image", file);
-    const res = await fetch("/api/v1/images", {
-      method: "POST",
-      body: formData,
-    });
+    // const formData = new FormData();
+    // if (!file) return;
+    // formData.append("image", file);
+    // const res = await fetch("/api/v1/images", {
+    //   method: "POST",
+    //   body: formData,
+    // });
 
-    if (!res.ok) {
-      console.error(res.statusText);
-      return;
-    }
+    // if (!res.ok) {
+    //   console.error(res.statusText);
+    //   return;
+    // }
 
-    console.log(await res.json());
+    // console.log(await res.json());
+    return;
   };
 
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {

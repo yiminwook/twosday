@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getWasUrl } from "@/utils/getWasUrl";
 import { RefObject } from "react";
 import ReactQuill from "react-quill";
@@ -24,27 +25,27 @@ export const imageHandler = async (
       // const formData = new FormData();
       // formData.append("image", file);
 
-      const wasRes = await fetch(`${getWasUrl()}/api/image/sign`, {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + session.accessToken,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ fileName: file.name, projectName: "twosday" }),
-        cache: "no-cache",
-      });
+      // const wasRes = await fetch(`${getWasUrl()}/api/image/sign`, {
+      //   method: "POST",
+      //   headers: {
+      //     Authorization: "Bearer " + session.accessToken,
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({ fileName: file.name, projectName: "twosday" }),
+      //   cache: "no-cache",
+      // });
 
-      if (!wasRes.ok) throw new Error("업로드중 오류가 발생했습니다.");
+      // if (!wasRes.ok) throw new Error("업로드중 오류가 발생했습니다.");
 
-      const body: { url: string } = await wasRes.json();
+      // const body: { url: string } = await wasRes.json();
 
-      const awsRes = await fetch(body.url, {
-        method: "PUT",
-        headers: { "Content-Type": file.type },
-        body: file,
-      });
+      // const awsRes = await fetch(body.url, {
+      //   method: "PUT",
+      //   headers: { "Content-Type": file.type },
+      //   body: file,
+      // });
 
-      if (!awsRes.ok) throw new Error("업로드중 오류가 발생했습니다.");
+      // if (!awsRes.ok) throw new Error("업로드중 오류가 발생했습니다.");
 
       const pathname = new URL(body.url).pathname;
 

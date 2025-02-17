@@ -13,12 +13,13 @@ export default function Client() {
   const mutation = useMutation({
     mutationFn: async (arg: { email: string; password: string }) => {
       const token = btoa(arg.email + ":" + arg.password);
-      const req = await fetch(getWasUrl() + "/api/auth/email-test", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Basic ${token}` },
-      });
-      const body: { data: { token: string }; message: string[] } = await req.json();
-      return body.data.token;
+      // const req = await fetch(getWasUrl() + "/api/auth/email-test", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json", Authorization: `Basic ${token}` },
+      // });
+      // const body: { data: { token: string }; message: string[] } = await req.json();
+      // return body.data.token;
+      return null;
     },
     onSuccess: (token) => {
       const threeDays = 1000 * 60 * 60 * 24 * 3;

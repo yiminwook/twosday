@@ -15,38 +15,38 @@ import * as css from "./page.css";
 import { cardList } from "@/components/refCard/refList.css";
 
 export default async function Page() {
-  const [popularPostResponse, recentPostResponse, referenceResponse] = await Promise.all([
-    fetch(`${getWasUrl()}/api/twosday/post?page=1&size=6&order=popular`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
-    }),
-    fetch(`${getWasUrl()}/api/twosday/post?page=1&size=6&order=recent`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
-    }),
-    fetch(`${getWasUrl()}/api/twosday/reference?page=1&size=4`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      next: { revalidate: 300, tags: ["home", "reference"] }, //1분 간격으로 캐시 갱신
-    }),
-  ]);
+  // const [popularPostResponse, recentPostResponse, referenceResponse] = await Promise.all([
+  // fetch(`${getWasUrl()}/api/twosday/post?page=1&size=6&order=popular`, {
+  //   method: "GET",
+  //   headers: { "Content-Type": "application/json" },
+  //   next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
+  // }),
+  // fetch(`${getWasUrl()}/api/twosday/post?page=1&size=6&order=recent`, {
+  //   method: "GET",
+  //   headers: { "Content-Type": "application/json" },
+  //   next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
+  // }),
+  // fetch(`${getWasUrl()}/api/twosday/reference?page=1&size=4`, {
+  //   method: "GET",
+  //   headers: { "Content-Type": "application/json" },
+  //   next: { revalidate: 300, tags: ["home", "reference"] }, //1분 간격으로 캐시 갱신
+  // }),
+  // ]);
 
-  const popularBody: {
-    data: { post: Post[]; total: number; size: number };
-    message: string[];
-  } = await popularPostResponse.json();
+  // const popularBody: {
+  //   data: { post: Post[]; total: number; size: number };
+  //   message: string[];
+  // } = await popularPostResponse.json();
 
-  const recentBody: {
-    data: { post: Post[]; total: number; size: number };
-    message: string[];
-  } = await recentPostResponse.json();
+  // const recentBody: {
+  //   data: { post: Post[]; total: number; size: number };
+  //   message: string[];
+  // } = await recentPostResponse.json();
 
-  const referenceBody: {
-    data: { reference: Reference[]; total: number; size: number };
-    message: string[];
-  } = await referenceResponse.json();
+  // const referenceBody: {
+  //   data: { reference: Reference[]; total: number; size: number };
+  //   message: string[];
+  // } = await referenceResponse.json();
 
   return (
     <main className={css.wrap}>
@@ -57,7 +57,7 @@ export default async function Page() {
           <Link href="/post?order=popluar">+ 더보기</Link>
         </div>
         <div className={css.cardSliderBox}>
-          <CardSlider order="popular" post={popularBody.data.post} />
+          <CardSlider order="popular" post={[]} />
         </div>
       </section>
       <section className={css.section}>
@@ -66,7 +66,7 @@ export default async function Page() {
           <Link href="/post">+ 더보기</Link>
         </div>
         <div>
-          <CardSlider order="recent" post={recentBody.data.post} />
+          <CardSlider order="recent" post={[]} />
         </div>
       </section>
 
@@ -76,9 +76,9 @@ export default async function Page() {
           <Link href="/reference">+ 더보기</Link>
         </div>
         <div className={cardList}>
-          {referenceBody.data.reference.map((reference) => (
+          {/* {referenceBody.data.reference.map((reference) => (
             <RefCard reference={reference} key={reference.id} />
-          ))}
+          ))} */}
         </div>
       </section>
 

@@ -14,31 +14,26 @@ export default async function Page({ searchParams }: PageProps) {
   const page = searchParams.page ? parseInt(searchParams.page) || 1 : 1;
   const session = await getServerSession();
 
-  const response = await fetch(`${getWasUrl()}/api/twosday/reference?page=${page}&size=10`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    // next: { revalidate: 300, tags: ["reference"] }, //5분 간격으로 캐시 갱신
-  });
+  // const response = await fetch(`${getWasUrl()}/api/twosday/reference?page=${page}&size=10`, {
+  //   method: "GET",
+  //   headers: { "Content-Type": "application/json" },
+  //   // next: { revalidate: 300, tags: ["reference"] }, //5분 간격으로 캐시 갱신
+  // });
 
-  const body: {
-    data: { reference: Reference[]; total: number; size: number };
-    message: string[];
-  } = await response.json();
+  // const body: {
+  //   data: { reference: Reference[]; total: number; size: number };
+  //   message: string[];
+  // } = await response.json();
 
-  if (!response.ok) {
-    throw new Error(body.message[0]);
-  }
+  // if (!response.ok) {
+  //   throw new Error(body.message[0]);
+  // }
 
   return (
     <div>
       <Nav session={session} />
       <div>
-        <RefList
-          references={body.data.reference}
-          currentPage={page}
-          total={body.data.total}
-          size={body.data.size}
-        />
+        <RefList references={[]} currentPage={page} total={0} size={0} />
       </div>
     </div>
   );

@@ -12,20 +12,17 @@ export default function SavedList({ onEdit, onClickRemovable }: SavedListProps) 
   const { data, isPending, error } = useQuery({
     queryKey: ["/api/twosday/tag"],
     queryFn: async () => {
-      const res = await fetch(`${getWasUrl()}/api/twosday/tag`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const body: { data: { tags: { id: number; name: string }[] }; message: string[] } =
-        await res.json();
-
-      if (!res.ok) {
-        throw new Error(body.message[0]);
-      }
-
-      return body;
+      // const res = await fetch(`${getWasUrl()}/api/twosday/tag`, {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // });
+      // const body: { data: { tags: { id: number; name: string }[] }; message: string[] } =
+      //   await res.json();
+      // if (!res.ok) {
+      //   throw new Error(body.message[0]);
+      // }
+      // return body;
     },
   });
 

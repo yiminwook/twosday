@@ -51,34 +51,34 @@ export default function Control({ editor, session }: ControlProps) {
         if (!result) return;
 
         const uploadUrl = getWasUrl() + "/api/image/sign";
-        const wasRes = await fetch(uploadUrl, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${session.accessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ fileName: file.name, projectName: "twosday" }),
-          cache: "no-cache",
-        });
+        // const wasRes = await fetch(uploadUrl, {
+        //   method: "POST",
+        //   headers: {
+        //     Authorization: `Bearer ${session.accessToken}`,
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({ fileName: file.name, projectName: "twosday" }),
+        //   cache: "no-cache",
+        // });
 
-        if (!wasRes.ok) throw new Error("업로드중 오류가 발생했습니다.");
+        // if (!wasRes.ok) throw new Error("업로드중 오류가 발생했습니다.");
 
-        const body: { url: string } = await wasRes.json();
+        // const body: { url: string } = await wasRes.json();
 
-        const awsRes = await fetch(body.url, {
-          method: "PUT",
-          body: file,
-          headers: {
-            "Content-Type": file.type,
-          },
-        });
+        // const awsRes = await fetch(body.url, {
+        //   method: "PUT",
+        //   body: file,
+        //   headers: {
+        //     "Content-Type": file.type,
+        //   },
+        // });
 
-        const pathname = new URL(body.url).pathname;
+        // const pathname = new URL(body.url).pathname;
 
-        if (!awsRes.ok) throw new Error("업로드중 오류가 발생했습니다.");
+        // if (!awsRes.ok) throw new Error("업로드중 오류가 발생했습니다.");
 
-        const imgUrl = process.env.NEXT_PUBLIC_AWS_CLOUD_FRONT_URL + pathname;
-        editor.chain().focus().setImage({ src: imgUrl }).run();
+        // const imgUrl = process.env.NEXT_PUBLIC_AWS_CLOUD_FRONT_URL + pathname;
+        // editor.chain().focus().setImage({ src: imgUrl }).run();
       }
       input.remove();
     });

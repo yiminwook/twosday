@@ -36,32 +36,32 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const response = await fetch(`${getWasUrl()}/api/twosday/post/${params.id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  // const response = await fetch(`${getWasUrl()}/api/twosday/post/${params.id}`, {
+  //   method: "GET",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // });
 
-  const body: { data: Post; message: string[] } = await response.json();
+  // const body: { data: Post; message: string[] } = await response.json();
 
-  if (!response.ok) {
-    if (response.status === 404) {
-      notFound();
-    }
-    throw new Error(body.message[0]);
-  }
+  // if (!response.ok) {
+  //   if (response.status === 404) {
+  //     notFound();
+  //   }
+  //   throw new Error(body.message[0]);
+  // }
 
   return (
     <div className={css.wrap}>
       <h1 className="blind">단건 조회 페이지</h1>
       <div className={css.viewerBox}>
         <div className={css.viewerHead}>
-          <h2>{body.data.title}</h2>
-          <p>{body.data.createdAt}</p>
-          <p>{body.data.updatedAt}</p>
+          <h2>title</h2>
+          <p>createdAt</p>
+          <p>updateAt</p>
         </div>
-        <Viewer content={body.data.content} />
+        <Viewer content="" />
       </div>
       <AdBanner />
       <div className={css.commentBox}>

@@ -36,33 +36,33 @@ export default function Home({ session }: HomeProps) {
   const mutation = useMutation({
     mutationFn: async (e: MouseEvent) => {
       if (!editor) return;
-      const response = await fetch(`${getWasUrl()}/api/twosday/post`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.accessToken}`,
-        },
-        body: JSON.stringify({
-          title,
-          content: editor.getHTML(),
-          tags: [],
-          isPublic: true,
-          thumbnail: excuteThumnail(value),
-        }),
-        credentials: "include",
-      });
+      // const response = await fetch(`${getWasUrl()}/api/twosday/post`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: `Bearer ${session.accessToken}`,
+      //   },
+      //   body: JSON.stringify({
+      //     title,
+      //     content: editor.getHTML(),
+      //     tags: [],
+      //     isPublic: true,
+      //     thumbnail: excuteThumnail(value),
+      //   }),
+      //   credentials: "include",
+      // });
 
-      const body: { data: { id: number }; message: string[] } = await response.json();
+      // const body: { data: { id: number }; message: string[] } = await response.json();
 
-      if (!response.ok) {
-        throw new Error(body.message[0]);
-      }
+      // if (!response.ok) {
+      //   throw new Error(body.message[0]);
+      // }
 
-      return body;
+      // return body;
     },
     onSuccess: (body) => {
       toast.success("업로드 성공");
-      router.push(`/post/${body?.data.id}`);
+      // router.push(`/post/${body?.data.id}`);
     },
     onSettled: async () => {
       await fetch("/api/revalidate/tag?name=post");

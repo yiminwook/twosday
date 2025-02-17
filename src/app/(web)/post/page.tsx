@@ -20,20 +20,20 @@ export default async function Page({ searchParams }: PostProps) {
     order: searchParams.order === "popular" ? "popular" : "recent",
   });
 
-  const response = await fetch(`${getWasUrl()}/api/twosday/post?${urlSearchParams.toString()}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    // next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
-  });
+  // const response = await fetch(`${getWasUrl()}/api/twosday/post?${urlSearchParams.toString()}`, {
+  //   method: "GET",
+  //   headers: { "Content-Type": "application/json" },
+  //   // next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
+  // });
 
-  const body: {
-    data: { post: Post[]; total: number; size: number };
-    message: string[];
-  } = await response.json();
+  // const body: {
+  //   data: { post: Post[]; total: number; size: number };
+  //   message: string[];
+  // } = await response.json();
 
-  if (!response.ok) {
-    throw new Error(body.message[0]);
-  }
+  // if (!response.ok) {
+  //   throw new Error(body.message[0]);
+  // }
 
   return (
     <div>
@@ -48,13 +48,7 @@ export default async function Page({ searchParams }: PostProps) {
         </Link>
       </div>
       <div>
-        <List
-          post={body.data.post}
-          currentPage={page}
-          total={body.data.total}
-          size={body.data.size}
-          order={searchParams.order}
-        />
+        <List post={[]} currentPage={page} total={0} size={0} order={searchParams.order} />
       </div>
     </div>
   );
