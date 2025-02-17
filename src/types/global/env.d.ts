@@ -29,6 +29,14 @@ declare global {
       readonly PG_DATABASE: string;
       readonly PG_USER: string;
       readonly PG_PASSWORD: string;
+
+      readonly CLOUDFARE_ACCOUNT_ID: string;
+
+      // cluodflare - r2
+      readonly CLOUDFARE_R2_TOKEN: string;
+      readonly CLOUDFARE_R2_ACCESS_ID: string;
+      readonly CLOUDFARE_R2_SECRET_KEY: string;
+      readonly CLOUDFARE_R2_BUCKET_NAME: string;
     }
   }
 }
