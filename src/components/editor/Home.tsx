@@ -4,7 +4,6 @@ import Viewer from "./Viewer";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { getWasUrl } from "@/utils/getWasUrl";
 import * as css from "./home.css";
 import Form from "./Form";
 import { excuteThumnail } from "@/utils/excuteThumbnail";

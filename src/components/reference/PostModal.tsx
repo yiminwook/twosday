@@ -2,7 +2,6 @@ import Modal from "@/components/common/modal/Modal";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import * as css from "@/components/common/modal/modal.css";
-import { getWasUrl } from "@/utils/getWasUrl";
 import { ModalProps } from "@/stores/modalStore";
 import { modalDefaultBtn } from "@/components/common/modal/modalBtn.css";
 import { useRouter } from "next/navigation";

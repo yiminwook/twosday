@@ -22,7 +22,7 @@ interface InitialProps {
 export function renderWithClient(ui: React.ReactElement, initialProps: InitialProps) {
   const testQueryClient = createTestQueryClient();
   const { rerender, ...result } = render(
-    <App session={initialProps.session}>
+    <App>
       <Hotkeys>
         <QueryClientProvider client={testQueryClient}>
           {ui}

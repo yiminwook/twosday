@@ -4,11 +4,10 @@ import { AppContext, SESSION_STORAGE_KEY, createAppStore } from "@/stores/app";
 
 interface AppProps {
   children: React.ReactNode;
-  session: Session | null;
 }
 
-export default function App({ session, children }: AppProps) {
-  const store = useRef(createAppStore({ session: !!session ? "user" : "guest", theme: "light" }));
+export default function App({ children }: AppProps) {
+  const store = useRef(createAppStore({ session: "guest", theme: "light" }));
 
   useEffect(() => {
     // 쿠키와 로컬스토리지의 세션 정보를 동기화

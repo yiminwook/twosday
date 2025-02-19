@@ -19,10 +19,10 @@ type Action = {
 type AppStore = ReturnType<typeof createAppStore>;
 
 export const createAppStore = (initState: State) => {
-  if (typeof window !== "undefined") {
-    // 쿠키와 로컬스토리지의 세션 정보를 동기화
-    localStorage.setItem(SESSION_STORAGE_KEY, initState.session);
-  }
+  // if (typeof window !== "undefined") {
+  //   // 쿠키와 로컬스토리지의 세션 정보를 동기화
+  //   localStorage.setItem(SESSION_STORAGE_KEY, initState.session);
+  // }
 
   return createStore<State & Action>((set) => ({
     ...initState,

@@ -17,7 +17,6 @@ import { GoListOrdered, GoListUnordered } from "react-icons/go";
 import { LuListX } from "react-icons/lu";
 import { RiH1, RiH2, RiH3 } from "react-icons/ri";
 import { RichTextEditor } from "@mantine/tiptap";
-import { getWasUrl } from "@/utils/getWasUrl";
 import { get } from "http";
 
 interface ControlProps {
@@ -50,7 +49,7 @@ export default function Control({ editor, session }: ControlProps) {
 
         if (!result) return;
 
-        const uploadUrl = getWasUrl() + "/api/image/sign";
+        const uploadUrl = "/api/image/sign";
         // const wasRes = await fetch(uploadUrl, {
         //   method: "POST",
         //   headers: {

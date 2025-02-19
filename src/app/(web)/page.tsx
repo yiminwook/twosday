@@ -1,4 +1,3 @@
-import { getWasUrl } from "@/utils/getWasUrl";
 import { Post } from "@/types/api";
 import RefCard from "@/components/refCard/RefCard";
 import Link from "next/link";

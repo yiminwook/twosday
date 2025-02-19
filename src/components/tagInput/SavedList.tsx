@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import * as css from "./savedList.css";
-import { getWasUrl } from "@/utils/getWasUrl";
 import { useMemo } from "react";
 
 interface SavedListProps {

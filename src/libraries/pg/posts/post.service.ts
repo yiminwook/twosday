@@ -18,16 +18,16 @@ export const getPosts = withPgConnection(async (client, dto: TGetPostsParamsDto)
       : `ORDER BY T01."createdAt" DESC`;
 
   const listQuery = `
-    SELECT  T01."id" as "id",
-            T01."authorId" as "authorId",
-            T01."title" as "title",
-            T01."content" as "content",
-            T01."isPublic" as "isPublic",
-            T01."viewCount" as "viewCount",
-            T01."createdAt" as "createdAt",
-            T01."updatedAt" as "updatedAt",
-            T01."deletedAt" as "deletedAt",
-            T02."nickname" as "authorName"
+    SELECT  T01."id"        AS "id",
+            T01."authorId"  AS "authorId",
+            T01."title"     AS "title",
+            T01."content"   AS "content",
+            T01."isPublic"  AS "isPublic",
+            T01."viewCount" AS "viewCount",
+            T01."createdAt" AS "createdAt",
+            T01."updatedAt" AS "updatedAt",
+            T01."deletedAt" AS "deletedAt",
+            T02."nickname"  AS "authorName"
     FROM "${POSTS_TABLE}" T01
     LEFT JOIN "${USERS_TABLE}" T02 
       ON T01."authorId" = T02."id"

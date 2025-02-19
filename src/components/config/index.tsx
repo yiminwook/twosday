@@ -1,16 +1,10 @@
-import dynamic from "next/dynamic";
-import { PropsWithChildren } from "react";
 import { Toaster } from "sonner";
 import App from "@/components/config/App";
 import Devtools from "@/components/config/Devtools";
 import Hotkeys from "@/components/config/Hotkeys";
 import ReactQuery from "./ReactQuery";
-import { getServerSession } from "@/apis/getServerSession";
 import MantineProvider from "./MantainProvider";
-
-const ModalContainer = dynamic(() => import("@/components/common/modal/ModalContainer"), {
-  ssr: false,
-});
+import ModalContainer from "../common/modal/ModalContainer";
 
 interface ConfigsProps {
   defaultColorScheme: "light" | "dark";
@@ -18,10 +12,8 @@ interface ConfigsProps {
 }
 
 export default async function Configs({ children, defaultColorScheme }: ConfigsProps) {
-  const session = await getServerSession();
-
   return (
-    <App session={session}>
+    <App>
       <Hotkeys>
         <ReactQuery>
           <MantineProvider defaultColorScheme={defaultColorScheme}>

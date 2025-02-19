@@ -1,4 +1,3 @@
-import { getServerSession } from "@/apis/getServerSession";
 import { fixed, link, right, title, wrap, upload, inner } from "./header.css";
 import Link from "next/link";
 import Pencil from "@/assets/svg/pencil.svg?react";
@@ -7,8 +6,6 @@ import ThemeBtn from "../ThemeBtn";
 import LogoutBtn from "../LogoutBtn";
 
 export default async function Header() {
-  const session = await getServerSession();
-
   return (
     <header className={wrap}>
       <div className={fixed}>
@@ -29,7 +26,7 @@ export default async function Header() {
               </Link>
             </li>
 
-            <li>{!session ? <LoginBtn /> : <LogoutBtn />}</li>
+            <li>{true ? <LoginBtn /> : <LogoutBtn />}</li>
           </ul>
         </div>
       </div>
