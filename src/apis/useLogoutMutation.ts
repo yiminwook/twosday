@@ -11,7 +11,7 @@ export const useLogoutMutation = () => {
     mutationKey: ["/auth/logout"],
     mutationFn: async () => {
       action.logout();
-      window.location.href = "/login";
+      window.location.href = "/signin";
     },
   });
 

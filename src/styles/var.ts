@@ -3,6 +3,7 @@ import { calc } from "@vanilla-extract/css-utils";
 
 export const BEZIER_CURVE = "cubic-bezier(0.23, 1, 0.32, 1)";
 export const BOX_SHADOW = "0px 1px 2px 0 rgba(56, 52, 52, 0.4)";
+export const MOBILE_MIN_WIDTH = 480;
 
 export const flexCenter: CSSPropertiesWithVars = {
   display: "flex",
