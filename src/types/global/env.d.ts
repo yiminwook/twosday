@@ -15,9 +15,6 @@ declare global {
       /** @Example - http://localhost:3000 */
       readonly NEXT_PUBLIC_API_URL: string;
 
-      readonly NEXT_PUBLIC_WAS_PROTOCOL: "http" | "https";
-      readonly NEXT_PUBLIC_WAS_HOST: string;
-
       readonly NEXT_PUBLIC_AWS_CLOUD_FRONT_URL: string;
 
       // dev-tools
@@ -37,6 +34,11 @@ declare global {
       readonly CLOUDFARE_R2_ACCESS_ID: string;
       readonly CLOUDFARE_R2_SECRET_KEY: string;
       readonly CLOUDFARE_R2_BUCKET_NAME: string;
+
+      // auth
+      readonly AUTH_ACCESS_SECRET: string;
+      readonly AUTH_REFRESH_SECRET: string;
+      readonly AUTH_SALT: string;
     }
   }
 }
