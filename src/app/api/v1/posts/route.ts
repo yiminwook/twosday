@@ -1,8 +1,11 @@
+import { getPureText } from "@/libraries/dompurify";
 import { BadRequestError, serverErrorHandler } from "@/libraries/error";
 import { getPosts } from "@/libraries/pg/post/post.service";
 import { getPostsParamsDto } from "@/libraries/pg/post/posts.dto";
 import { NextRequest, NextResponse } from "next/server";
 import { parse } from "qs";
+
+const CONTENT_PREVIEW_STRING_MAX_LENGTH = 200;
 
 // GET /api/v1/posts?order=popular&size=10&page=1&query=검색어
 export async function GET(req: NextRequest) {
@@ -17,7 +20,15 @@ export async function GET(req: NextRequest) {
     }
 
     const data = await getPosts(dto.data);
-    return NextResponse.json({ message: "글목록이 검색 되었습니다.", data }, { status: 200 });
+    const parsedPosts = data.posts.map((post) => ({
+      ...post,
+      content: getPureText(post.content).slice(0, CONTENT_PREVIEW_STRING_MAX_LENGTH),
+    }));
+
+    return NextResponse.json(
+      { message: "글목록이 검색 되었습니다.", data: { ...data, posts: parsedPosts } },
+      { status: 200 },
+    );
   } catch (error) {
     console.error(error);
     const { message, status } = serverErrorHandler(error);
