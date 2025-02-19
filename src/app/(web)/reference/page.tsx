@@ -1,8 +1,5 @@
-import { getServerSession } from "@/apis/getServerSession";
-import { getWasUrl } from "@/utils/getWasUrl";
 import RefList from "@/components/refCard/RefList";
 import Nav from "@/components/reference/Nav";
-import { Reference } from "@/types/ref";
 
 interface PageProps {
   searchParams: {
@@ -12,7 +9,6 @@ interface PageProps {
 
 export default async function Page({ searchParams }: PageProps) {
   const page = searchParams.page ? parseInt(searchParams.page) || 1 : 1;
-  const session = await getServerSession();
 
   // const response = await fetch(`${getWasUrl()}/api/twosday/reference?page=${page}&size=10`, {
   //   method: "GET",
@@ -31,7 +27,7 @@ export default async function Page({ searchParams }: PageProps) {
 
   return (
     <div>
-      <Nav session={session} />
+      <Nav session={null} />
       <div>
         <RefList references={[]} currentPage={page} total={0} size={0} />
       </div>

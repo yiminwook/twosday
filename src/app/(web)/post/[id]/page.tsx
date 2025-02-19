@@ -1,4 +1,3 @@
-import { getWasUrl } from "@/utils/getWasUrl";
 import Viewer from "@/components/editor/Viewer";
 import { notFound } from "next/navigation";
 import Comment from "@/components/editor/Comment";

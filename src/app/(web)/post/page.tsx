@@ -1,6 +1,4 @@
-import { getWasUrl } from "@/utils/getWasUrl";
 import List from "@/components/editor/List";
-import { getServerSession } from "@/apis/getServerSession";
 import { Post } from "@/types/api";
 import Link from "next/link";
 
@@ -12,7 +10,6 @@ interface PostProps {
 }
 export default async function Page({ searchParams }: PostProps) {
   const page = searchParams.page ? parseInt(searchParams.page) || 1 : 1;
-  const session = await getServerSession();
 
   const urlSearchParams = new URLSearchParams({
     page: page.toString(),
