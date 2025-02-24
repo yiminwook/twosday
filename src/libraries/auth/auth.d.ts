@@ -5,9 +5,9 @@ declare global {
     id: number;
     email: string;
     /** 로그인한 ISO-시간 */
-    loginAt: string;
+    loginAt: Date;
     /** ISO-String */
-    iss: string;
+    iss: Date;
     iat?: number;
     exp?: number;
   }
@@ -15,6 +15,12 @@ declare global {
   /** Signin Session */
   interface Session extends JWT {
     accessToken: string;
+    // avartar: string | null;
+    // nickname: string;
+    // accountType: "email";
+    // status: "1" | "2" | "3";
+    // createdAt: Date;
+    // updatedAt: Date;
   }
 
   /** AccessToken Payload */

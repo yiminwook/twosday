@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import { Reference } from "@/types/ref";
+import { TReference } from "@/libraries/pg/references/references.dto";
 import * as css from "./refCard.css";
 
 interface RefCardProps {
-  reference: Reference;
+  reference: TReference;
 }
 
 export default function RefCard({ reference }: RefCardProps) {

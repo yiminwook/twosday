@@ -39,6 +39,8 @@ declare global {
       readonly AUTH_ACCESS_SECRET: string;
       readonly AUTH_REFRESH_SECRET: string;
       readonly AUTH_SALT: string;
+
+      readonly GOOGLE_API_KEY: string;
     }
   }
 }

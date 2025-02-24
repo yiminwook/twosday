@@ -4,13 +4,13 @@ import { zInt } from "..";
 export type TImageItemDto = z.infer<typeof imageItemDto>;
 export const imageItemDto = z.object({
   id: z.string(),
-  key: z.string(), // R2 key
+  key: z.string(), // R2 key UNIQUE
 
   createdAt: z.string(),
   updatedAt: z.string(),
   deletedAt: z.string().nullable(),
 
-  userId: z.number(),
+  userId: zInt,
 });
 
 export type TCreateImageDto = z.infer<typeof createImageDto>;

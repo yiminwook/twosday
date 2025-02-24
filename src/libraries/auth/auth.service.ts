@@ -61,7 +61,7 @@ export const sessionService = async (refreshToken: string): Promise<Session> => 
   const session = await parseJwtToken(refreshToken, "refresh");
   delete session.iat;
   delete session.exp;
-  session.iss = new Date().toISOString();
+  session.iss = new Date();
 
   const accessToken = await generateAccessToken(session);
   return { accessToken, ...session };

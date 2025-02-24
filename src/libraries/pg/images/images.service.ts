@@ -55,7 +55,7 @@ export const postImage = withPgConnection(async (client, dto: TCreateImageDto) =
 export const deleteImage = withPgConnection(async (client, key: string) => {
   const sql = `
     UPDATE "${IMAGES_TABLE}"
-    SET "deletedAt" = NOW()
+    SET "deletedAt" = CURRENT_TIMESTAMP
     WHERE "key" = $1
   `;
 

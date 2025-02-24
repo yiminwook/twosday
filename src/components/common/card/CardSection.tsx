@@ -1,10 +1,10 @@
-import { Post } from "@/types/api";
+import { TPost, TPostOrderBy } from "@/libraries/pg/posts/posts.dto";
 import Card from "./Card";
 import { wrap } from "./cardSection.css";
 
 interface CardSectionProps {
-  post: Post[];
-  order: "popular" | "recent";
+  post: TPost[];
+  order: TPostOrderBy;
 }
 
 export default function CardSection({ post, order }: CardSectionProps) {

@@ -16,7 +16,7 @@ export const parseJwtToken = async <T extends "access" | "refresh">(token: strin
     return jwt.verify(
       token,
       type === "access" ? process.env.AUTH_ACCESS_SECRET : process.env.AUTH_REFRESH_SECRET,
-    ) as T extends "access" ? Payload : JWT;
+    ) as unknown as T extends "access" ? Payload : JWT;
   } catch (error) {
     throw new BadRequestError("Invalid Token");
   }

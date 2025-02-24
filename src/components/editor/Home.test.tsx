@@ -4,7 +4,6 @@ import { waitFor, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mswServer } from "@/__test__/__mock__/msw";
 import { http, HttpResponse } from "msw";
-import { getWasUrl } from "@/utils/getWasUrl";
 import { useRouter } from "next/navigation";
 
 describe("업로드 페이지 테스트", () => {
@@ -17,7 +16,7 @@ describe("업로드 페이지 테스트", () => {
     window.document.execCommand = jest.fn();
 
     mswServer.use(
-      http.post(`${getWasUrl()}/api/twosday/post`, async ({ request }) => {
+      http.post(`${process.env.NEXT_PUBLIC_API_URL}/api/twosday/post`, async ({ request }) => {
         const token = request.headers.get("Authorization")?.split(" ")[1];
         const body = (await request.json()) as {
           title: string;
@@ -40,15 +39,17 @@ describe("업로드 페이지 테스트", () => {
     );
 
     const mockSession: Session = {
+      accessToken: "accessToken",
       id: 1,
       email: "email@naver.com",
-      avartar: null,
-      nickname: "nickname",
-      accountType: "email",
-      status: "1",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      accessToken: "accessToken",
+      // avartar: null,
+      // nickname: "nickname",
+      // accountType: "email",
+      // status: "1",
+      // createdAt: new Date(),
+      // updatedAt: new Date(),
+      loginAt: new Date(),
+      iss: new Date(),
     };
 
     const { container } = await waitFor(() =>
@@ -76,6 +77,6 @@ describe("업로드 페이지 테스트", () => {
 
     expect(pushMock).toHaveBeenCalled();
     const pushMockArg = pushMock.mock.calls[0][0];
-    expect(pushMockArg).toBe("/post/1");
+    expect(pushMockArg).toBe("/posts/1");
   });
 });

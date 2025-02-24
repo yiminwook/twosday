@@ -14,6 +14,11 @@ const nextConfig = {
     // ts빌드 에러를 무시하고 싶다면 아래 옵션을 true로 변경하세요.
     ignoreBuildErrors: false,
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   sassOptions: {
     includePaths: [path.join(__dirname, "src", "styles")], // styles 폴더에 있는 파일은 이름만으로 import 가능(경로 축약)
     prependData: `
@@ -21,6 +26,10 @@ const nextConfig = {
       @use "util.scss"; 
     `, // 위 파일은 import 하지 않아도 된다.
     silenceDeprecations: ["legacy-js-api"], // sass warning 제거
+    logger: {
+      warn: (message) => console.warn(message),
+      debug: (message) => console.log(message),
+    },
   },
   webpack: (config) => {
     const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.(".svg"));

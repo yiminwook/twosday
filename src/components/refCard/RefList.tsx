@@ -1,12 +1,12 @@
 "use client";
 import RefCard from "@/components/refCard/RefCard";
-import { Reference } from "@/types/ref";
 import { cardList } from "./refList.css";
 import PagePagination from "@/components/common/pagination/PagePagination";
 import { useRouter } from "next/navigation";
+import { TReference } from "@/libraries/pg/references/references.dto";
 
 interface RefListProps {
-  references: Reference[];
+  references: TReference[];
   currentPage: number;
   total: number;
   size: number;
@@ -25,7 +25,7 @@ export default function RefList({ references, total, currentPage, size }: RefLis
         currentPage={currentPage}
         totalCnt={total}
         pgSize={size}
-        onChange={(page) => router.push(`/reference?page=${page}`)}
+        onChange={(page) => router.push(`/references?page=${page}`)}
       />
     </>
   );

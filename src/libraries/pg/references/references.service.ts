@@ -1,0 +1,74 @@
+import { DatabaseError } from "pg";
+import { pageOffset, withPgConnection } from "..";
+import { REFERENCES_TABLE } from "../tables";
+import { TCreateReferenceDto, TGetReferencesDto, TReference } from "./references.dto";
+import { InternalServerError } from "@/libraries/error";
+
+export const getReferences = withPgConnection(async (connection, dto: TGetReferencesDto) => {
+  const countSql = `
+    SELECT COUNT(DISTINCT T01."id") as "count"
+    FROM "${REFERENCES_TABLE}" T01
+    WHERE T01."deletedAt" IS NULL
+  `;
+
+  const countResult = await connection.query<{ count: number }>(countSql);
+
+  const sql = `
+    SELECT  T01."id"           AS "id", 
+            T01."url"          AS "url", 
+            T01."thumbnail"    AS "thumbnail", 
+            T01."title"        AS "title", 
+            T01."description"  AS "description", 
+            T01."createdAt"    AS "createdAt", 
+            T01."updatedAt"    AS "updatedAt"
+    FROM "${REFERENCES_TABLE}" T01
+    WHERE T01."deletedAt" is NULL
+    ORDER BY T01."createdAt" DESC
+    OFFSET $1 ROWS FETCH NEXT $2 ROWS ONLY
+  `;
+
+  const result = await connection.query<TReference>(sql, [
+    pageOffset(dto.page, dto.size),
+    dto.size,
+  ]);
+  return {
+    total: countResult.rows[0].count,
+    list: result.rows,
+  };
+});
+
+export const postReference = withPgConnection(async (connection, dto: TCreateReferenceDto) => {
+  try {
+    const sql = `
+    INSERT INTO "${REFERENCES_TABLE}" ("url", "thumbnail", "title", "description")
+    VALUES ($1, $2, $3, $4)
+  `;
+
+    const result = await connection.query(sql, [
+      dto.url,
+      dto.thumbnail,
+      dto.title,
+      dto.description,
+    ]);
+    return result.rows[0];
+  } catch (error) {
+    if (error instanceof DatabaseError) {
+      if (error.code === "23505") {
+        throw new InternalServerError("이미 등록된 레퍼런스입니다.");
+      }
+    }
+
+    throw error;
+  }
+});
+
+export const deleteReferenceById = withPgConnection(async (connection, id: number) => {
+  const sql = `
+    UPDATE "${REFERENCES_TABLE}"
+    SET "deletedAt" = CURRENT_TIMESTAMP
+    WHERE "id" = $1
+  `;
+
+  const result = await connection.query(sql, [id]);
+  return result.rows[0];
+});

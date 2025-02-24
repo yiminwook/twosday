@@ -1,5 +1,4 @@
 import List from "@/components/editor/List";
-import { Post } from "@/types/api";
 import Link from "next/link";
 
 interface PostProps {
@@ -37,7 +36,7 @@ export default async function Page({ searchParams }: PostProps) {
       <h1 className="blind">조회 페이지</h1>
       <div>
         <Link
-          href={`/post?order=${
+          href={`/posts?order=${
             searchParams.order === "popular" ? "recent" : "popular"
           }&page=${page}`}
         >

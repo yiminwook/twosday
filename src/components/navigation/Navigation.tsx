@@ -9,7 +9,7 @@ export default function Navigation() {
         <ul className={css.list}>
           <li>list1</li>
           <li>
-            <Link href="/post/edit" className={css.link}>
+            <Link href="/posts/edit" className={css.link}>
               <Pencil className={css.pencil} />
             </Link>
           </li>

@@ -21,7 +21,22 @@ export const PostItemDto = z.object({
   categoryIds: z.array(z.string()),
 });
 
+export type TPost = {
+  id: number;
+  title: string;
+  thumbnail: string | null;
+  updatedAt: string;
+  createdAt: string;
+  author: {
+    nickname: string;
+    email: string;
+    avatar: string | null;
+  };
+  tags: { id: number; name: string }[];
+};
+
 export type TGetPostsDto = z.infer<typeof getPostsDto>;
+export type TPostOrderBy = TGetPostsDto["order"];
 export const getPostsDto = z.object({
   order: z.enum(["popular", "recent"]),
   page: z.preprocess((s) => Number(s), zInt),

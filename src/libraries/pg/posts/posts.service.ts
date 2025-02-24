@@ -4,11 +4,11 @@ import { TGetPostsDto } from "./posts.dto";
 
 export const getPosts = withPgConnection(async (client, dto: TGetPostsDto) => {
   const countSql = `
-  SELECT COUNT(DISTINCT T01."id") as "count"
-  FROM "${POSTS_TABLE}" T01
-  WHERE T01."deletedAt" IS NULL
-    AND  LOWER(T01."title") LIKE LOWER('%' || $1 || '%')
-`;
+    SELECT COUNT(DISTINCT T01."id") as "count"
+    FROM "${POSTS_TABLE}" T01
+    WHERE T01."deletedAt" IS NULL
+      AND  LOWER(T01."title") LIKE LOWER('%' || $1 || '%')
+  `;
 
   const countResult = await client.query<{ count: number }>(countSql, [dto.query]);
 

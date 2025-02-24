@@ -13,8 +13,8 @@ export async function POST(req: NextRequest) {
 
     const payload: JWT = {
       ...signinData,
-      loginAt: new Date().toISOString(),
-      iss: new Date().toISOString(),
+      loginAt: new Date(),
+      iss: new Date(),
     };
 
     const newRefreshToken = await generateRefreshToken(payload);

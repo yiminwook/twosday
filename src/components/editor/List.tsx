@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import { Post } from "@/types/api";
 import * as css from "./list.css";
 import { useRouter } from "next/navigation";
 import PagePagination from "@/components/common/pagination/PagePagination";
+import { TPost } from "@/libraries/pg/posts/posts.dto";
 
 interface ListProps {
-  post: Post[];
+  post: TPost[];
   currentPage: number;
   total: number;
   size: number;
@@ -32,7 +32,7 @@ export default function List({ post, currentPage, total, size }: ListProps) {
             key={rowData.id}
             className={css.row}
             onClick={() => {
-              router.push(`/post/${rowData.id}`);
+              router.push(`/posts/${rowData.id}`);
             }}
           >
             <div className={css.thumbnailBox}>
@@ -53,7 +53,7 @@ export default function List({ post, currentPage, total, size }: ListProps) {
       <PagePagination
         currentPage={currentPage}
         totalCnt={total}
-        onChange={(page) => router.push(`/post?order=popular&page=${page}`)}
+        onChange={(page) => router.push(`/posts?order=popular&page=${page}`)}
         pgSize={size}
       />
     </>

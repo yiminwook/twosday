@@ -20,7 +20,7 @@ export default async function Header() {
               <ThemeBtn />
             </li>
             <li className={upload}>
-              <Link href="/post/edit" className={link}>
+              <Link href="/posts/edit" className={link}>
                 <Pencil />
                 <span>글쓰기</span>
               </Link>

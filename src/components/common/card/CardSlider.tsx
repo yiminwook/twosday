@@ -1,10 +1,10 @@
 import { cardSlider } from "./cardSlider.css";
 import Card from "./Card";
-import { Post } from "@/types/api";
+import { TPost, TPostOrderBy } from "@/libraries/pg/posts/posts.dto";
 
 interface CardSliderProps {
-  post: Post[];
-  order: "popular" | "recent";
+  post: TPost[];
+  order: TPostOrderBy;
 }
 
 export default function CardSlider({ post, order }: CardSliderProps) {
