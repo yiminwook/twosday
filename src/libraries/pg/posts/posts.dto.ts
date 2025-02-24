@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { zInt } from "..";
-import { thumbnail } from "@/components/editor/list.css";
 
 export type TPostItemDto = z.infer<typeof PostItemDto>;
 export const PostItemDto = z.object({
@@ -11,6 +10,7 @@ export const PostItemDto = z.object({
   thumbnail: z.string().optional(),
   isPublic: z.boolean(),
   viewCount: zInt,
+
   createdAt: z.date(),
   updataAt: z.date(),
   deletedAt: z.date().nullable(),
@@ -21,8 +21,8 @@ export const PostItemDto = z.object({
   categoryIds: z.array(z.string()),
 });
 
-export type TGetPostsParamsDto = z.infer<typeof getPostsParamsDto>;
-export const getPostsParamsDto = z.object({
+export type TGetPostsDto = z.infer<typeof getPostsDto>;
+export const getPostsDto = z.object({
   order: z.enum(["popular", "recent"]),
   page: z.preprocess((s) => Number(s), zInt),
   size: z.preprocess((s) => Number(s), zInt),

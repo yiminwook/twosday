@@ -1,23 +1,23 @@
-import { withPgConnection } from "..";
+import { pageOffset, withPgConnection } from "..";
 import { POSTS_TABLE, USERS_TABLE } from "../tables";
-import { TGetPostsParamsDto } from "./posts.dto";
+import { TGetPostsDto } from "./posts.dto";
 
-export const getPosts = withPgConnection(async (client, dto: TGetPostsParamsDto) => {
-  const countQuery = `
+export const getPosts = withPgConnection(async (client, dto: TGetPostsDto) => {
+  const countSql = `
   SELECT COUNT(DISTINCT T01."id") as "count"
   FROM "${POSTS_TABLE}" T01
   WHERE T01."deletedAt" IS NULL
     AND  LOWER(T01."title") LIKE LOWER('%' || $1 || '%')
 `;
 
-  const countResult = await client.query(countQuery, [dto.query]);
+  const countResult = await client.query<{ count: number }>(countSql, [dto.query]);
 
   const orderBy =
     dto.order === "popular"
       ? `ORDER BY T01."createdAt" DESC, T01."viewCount" DESC`
       : `ORDER BY T01."createdAt" DESC`;
 
-  const listQuery = `
+  const listSql = `
     SELECT  T01."id"        AS "id",
             T01."authorId"  AS "authorId",
             T01."title"     AS "title",
@@ -37,9 +37,9 @@ export const getPosts = withPgConnection(async (client, dto: TGetPostsParamsDto)
     OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY
   `;
 
-  const listResult = await client.query(listQuery, [
+  const listResult = await client.query(listSql, [
     dto.query,
-    dto.page < 2 ? 0 : (dto.page - 1) * dto.size, // 페이지는 1보다 작을 수 없음
+    pageOffset(dto.page, dto.size),
     dto.size,
   ]);
 

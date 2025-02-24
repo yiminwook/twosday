@@ -1,7 +1,7 @@
 import { getPureText } from "@/libraries/dompurify";
 import { BadRequestError, serverErrorHandler } from "@/libraries/error";
-import { getPosts } from "@/libraries/pg/posts/post.service";
-import { getPostsParamsDto } from "@/libraries/pg/posts/posts.dto";
+import { getPosts } from "@/libraries/pg/posts/posts.service";
+import { getPostsDto } from "@/libraries/pg/posts/posts.dto";
 import { NextRequest, NextResponse } from "next/server";
 import { parse } from "qs";
 
@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   try {
     const queryString = req.nextUrl.searchParams.toString();
     const searchParams = parse(queryString);
-    const dto = getPostsParamsDto.safeParse(searchParams);
+    const dto = getPostsDto.safeParse(searchParams);
 
     if (dto.error) {
       console.error(dto.error);

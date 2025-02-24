@@ -42,3 +42,13 @@ export function withPgConnection<TArgs extends any[], TResult>(
 }
 
 export const zInt = z.number().int().positive();
+
+/**
+ * page가 0또는 1일때 0으로 처리
+ *
+ * OFFSET ROWS FETCH NEXT ROWS ONLY 구문에 사용
+ */
+export const pageOffset = (currentPage: number, pageSize: number) => {
+  // 페이지는 1보다 작을 수 없음,
+  return currentPage < 2 ? 0 : (currentPage - 1) * pageSize;
+};
