@@ -96,3 +96,4 @@ export default async function Page() {
 
 // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
 // export const fetchCache = "default-no-store";
+export const dynamic = "force-dynamic"; // 최종배포시 제거필요
