@@ -2,7 +2,11 @@ import { NotFoundError } from "@/libraries/error";
 import { pageOffset, withPgConnection, withPgTransaction } from "..";
 import { POSTS_IMAGES_TABLE, POSTS_TABLE, USERS_TABLE } from "../tables";
 import { TCreatePostDto, TGetPostsDto } from "./posts.dto";
-import { addImages, removeImages } from "./posts.util";
+import {
+  addImagesQueryByTransaction,
+  removeImagesQueryByTransaction,
+} from "../images/images.service";
+import { addTagsQueryByTransaction, removeTagsQueryByTransaction } from "../tags/tags.service";
 
 type TSelectPost = {
   id: number;
@@ -96,7 +100,10 @@ export const getPostById = withPgConnection(async (client, postId: number) => {
               T02."nickname"  
   `;
 
-  const postResult = await client.query<TSelectPost & { imagesIds: number[] }>(postSql, [postId]);
+  const postResult = await client.query<TSelectPost & { imagesId: number[]; tagIds: number[] }>(
+    postSql,
+    [postId],
+  );
 
   if (postResult.rows.length === 0) {
     throw new NotFoundError("해당 글을 찾을 수 없습니다.");
@@ -109,19 +116,18 @@ export const postPost = withPgTransaction(async (client, authorId: number, dto: 
   // tag insert
   // category insert
   const postSql = `
-    INSERT INTO "${POSTS_TABLE}" ("authorId", "title", "content", "isPublic")
-    VALUES ($1, $2, $3, $4)
+    INSERT INTO "${POSTS_TABLE}" ("authorId", "title", "content", "isPublic", "categoryId")
+    VALUES ($1, $2, $3, $4, $5)
     RETURNING id
   `;
 
   const postSqlResult = await client.query<{
     id: number;
-  }>(postSql, [authorId, dto.title, dto.content, dto.isPublic]);
+  }>(postSql, [authorId, dto.title, dto.content, dto.isPublic, dto.categoryId]);
 
   const postId = postSqlResult.rows[0].id;
 
-  const addImagesOption = addImages(postId, dto.imageIds);
-  await client.query(addImagesOption.sql, addImagesOption.value);
+  await addImagesQueryByTransaction(client, postId, dto.imageIds);
 
   return postSqlResult.rows[0];
 });
@@ -129,27 +135,37 @@ export const postPost = withPgTransaction(async (client, authorId: number, dto: 
 export const putPost = withPgTransaction(async (client, postId: number, dto: TCreatePostDto) => {
   const currnetPost = await getPostById(postId);
 
-  // tag insert
   // category insert
   const postSql = `
     UPDATE "${POSTS_TABLE}"
-    SET "title" = $2, "content" = $3, "isPublic" = $4
+    SET "title" = $2, "content" = $3, "isPublic" = $4, "categoryId" = $5
     WHERE "id" = $1
   `;
 
-  const addImageList = dto.imageIds.filter((imageId) => !currnetPost.imagesIds.includes(imageId));
-  const removeImageList = currnetPost.imagesIds.filter(
-    (imageId) => !dto.imageIds.includes(imageId),
-  );
-
-  const addImagesOption = addImages(postId, addImageList);
-  const removeImagesOption = removeImages(postId, removeImageList);
+  const addImageList = dto.imageIds.filter((imageId) => !currnetPost.imagesId.includes(imageId));
+  const removeImageList = currnetPost.imagesId.filter((imageId) => !dto.imageIds.includes(imageId));
+  const addTagsList = dto.tagIds.filter((tagId) => !currnetPost.tagIds.includes(tagId));
+  const removeTagsList = currnetPost.tagIds.filter((tagId) => !dto.tagIds.includes(tagId));
 
   await Promise.all([
-    client.query(postSql, [postId, dto.title, dto.content, dto.isPublic]),
-    client.query(addImagesOption.sql, addImagesOption.value),
-    client.query(removeImagesOption.sql, removeImagesOption.value),
+    client.query(postSql, [postId, dto.title, dto.content, dto.isPublic, dto.categoryId]),
+    addImagesQueryByTransaction(client, postId, addImageList),
+    removeImagesQueryByTransaction(client, postId, removeImageList),
+    addTagsQueryByTransaction(client, postId, addTagsList),
+    removeTagsQueryByTransaction(client, postId, removeTagsList),
   ]);
 
-  return { message: "성공적으로 글이 수정되었습니다." };
+  return { id: postId };
+});
+
+export const deletePost = withPgTransaction(async (client, postId: number) => {
+  const sql = `
+    -- SOFT DELETE
+    UPDATE "${POSTS_TABLE}"
+    SET "deletedAt" = CURRENT_TIMESTAMP, "isPublic" = FALSE
+    WHERE "id" = $1
+  `;
+
+  await client.query(sql, [postId]);
+  return { id: postId };
 });

@@ -52,7 +52,7 @@ export const createPostDto = z.object({
   title: z.string().min(1).max(100),
   content: z.string().min(1),
   isPublic: z.boolean(),
-  tagIds: z.array(z.string()),
+  tagIds: z.array(z.number()),
   imageIds: z.array(z.number()),
-  categoryIds: z.array(z.string()),
+  categoryId: z.number().nullable(),
 });

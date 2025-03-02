@@ -1,7 +1,8 @@
 import { InternalServerError } from "@/libraries/error";
 import { isDatabaseError, withPgConnection, withPgTransaction } from "..";
-import { TAGS_TABLE } from "../tables";
+import { POSTS_TAGS_TABLE, TAGS_TABLE } from "../tables";
 import { TPostTagDto, TPutTagDto } from "./tags.dto";
+import { PoolClient } from "pg";
 
 type TSelectTag = {
   id: number;
@@ -87,7 +88,7 @@ export const putTag = withPgTransaction(async (client, dto: TPutTagDto) => {
 
 export const deleteTag = withPgTransaction(async (client, id: number) => {
   const sql = `
-    -- HARD DELETE
+    -- HARD DELETE, 삭제시 POSTS_TAGS 테이블에서도 삭제됨
     DELETE FROM "${TAGS_TABLE}"
     WHERE "id" = $1
   `;
@@ -95,3 +96,40 @@ export const deleteTag = withPgTransaction(async (client, id: number) => {
   await client.query(sql, [id]);
   return { id };
 });
+
+export const addTagsQueryByTransaction = async (
+  client: PoolClient,
+  postId: number,
+  tagIds: number[],
+) => {
+  const multiPostTagValues: number[] = [];
+  const multiPostTagPlaceholders = tagIds
+    .map((tagId, index) => {
+      multiPostTagValues.push(postId, tagId);
+      return `($${index * 2 + 1}, $${index * 2 + 2})`;
+    })
+    .join(", ");
+
+  const multiPostTagSql = `
+    INSERT INTO "${POSTS_TAGS_TABLE}" ("postsId", "tagsId")
+    VALUES ${multiPostTagPlaceholders}
+  `;
+
+  return client.query(multiPostTagSql, multiPostTagValues);
+};
+
+export const removeTagsQueryByTransaction = async (
+  client: PoolClient,
+  postId: number,
+  tagIds: number[],
+) => {
+  // ANY  : 배열 안에 포함된 값 중 하나라도 일치하면 참
+  // "tagsId"= $2 OR "tagsId"= $3 OR "tagsId"= $4
+
+  const multiPostTagSql = `
+    DELETE FROM "${POSTS_TAGS_TABLE}"
+    WHERE "postsId" = $1 AND "tagsId" = ANY($2)
+  `;
+
+  return client.query(multiPostTagSql, [postId, tagIds]);
+};
