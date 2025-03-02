@@ -48,7 +48,7 @@ export async function POST() {
       content: "테스트 콘텐츠",
       isPublic: true,
       tagIds: [],
-      imageIds: [],
+      imageIds: [36, 37],
       categoryIds: [],
     });
 
