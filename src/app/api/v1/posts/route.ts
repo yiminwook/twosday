@@ -1,6 +1,6 @@
 import { getPureText } from "@/libraries/dompurify";
 import { BadRequestError, serverErrorHandler } from "@/libraries/error";
-import { getPosts } from "@/libraries/pg/posts/posts.service";
+import { getPosts, postPost } from "@/libraries/pg/posts/posts.service";
 import { getPostsDto } from "@/libraries/pg/posts/posts.dto";
 import { NextRequest, NextResponse } from "next/server";
 import { parse } from "qs";
@@ -43,10 +43,16 @@ export async function GET(req: NextRequest) {
 
 export async function POST() {
   try {
-    return NextResponse.json(
-      { message: "성공적으로 글이 작성되었습니다.", data: { id: 1 } },
-      { status: 201 },
-    );
+    const data = await postPost(6, {
+      title: "테스트 타이틀",
+      content: "테스트 콘텐츠",
+      isPublic: true,
+      tagIds: [],
+      imageIds: [],
+      categoryIds: [],
+    });
+
+    return NextResponse.json({ message: "성공적으로 글이 작성되었습니다.", data }, { status: 201 });
   } catch (error) {
     console.error(error);
     const { message, status } = serverErrorHandler(error);

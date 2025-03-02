@@ -1,6 +1,6 @@
-import { pageOffset, withPgConnection } from "..";
+import { pageOffset, withPgConnection, withPgTransaction } from "..";
 import { POSTS_TABLE, USERS_TABLE } from "../tables";
-import { TGetPostsDto } from "./posts.dto";
+import { TCreatePostDto, TGetPostsDto } from "./posts.dto";
 
 export const getPosts = withPgConnection(async (client, dto: TGetPostsDto) => {
   const countSql = `
@@ -47,4 +47,21 @@ export const getPosts = withPgConnection(async (client, dto: TGetPostsDto) => {
     posts: listResult.rows,
     total: countResult.rows[0].count,
   };
+});
+
+export const postPost = withPgTransaction(async (client, authorId: number, dto: TCreatePostDto) => {
+  // image insert
+  // tag insert
+  // category insert
+  const sql = `
+    INSERT INTO "${POSTS_TABLE}" ("authorId", "title", "content", "isPublic")
+    VALUES ($1, $2, $3, $4)
+    RETURNING id
+  `;
+
+  const result = await client.query<{
+    id: number;
+  }>(sql, [authorId, dto.title, dto.content, dto.isPublic]);
+
+  return result.rows[0];
 });

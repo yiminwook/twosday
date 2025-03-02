@@ -1,5 +1,5 @@
 import { DatabaseError } from "pg";
-import { pageOffset, withPgConnection } from "..";
+import { pageOffset, withPgConnection, withPgTransaction } from "..";
 import { REFERENCES_TABLE } from "../tables";
 import { TCreateReferenceDto, TGetReferencesDto, TReference } from "./references.dto";
 import { InternalServerError } from "@/libraries/error";
@@ -37,19 +37,21 @@ export const getReferences = withPgConnection(async (connection, dto: TGetRefere
   };
 });
 
-export const postReference = withPgConnection(async (connection, dto: TCreateReferenceDto) => {
+export const postReference = withPgTransaction(async (connection, dto: TCreateReferenceDto) => {
   try {
     const sql = `
     INSERT INTO "${REFERENCES_TABLE}" ("url", "thumbnail", "title", "description")
     VALUES ($1, $2, $3, $4)
+    RETURNING id
   `;
 
-    const result = await connection.query(sql, [
+    const result = await connection.query<{ id: number }>(sql, [
       dto.url,
       dto.thumbnail,
       dto.title,
       dto.description,
     ]);
+
     return result.rows[0];
   } catch (error) {
     if (error instanceof DatabaseError) {
@@ -62,13 +64,14 @@ export const postReference = withPgConnection(async (connection, dto: TCreateRef
   }
 });
 
-export const deleteReferenceById = withPgConnection(async (connection, id: number) => {
+export const deleteReferenceById = withPgTransaction(async (connection, id: number) => {
   const sql = `
     UPDATE "${REFERENCES_TABLE}"
     SET "deletedAt" = CURRENT_TIMESTAMP
     WHERE "id" = $1
+    RETURNING id
   `;
 
-  const result = await connection.query(sql, [id]);
+  const result = await connection.query<{ id: number }>(sql, [id]);
   return result.rows[0];
 });

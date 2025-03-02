@@ -1,4 +1,4 @@
-import { pageOffset, withPgConnection } from "..";
+import { pageOffset, withPgConnection, withPgTransaction } from "..";
 import { IMAGES_TABLE } from "../tables";
 import { TCreateImageDto, TGetImagesDto } from "./images.dto";
 
@@ -42,23 +42,25 @@ export const getImages = withPgConnection(async (client, dto: TGetImagesDto) => 
   };
 });
 
-export const postImage = withPgConnection(async (client, dto: TCreateImageDto) => {
+export const postImage = withPgTransaction(async (client, dto: TCreateImageDto) => {
   const sql = `
     INSERT INTO "${IMAGES_TABLE}" ("key", "userId")
     VALUES ($1, $2)
+    RETURNING id
   `;
 
-  const result = await client.query(sql, [dto.key, dto.userId]);
+  const result = await client.query<{ id: number }>(sql, [dto.key, dto.userId]);
   return result.rows[0];
 });
 
-export const deleteImage = withPgConnection(async (client, key: string) => {
+export const deleteImage = withPgTransaction(async (client, key: string) => {
   const sql = `
     UPDATE "${IMAGES_TABLE}"
     SET "deletedAt" = CURRENT_TIMESTAMP
     WHERE "key" = $1
+    RETURNING id
   `;
 
-  const result = await client.query(sql, [key]);
+  const result = await client.query<{ id: number }>(sql, [key]);
   return result.rows[0];
 });
