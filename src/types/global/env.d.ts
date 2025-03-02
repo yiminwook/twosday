@@ -40,6 +40,13 @@ declare global {
       readonly AUTH_SALT: string;
 
       readonly GOOGLE_API_KEY: string;
+
+      // LOG
+      readonly DISCORD_WEBHOOK_URL: string;
+
+      // MAIL
+      readonly MAIL_USER: string;
+      readonly MAIL_PASSWORD: string;
     }
   }
 }
