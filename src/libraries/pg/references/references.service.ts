@@ -1,5 +1,4 @@
-import { DatabaseError } from "pg";
-import { pageOffset, withPgConnection, withPgTransaction } from "..";
+import { isDatabaseError, pageOffset, withPgConnection, withPgTransaction } from "..";
 import { REFERENCES_TABLE } from "../tables";
 import { TCreateReferenceDto, TGetReferencesDto, TReference } from "./references.dto";
 import { InternalServerError } from "@/libraries/error";
@@ -54,10 +53,8 @@ export const postReference = withPgTransaction(async (connection, dto: TCreateRe
 
     return result.rows[0];
   } catch (error) {
-    if (error instanceof DatabaseError) {
-      if (error.code === "23505") {
-        throw new InternalServerError("이미 등록된 레퍼런스입니다.");
-      }
+    if (isDatabaseError(error) && error.code === "23505") {
+      throw new InternalServerError("이미 등록된 레퍼런스입니다.");
     }
 
     throw error;

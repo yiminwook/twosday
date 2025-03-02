@@ -63,7 +63,5 @@ export const postPost = withPgTransaction(async (client, authorId: number, dto: 
     id: number;
   }>(sql, [authorId, dto.title, dto.content, dto.isPublic]);
 
-  throw new Error("Not implemented yet");
-
   return result.rows[0];
 });

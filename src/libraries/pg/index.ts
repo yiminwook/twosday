@@ -1,5 +1,6 @@
-import { Client, Pool, PoolClient } from "pg";
+import { Client, DatabaseError, Pool, PoolClient } from "pg";
 import { z } from "zod";
+import { CustomServerError } from "../error";
 
 const PG_PORT = 5432 as const;
 
@@ -29,9 +30,15 @@ export function withPgConnection<TArgs extends any[], TResult>(
       await pgClient.connect();
 
       // `await`를 추가하여 비동기 함수의 에러를 catch 블록에서 잡을 수 있도록 함
-      return await fn(pgClient, ...args);
+      const result = await fn(pgClient, ...args);
+      return result;
     } catch (error) {
-      console.error("PG Connection Wrapper Error:", error);
+      if (isDatabaseError(error)) {
+        console.error("PG Connection 에러코드   :", error.code);
+        console.error("PG Connection 에러메세지 :", error.message);
+        console.error("PG Connection 에러상세   :", error.detail);
+        throw new CustomServerError("관리자에게 문의하세요", 599, "DatabaseError");
+      }
       throw error;
     } finally {
       await pgClient.end();
@@ -67,15 +74,17 @@ export function withPgTransaction<TArgs extends any[], TResult>(
       // `await`를 추가하여 비동기 함수의 에러를 catch 블록에서 잡을 수 있도록 함
       const result = await fn(pgClient, ...args);
 
-      console.log("COMMIT");
       await pgClient.query("COMMIT");
-      // console.log("@", result2);
 
       return result;
     } catch (error) {
-      console.log("ROLLBACK");
       await pgClient.query("ROLLBACK");
-      // console.error("PG Connection Wrapper Error:", error);
+      if (isDatabaseError(error)) {
+        console.error("PG Connection 에러코드   :", error.code);
+        console.error("PG Connection 에러메세지 :", error.message);
+        console.error("PG Connection 에러상세   :", error.detail);
+        throw new CustomServerError("관리자에게 문의하세요", 599, "DatabaseError");
+      }
       throw error;
     } finally {
       pgClient.release();
@@ -93,4 +102,8 @@ export const zInt = z.number().int().positive();
 export const pageOffset = (currentPage: number, pageSize: number) => {
   // 페이지는 1보다 작을 수 없음,
   return currentPage < 2 ? 0 : (currentPage - 1) * pageSize;
+};
+
+export const isDatabaseError = (error: unknown): error is DatabaseError => {
+  return error instanceof DatabaseError;
 };
