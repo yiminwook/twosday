@@ -62,16 +62,20 @@ export function withPgTransaction<TArgs extends any[], TResult>(
     const pgClient = await pool.connect();
 
     try {
+      await pgClient.query("BEGIN");
+
       // `await`를 추가하여 비동기 함수의 에러를 catch 블록에서 잡을 수 있도록 함
       const result = await fn(pgClient, ...args);
 
-      const result2 = await pgClient.query("COMMIT");
-      console.log("@", result2);
+      console.log("COMMIT");
+      await pgClient.query("COMMIT");
+      // console.log("@", result2);
 
       return result;
     } catch (error) {
+      console.log("ROLLBACK");
       await pgClient.query("ROLLBACK");
-      console.error("PG Connection Wrapper Error:", error);
+      // console.error("PG Connection Wrapper Error:", error);
       throw error;
     } finally {
       pgClient.release();

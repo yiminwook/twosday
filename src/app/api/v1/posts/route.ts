@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
 export async function POST() {
   try {
     const data = await postPost(6, {
-      title: "테스트 타이틀",
+      title: "테스트 타이틀 rollbacks",
       content: "테스트 콘텐츠",
       isPublic: true,
       tagIds: [],
