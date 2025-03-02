@@ -49,7 +49,7 @@ export async function POST() {
       isPublic: true,
       tagIds: [],
       imageIds: [36, 37],
-      categoryIds: [],
+      categoryId: null,
     });
 
     return NextResponse.json({ message: "성공적으로 글이 작성되었습니다.", data }, { status: 201 });
