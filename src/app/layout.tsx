@@ -35,10 +35,10 @@ export default async function RootLayout({ children }: PropsWithChildren) {
     // https://github.com/mantinedev/mantine/issues/7008
     <html lang="ko" suppressContentEditableWarning>
       <head>
-        <ColorSchemeScript defaultColorScheme="light" />
+        <ColorSchemeScript />
       </head>
       <body className={font.className}>
-        <Configs defaultColorScheme={"light"}>{children}</Configs>
+        <Configs>{children}</Configs>
       </body>
     </html>
   );

@@ -11,7 +11,7 @@ import { extensions } from "@/libraries/extentions";
 import { useEditor } from "@tiptap/react";
 import { useSession } from "@/libraries/auth/useSession";
 import { clientApi } from "@/apis/fetcher";
-import { IMAGE_URL } from "@/constants";
+import { IMAGE_URL } from "@/constances";
 
 interface HomeProps {}
 

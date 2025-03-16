@@ -7,16 +7,15 @@ import MantineProvider from "./MantainProvider";
 import ModalContainer from "../common/modal/ModalContainer";
 
 interface ConfigsProps {
-  defaultColorScheme: "light" | "dark";
   children: React.ReactNode;
 }
 
-export default async function Configs({ children, defaultColorScheme }: ConfigsProps) {
+export default async function Configs({ children }: ConfigsProps) {
   return (
     <App>
       <Hotkeys>
         <ReactQuery>
-          <MantineProvider defaultColorScheme={defaultColorScheme}>
+          <MantineProvider>
             {children}
             <Devtools />
             <ModalContainer />

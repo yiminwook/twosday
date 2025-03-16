@@ -7,7 +7,7 @@ import { LuImage } from "react-icons/lu";
 import { FaYoutube } from "react-icons/fa";
 import { RichTextEditor } from "@mantine/tiptap";
 import { clientApi } from "@/apis/fetcher";
-import { IMAGE_URL } from "@/constants";
+import { IMAGE_URL } from "@/constances";
 import { toast } from "sonner";
 
 interface ControlProps {
