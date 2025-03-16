@@ -3,21 +3,12 @@ import * as css from "./editor.css";
 import { Editor } from "@tiptap/react";
 import { readFile } from "./readFile";
 import CropModal, { CroppedData } from "./CropModal";
-import classNames from "classnames";
-import { VscBold } from "react-icons/vsc";
-import { IoCodeSlashOutline } from "react-icons/io5";
 import { LuImage } from "react-icons/lu";
 import { FaYoutube } from "react-icons/fa";
-import { TfiAlignLeft, TfiAlignRight, TfiAlignCenter, TfiAlignJustify } from "react-icons/tfi";
-import { BsTypeH1, BsTypeH2, BsTypeH3 } from "react-icons/bs";
-import { CgFormatItalic } from "react-icons/cg";
-import { BsTypeStrikethrough } from "react-icons/bs";
-import { BiUnderline, BiLink, BiUnlink } from "react-icons/bi";
-import { GoListOrdered, GoListUnordered } from "react-icons/go";
-import { LuListX } from "react-icons/lu";
-import { RiH1, RiH2, RiH3 } from "react-icons/ri";
 import { RichTextEditor } from "@mantine/tiptap";
-import { get } from "http";
+import { clientApi } from "@/apis/fetcher";
+import { IMAGE_URL } from "@/constants";
+import { toast } from "sonner";
 
 interface ControlProps {
   editor: Editor;
@@ -39,47 +30,40 @@ export default function Control({ editor, session }: ControlProps) {
     input.type = "file";
     input.accept = "image/*";
     input.addEventListener("change", async () => {
-      if (input.files && input.files.length > 0) {
-        const file = input.files[0];
-        const url = await readFile(file);
+      try {
+        if (input.files && input.files.length > 0) {
+          const file = input.files[0];
+          const url = await readFile(file);
 
-        const result: CroppedData | undefined = await modalStore.push(CropModal, {
-          props: { file, imageUrl: url },
-        });
+          const result: CroppedData | undefined = await modalStore.push(CropModal, {
+            props: { file, imageUrl: url },
+          });
 
-        if (!result) return;
+          if (!result) return;
 
-        const uploadUrl = "/api/image/sign";
-        // const wasRes = await fetch(uploadUrl, {
-        //   method: "POST",
-        //   headers: {
-        //     Authorization: `Bearer ${session.accessToken}`,
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({ fileName: file.name, projectName: "twosday" }),
-        //   cache: "no-cache",
-        // });
+          const formData = new FormData();
+          formData.append("image", result.file);
 
-        // if (!wasRes.ok) throw new Error("업로드중 오류가 발생했습니다.");
+          const wasRes = await clientApi("images", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${session.accessToken}`,
+            },
+            body: formData,
+          });
 
-        // const body: { url: string } = await wasRes.json();
+          const json: { key: string; message: string } = await wasRes.json();
 
-        // const awsRes = await fetch(body.url, {
-        //   method: "PUT",
-        //   body: file,
-        //   headers: {
-        //     "Content-Type": file.type,
-        //   },
-        // });
-
-        // const pathname = new URL(body.url).pathname;
-
-        // if (!awsRes.ok) throw new Error("업로드중 오류가 발생했습니다.");
-
-        // const imgUrl = process.env.NEXT_PUBLIC_AWS_CLOUD_FRONT_URL + pathname;
-        // editor.chain().focus().setImage({ src: imgUrl }).run();
+          editor
+            .chain()
+            .focus()
+            .setImage({ src: IMAGE_URL + "/" + json.key })
+            .run();
+        }
+        input.remove();
+      } catch (error) {
+        toast.error("이미지 업로드에 실패했습니다.");
       }
-      input.remove();
     });
     input.click();
   };

@@ -11,7 +11,7 @@ import { extensions } from "@/libraries/extentions";
 import { useEditor } from "@tiptap/react";
 import { useSession } from "@/libraries/auth/useSession";
 import { clientApi } from "@/apis/fetcher";
-import { errorToJSON } from "next/dist/server/render";
+import { IMAGE_URL } from "@/constants";
 
 interface HomeProps {}
 
@@ -81,6 +81,17 @@ export default function Home({}: HomeProps) {
       return;
     }
 
+    const savedImageKeys = editor
+      .getJSON()
+      .content?.filter((node) => node.type === "image")
+      .map((node) => {
+        const src = node.attrs?.src as string | undefined;
+        if (!src) return null;
+        return src.startsWith(IMAGE_URL) ? src.replace(IMAGE_URL + "/", "") : null;
+      })
+      .filter((src): src is string => typeof src === "string");
+
+    console.log("images", savedImageKeys);
     mutation.mutate(editor.getHTML());
   };
 
