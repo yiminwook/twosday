@@ -71,6 +71,8 @@ export const addImagesQueryByTransaction = async (
   postId: number,
   imageIds: number[],
 ) => {
+  if (imageIds.length === 0) return; // 이미지가 없으면 실행하지 않음
+
   const multiPostImageValues: number[] = [];
   const multiPostImagePlaceholders = imageIds
     .map((imageId, index) => {

@@ -1,4 +1,4 @@
-import { ForbiddenError, InternalServerError, NotFoundError } from "../error";
+import { ForbiddenError, InternalServerError, NotFoundError, UnauthorizedError } from "../error";
 import { generateAccessToken, parseJwtToken } from "./jwt.service";
 import { cookies } from "next/headers";
 import { REFRESH_COOKIE_NAME } from "./config";
@@ -6,33 +6,6 @@ import { redirect } from "next/navigation";
 import { base64ToUtf8 } from "@/utils/textEncode";
 import bcrypt from "bcryptjs";
 import { getUserByEmail } from "../pg/users/users.service";
-
-export const checkBasicAuth = (auth: string | null) => {
-  if (auth === null) {
-    throw new InternalServerError("Invalid authorization");
-  }
-  try {
-    const credentials = auth.split("Basic ")[1];
-    const [email, password] = base64ToUtf8(credentials).split(":");
-    return { email, password };
-  } catch (error) {
-    throw new InternalServerError("Invalid authorization");
-  }
-};
-
-export const checkBearerAuth = (auth: string | null) => {
-  if (auth === null) {
-    throw new InternalServerError("Invalid authorization");
-  }
-
-  try {
-    const token = auth.split("Bearer ")[1];
-    const payload = parseJwtToken(token, "access");
-    return payload;
-  } catch (error) {
-    throw new InternalServerError("Invalid authorization");
-  }
-};
 
 export const signUpService = async (email: string, password: string) => {
   const saltRounds = Number(process.env.AUTH_SALT);

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { BadRequestError, InternalServerError } from "../error";
+import { BadRequestError, InternalServerError, UnauthorizedError } from "../error";
 import { ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE } from "./config";
 import { base64ToUtf8 } from "@/utils/textEncode";
 
@@ -24,27 +24,27 @@ export const parseJwtToken = async <T extends "access" | "refresh">(token: strin
 
 export const checkBasicAuth = (auth: string | null) => {
   if (auth === null) {
-    throw new InternalServerError("Invalid authorization");
+    throw new UnauthorizedError("Invalid authorization");
   }
   try {
     const credentials = auth.split("Basic ")[1];
-    const [corpCd, externId] = base64ToUtf8(credentials).split(":");
-    return { corpCd, externId };
-  } catch (e) {
-    throw new InternalServerError("Invalid authorization");
+    const [email, password] = base64ToUtf8(credentials).split(":");
+    return { email, password };
+  } catch (error) {
+    throw new UnauthorizedError("Invalid authorization");
   }
 };
 
 export const checkBearerAuth = (auth: string | null) => {
   if (auth === null) {
-    throw new InternalServerError("Invalid authorization");
+    throw new UnauthorizedError("Invalid authorization");
   }
 
   try {
     const token = auth.split("Bearer ")[1];
     const payload = parseJwtToken(token, "access");
     return payload;
-  } catch (e) {
-    throw new InternalServerError("Invalid authorization");
+  } catch (error) {
+    throw new UnauthorizedError("Invalid authorization");
   }
 };

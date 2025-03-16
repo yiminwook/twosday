@@ -102,6 +102,8 @@ export const addTagsQueryByTransaction = async (
   postId: number,
   tagIds: number[],
 ) => {
+  if (tagIds.length === 0) return; // 태그가 없으면 실행하지 않음
+
   const multiPostTagValues: number[] = [];
   const multiPostTagPlaceholders = tagIds
     .map((tagId, index) => {

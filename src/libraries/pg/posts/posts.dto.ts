@@ -49,7 +49,14 @@ export const getPostsDto = z.object({
 
 export type TCreatePostDto = z.infer<typeof createPostDto>;
 export const createPostDto = z.object({
-  title: z.string().min(1).max(100),
+  title: z
+    .string()
+    .min(1, {
+      message: "제목은 1자 이상이어야 합니다.",
+    })
+    .max(100, {
+      message: "제목은 100자 이하여야 합니다.",
+    }),
   content: z.string().min(1),
   isPublic: z.boolean(),
   tagIds: z.array(z.number()),

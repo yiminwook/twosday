@@ -10,12 +10,13 @@ import { excuteThumnail } from "@/utils/excuteThumbnail";
 import { extensions } from "@/libraries/extentions";
 import { useEditor } from "@tiptap/react";
 import { useSession } from "@/libraries/auth/useSession";
+import { clientApi } from "@/apis/fetcher";
+import { errorToJSON } from "next/dist/server/render";
 
 interface HomeProps {}
 
 export default function Home({}: HomeProps) {
   const session = useSession().data!;
-  console.log(session);
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState<string[]>([]);
@@ -34,31 +35,27 @@ export default function Home({}: HomeProps) {
   });
 
   const mutation = useMutation({
-    mutationFn: async (e: MouseEvent) => {
-      if (!editor) return;
-      // const response = await fetch(`${getWasUrl()}/api/twosday/post`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: `Bearer ${session.accessToken}`,
-      //   },
-      //   body: JSON.stringify({
-      //     title,
-      //     content: editor.getHTML(),
-      //     tags: [],
-      //     isPublic: true,
-      //     thumbnail: excuteThumnail(value),
-      //   }),
-      //   credentials: "include",
-      // });
+    mutationFn: async (content: string) => {
+      const response = await clientApi("posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+        body: JSON.stringify({
+          title,
+          content,
+          tagIds: [],
+          imageIds: [],
+          categoryId: null,
+          isPublic: true,
+        }),
+        credentials: "include",
+      });
 
-      // const body: { data: { id: number }; message: string[] } = await response.json();
+      const body: { data: { id: number }; message: string } = await response.json();
 
-      // if (!response.ok) {
-      //   throw new Error(body.message[0]);
-      // }
-
-      // return body;
+      return body;
     },
     onSuccess: (body) => {
       toast.success("업로드 성공");
@@ -75,6 +72,16 @@ export default function Home({}: HomeProps) {
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(() => e.target.value);
+  };
+
+  const onSave = (e: MouseEvent<HTMLButtonElement>) => {
+    if (mutation.isPending) return;
+    if (!editor) {
+      toast.warning("에디터를 로드하지 못했습니다.");
+      return;
+    }
+
+    mutation.mutate(editor.getHTML());
   };
 
   const addTag = (tag: string) => {
@@ -101,7 +108,7 @@ export default function Home({}: HomeProps) {
             className={css.navBtn}
             type="submit"
             disabled={mutation.isPending}
-            onClick={mutation.mutate}
+            onClick={onSave}
           >
             저장
           </button>

@@ -1,9 +1,11 @@
 import { getPureText } from "@/libraries/dompurify";
 import { BadRequestError, serverErrorHandler } from "@/libraries/error";
 import { getPosts, postPost } from "@/libraries/pg/posts/posts.service";
-import { getPostsDto } from "@/libraries/pg/posts/posts.dto";
+import { createPostDto, getPostsDto } from "@/libraries/pg/posts/posts.dto";
 import { NextRequest, NextResponse } from "next/server";
 import { parse } from "qs";
+import { headers } from "next/headers";
+import { checkBearerAuth } from "@/libraries/auth/jwt.service";
 
 const CONTENT_PREVIEW_STRING_MAX_LENGTH = 200;
 
@@ -36,21 +38,19 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// image ids
-// tag ids
-// title
-// content
-
-export async function POST() {
+export async function POST(response: NextResponse) {
   try {
-    const data = await postPost(6, {
-      title: "테스트 타이틀 rollbacks",
-      content: "테스트 콘텐츠",
-      isPublic: true,
-      tagIds: [],
-      imageIds: [36, 37],
-      categoryId: null,
-    });
+    const payload = await checkBearerAuth(headers().get("Authorization"));
+    const body = await response.json();
+
+    const dto = createPostDto.safeParse(body);
+
+    if (dto.error) {
+      console.error(dto.error);
+      throw new BadRequestError(dto.error.errors[0].message);
+    }
+
+    const data = await postPost(payload.id, dto.data);
 
     return NextResponse.json({ message: "성공적으로 글이 작성되었습니다.", data }, { status: 201 });
   } catch (error) {
