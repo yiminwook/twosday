@@ -66,16 +66,3 @@ export const sessionService = async (refreshToken: string): Promise<Session> => 
   const accessToken = await generateAccessToken(session);
   return { accessToken, ...session };
 };
-
-export const getServerSession = async (): Promise<Session | null> => {
-  "use server";
-  try {
-    const refreshToken = cookies().get(REFRESH_COOKIE_NAME);
-    if (!refreshToken) return null;
-
-    return sessionService(refreshToken.value);
-  } catch (error) {
-    console.error(error);
-    redirect("/signout");
-  }
-};

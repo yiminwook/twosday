@@ -1,5 +1,5 @@
 "use client";
-import { MouseEvent, useRef, useState } from "react";
+import { MouseEvent, useState } from "react";
 import Viewer from "./Viewer";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -9,12 +9,13 @@ import Form from "./Form";
 import { excuteThumnail } from "@/utils/excuteThumbnail";
 import { extensions } from "@/libraries/extentions";
 import { useEditor } from "@tiptap/react";
+import { useSession } from "@/libraries/auth/useSession";
 
-interface HomeProps {
-  session: Session;
-}
+interface HomeProps {}
 
-export default function Home({ session }: HomeProps) {
+export default function Home({}: HomeProps) {
+  const session = useSession().data!;
+  console.log(session);
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState<string[]>([]);
