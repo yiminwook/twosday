@@ -31,13 +31,6 @@ globalStyle("::-webkit-scrollbar-button", {
   visibility: "hidden",
 });
 
-globalStyle("html, body", {
-  fontSize: 14, //root font size
-  letterSpacing: "-0.05em",
-  margin: 0,
-  padding: 0,
-});
-
 globalStyle("a", {
   color: "inherit",
   textDecoration: "none",

@@ -7,19 +7,7 @@ import {
   removeImagesQueryByTransaction,
 } from "../images/images.service";
 import { addTagsQueryByTransaction, removeTagsQueryByTransaction } from "../tags/tags.service";
-
-type TSelectPost = {
-  id: number;
-  authorId: number;
-  title: string;
-  content: string;
-  isPublic: boolean;
-  viewCount: number;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-  nickname: string;
-};
+import { TSelectPost } from "./posts.type";
 
 export const getPosts = withPgConnection(async (client, dto: TGetPostsDto) => {
   const countSql = `

@@ -1,10 +1,10 @@
 import { PropsWithChildren } from "react";
 import Header from "@/components/header/Header";
-
-import "@/styles/cropper.css";
-import * as css from "./layout.css";
 import Navigation from "@/components/navigation/Navigation";
 import Footer from "@/components/footer/Footer";
+
+import "@/styles/cropper.css";
+import css from "./layout.module.scss";
 
 export default function Layout({ children }: PropsWithChildren) {
   return (

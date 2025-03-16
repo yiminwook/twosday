@@ -3,17 +3,17 @@
 import * as css from "./list.css";
 import { useRouter } from "next/navigation";
 import PagePagination from "@/components/common/pagination/PagePagination";
-import { TPost } from "@/libraries/pg/posts/posts.dto";
+import { TSelectPost } from "@/libraries/pg/posts/posts.type";
 
 interface ListProps {
-  post: TPost[];
+  post: TSelectPost[];
   currentPage: number;
   total: number;
   size: number;
   order?: "popular";
 }
 
-export default function List({ post, currentPage, total, size }: ListProps) {
+export default function List({ post, currentPage, total, size, order }: ListProps) {
   const router = useRouter();
 
   return (
@@ -36,24 +36,20 @@ export default function List({ post, currentPage, total, size }: ListProps) {
             }}
           >
             <div className={css.thumbnailBox}>
-              <img
-                className={css.thumbnail}
-                src={rowData.thumbnail || ""}
-                alt={`${rowData.title}`}
-              />
+              <img className={css.thumbnail} src={""} alt={`${rowData.title}`} />
             </div>
             <div className={css.cell}>{rowData.title}</div>
-            <div className={css.cell}>{rowData.author.nickname}</div>
+            <div className={css.cell}>{rowData.nickname}</div>
             <div className={css.cell}>{rowData.createdAt}</div>
             <div className={css.cell}>{rowData.updatedAt}</div>
-            <div className={css.cell}>{rowData.tags.map((tag) => tag.name).join(", ")}</div>
+            {/* <div className={css.cell}>{rowData.map((tag) => tag.name).join(", ")}</div> */}
           </div>
         ))}
       </div>
       <PagePagination
         currentPage={currentPage}
         totalCnt={total}
-        onChange={(page) => router.push(`/posts?order=popular&page=${page}`)}
+        onChange={(page) => router.push(`/posts?order=${order}&page=${page}`)}
         pgSize={size}
       />
     </>
