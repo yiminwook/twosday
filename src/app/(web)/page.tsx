@@ -6,13 +6,14 @@ import HeroSection from "@/components/home/HeroSection";
 import TechBelt from "@/components/home/TechBelt";
 import { cardList } from "@/components/refCard/refList.css";
 import { TReference } from "@/libraries/pg/references/references.dto";
+import { TSelectPost } from "@/libraries/pg/posts/posts.type";
+import PostsList from "@/components/home/PostList";
+import KakaoAdFit from "@/components/adBanner/KakaoAdfit";
 
 // css
 import "@/styles/swiper/swiper.css";
 import "@/styles/swiper/pagination.css";
 import * as css from "./page.css";
-import { TSelectPost } from "@/libraries/pg/posts/posts.type";
-import PostsList from "@/components/home/PostList";
 
 const RECENT_POST_SIZE = 6;
 const POPULAR_POST_SIZE = 6;
@@ -92,9 +93,14 @@ export default async function Page() {
         </div>
       </section>
 
+      <KakaoAdFit width={728} height={90} unit="DAN-CScUcNvZZ5M7SER1" />
+
       <div className={css.beltBox}>
         <TechBelt />
       </div>
+
+      <KakaoAdFit width={728} height={90} unit="DAN-Nhtq8wVm3UoGpfEk" />
+      {/* <KakaoAdFit width={300} height={250} unit="DAN-ES71g0m2rjta1wHl" /> */}
 
       <AdBanner />
     </main>
