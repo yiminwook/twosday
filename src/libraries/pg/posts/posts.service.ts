@@ -1,6 +1,6 @@
 import { NotFoundError } from "@/libraries/error";
 import { pageOffset, withPgConnection, withPgTransaction } from "..";
-import { POSTS_IMAGES_TABLE, POSTS_TABLE, USERS_TABLE } from "../tables";
+import { IMAGES_TABLE, POSTS_IMAGES_TABLE, POSTS_TABLE, USERS_TABLE } from "../tables";
 import { TCreatePostDto, TGetPostsDto } from "./posts.dto";
 import {
   addImagesQueryByTransaction,
@@ -69,12 +69,14 @@ export const getPostById = withPgConnection(async (client, postId: number) => {
             T01."updatedAt" AS "updatedAt",
             T01."deletedAt" AS "deletedAt",
             T02."nickname"  AS "authorName",
-            ARRAY_AGG(T03."key") AS image_keys
+            (ARRAY_AGG(T04."key" ORDER BY T04."id"))[1] AS image_key
     FROM "${POSTS_TABLE}" T01
     LEFT JOIN "${USERS_TABLE}" T02 
       ON T01."authorId" = T02."id"
     LEFT JOIN "${POSTS_IMAGES_TABLE}" T03
       ON T01."id" = T03."postsId"   
+    LEFT JOIN "${IMAGES_TABLE}" T04
+      ON T03."imagesId" = T04."id"
     WHERE T01."id" = $1
     GROUP BY  T01."id",
               T01."authorId",
