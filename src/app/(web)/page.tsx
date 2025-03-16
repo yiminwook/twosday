@@ -12,6 +12,7 @@ import "@/styles/swiper/swiper.css";
 import "@/styles/swiper/pagination.css";
 import * as css from "./page.css";
 import { TSelectPost } from "@/libraries/pg/posts/posts.type";
+import PostsList from "@/components/home/PostList";
 
 const RECENT_POST_SIZE = 6;
 const POPULAR_POST_SIZE = 6;
@@ -66,7 +67,7 @@ export default async function Page() {
           <Link href="/posts?order=popluar">+ 더보기</Link>
         </div>
         <div className={css.cardSliderBox}>
-          <CardSlider order="popular" post={[]} />
+          <CardSlider order="popular" post={popularBody.data.list} />
         </div>
       </section>
       <section className={css.section}>
@@ -75,7 +76,7 @@ export default async function Page() {
           <Link href="/posts">+ 더보기</Link>
         </div>
         <div>
-          <CardSlider order="recent" post={[]} />
+          <PostsList posts={recentBody.data.list} />
         </div>
       </section>
 

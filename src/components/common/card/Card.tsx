@@ -3,10 +3,10 @@ import Gravatar from "react-gravatar";
 import * as css from "./card.css";
 import { useRouter } from "next/navigation";
 import dayjs from "@/libraries/dayjs";
-import { TPost } from "@/libraries/pg/posts/posts.dto";
+import { TSelectPost } from "@/libraries/pg/posts/posts.type";
 
 interface CardProps {
-  post: TPost;
+  post: TSelectPost;
 }
 
 /* eslint-disable @next/next/no-img-element */
@@ -17,13 +17,13 @@ export default function Card({ post }: CardProps) {
   return (
     <article className={css.wrap}>
       <div className={css.imageBox} onClick={onClick}>
-        {post.thumbnail ? (
-          <img className={css.image} src={post.thumbnail} alt="placeholder_image" />
-        ) : (
-          <div className={css.image}>
-            <span className={css.placeholderText}>{post.title}</span>
-          </div>
-        )}
+        {/* {post.thumbnail ? (
+          // <img className={css.image} src={post.thumbnail} alt="placeholder_image" />
+        ) : ( */}
+        <div className={css.image}>
+          <span className={css.placeholderText}>{post.title}</span>
+        </div>
+        {/* )} */}
       </div>
       <div className={css.descBox}>
         <h4 className={css.title} onClick={onClick}>
@@ -31,13 +31,13 @@ export default function Card({ post }: CardProps) {
         </h4>
         <div className={css.editorBox}>
           <div className={css.avatarBox}>
-            {post.author.avatar ? (
+            {/* {post.author.avatar ? (
               <img src={post.author.avatar} alt="avatar" width={20} height={20} />
-            ) : (
-              <Gravatar email={post.author.email} size={20} />
-            )}
+            ) : ( */}
+            <Gravatar email={post.nickname} size={20} />
+            {/* )} */}
           </div>
-          <span className={css.editor}>{post.author.nickname}</span>
+          <span className={css.editor}>{post.nickname}</span>
         </div>
         <div className={css.timeBox}>
           <time>{updateTime}</time>

@@ -1,9 +1,10 @@
 import { cardSlider } from "./cardSlider.css";
 import Card from "./Card";
 import { TPost, TPostOrderBy } from "@/libraries/pg/posts/posts.dto";
+import { TSelectPost } from "@/libraries/pg/posts/posts.type";
 
 interface CardSliderProps {
-  post: TPost[];
+  post: TSelectPost[];
   order: TPostOrderBy;
 }
 
