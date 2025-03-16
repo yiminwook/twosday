@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(response: NextResponse) {
+export async function POST(response: NextRequest) {
   try {
     const payload = checkBearerAuth(headers().get("Authorization"));
     const body = await response.json();

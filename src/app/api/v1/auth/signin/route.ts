@@ -1,6 +1,6 @@
-import { checkBasicAuth, signInService } from "@/libraries/auth/auth.service";
+import { signInService } from "@/libraries/auth/auth.service";
 import { REFRESH_COOKIE_NAME, REFRESH_TOKEN_MAX_AGE } from "@/libraries/auth/config";
-import { generateRefreshToken } from "@/libraries/auth/jwt.service";
+import { checkBasicAuth, generateRefreshToken } from "@/libraries/auth/jwt.service";
 import { serverErrorHandler } from "@/libraries/error";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
