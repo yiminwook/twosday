@@ -35,7 +35,7 @@ export default function Home({}: HomeProps) {
   });
 
   const mutation = useMutation({
-    mutationFn: async (content: string) => {
+    mutationFn: async (arg: { content: string; imageKeys: string[] }) => {
       const response = await clientApi("posts", {
         method: "POST",
         headers: {
@@ -44,9 +44,9 @@ export default function Home({}: HomeProps) {
         },
         body: JSON.stringify({
           title,
-          content,
+          content: arg.content,
           tagIds: [],
-          imageIds: [],
+          imageKeys: arg.imageKeys,
           categoryId: null,
           isPublic: true,
         }),
@@ -92,7 +92,10 @@ export default function Home({}: HomeProps) {
       .filter((src): src is string => typeof src === "string");
 
     console.log("images", savedImageKeys);
-    mutation.mutate(editor.getHTML());
+    mutation.mutate({
+      content: editor.getHTML(),
+      imageKeys: savedImageKeys || [],
+    });
   };
 
   const addTag = (tag: string) => {

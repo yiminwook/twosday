@@ -31,11 +31,16 @@ export const signInService = async (email: string, password: string) => {
 export const signOutService = async (corpCd: string, externId: string) => {};
 
 export const sessionService = async (refreshToken: string): Promise<Session> => {
-  const session = await parseJwtToken(refreshToken, "refresh");
-  delete session.iat;
-  delete session.exp;
-  session.iss = new Date();
+  try {
+    const session = parseJwtToken(refreshToken, "refresh");
+    delete session.iat;
+    delete session.exp;
+    session.iss = new Date();
 
-  const accessToken = await generateAccessToken(session);
-  return { accessToken, ...session };
+    const accessToken = generateAccessToken(session);
+    return { ...session, accessToken };
+  } catch (error) {
+    console.error(error);
+    throw new UnauthorizedError("Invalid Token");
+  }
 };

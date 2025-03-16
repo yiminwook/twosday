@@ -16,7 +16,7 @@ export default function PostsList({ posts }: Props) {
               <h4>{post.title}</h4>
               <br />
               <br />
-              <desc>{post.content}</desc>
+              <p>{post.content}</p>
             </div>
           </li>
         </Link>

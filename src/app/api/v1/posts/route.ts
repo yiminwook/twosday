@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(response: NextResponse) {
   try {
-    const payload = await checkBearerAuth(headers().get("Authorization"));
+    const payload = checkBearerAuth(headers().get("Authorization"));
     const body = await response.json();
 
     const dto = createPostDto.safeParse(body);

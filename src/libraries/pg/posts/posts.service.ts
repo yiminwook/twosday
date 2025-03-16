@@ -69,7 +69,7 @@ export const getPostById = withPgConnection(async (client, postId: number) => {
             T01."updatedAt" AS "updatedAt",
             T01."deletedAt" AS "deletedAt",
             T02."nickname"  AS "authorName",
-            ARRAY_AGG(T03."imagesId") AS imagesIds
+            ARRAY_AGG(T03."key") AS image_keys
     FROM "${POSTS_TABLE}" T01
     LEFT JOIN "${USERS_TABLE}" T02 
       ON T01."authorId" = T02."id"
@@ -88,7 +88,7 @@ export const getPostById = withPgConnection(async (client, postId: number) => {
               T02."nickname"  
   `;
 
-  const postResult = await client.query<TSelectPost & { imagesId: number[]; tagIds: number[] }>(
+  const postResult = await client.query<TSelectPost & { image_keys: string[]; tagIds: number[] }>(
     postSql,
     [postId],
   );
@@ -115,7 +115,7 @@ export const postPost = withPgTransaction(async (client, authorId: number, dto: 
 
   const postId = postSqlResult.rows[0].id;
 
-  await addImagesQueryByTransaction(client, postId, dto.imageIds);
+  await addImagesQueryByTransaction(client, postId, dto.imageKeys);
 
   return postSqlResult.rows[0];
 });
@@ -130,8 +130,12 @@ export const putPost = withPgTransaction(async (client, postId: number, dto: TCr
     WHERE "id" = $1
   `;
 
-  const addImageList = dto.imageIds.filter((imageId) => !currnetPost.imagesId.includes(imageId));
-  const removeImageList = currnetPost.imagesId.filter((imageId) => !dto.imageIds.includes(imageId));
+  const addImageList = dto.imageKeys.filter(
+    (imageKey) => !currnetPost.image_keys.includes(imageKey),
+  );
+  const removeImageList = currnetPost.image_keys.filter(
+    (imageKey) => !dto.imageKeys.includes(imageKey),
+  );
   const addTagsList = dto.tagIds.filter((tagId) => !currnetPost.tagIds.includes(tagId));
   const removeTagsList = currnetPost.tagIds.filter((tagId) => !dto.tagIds.includes(tagId));
 
