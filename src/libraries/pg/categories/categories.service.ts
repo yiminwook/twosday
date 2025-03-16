@@ -5,21 +5,30 @@ import { TPostCategoryDto, TPutCategoryDto } from "./categories.dto";
 export const getCategories = withPgConnection(async (client) => {
   const sql = `
     -- 페이지네이션 없이 모든 카테고리를 조회
-    SELECT  T01."id"          AS categoryId,  
-            T01."parentId"    AS parentId, 
-            T01."name"        AS categoryName,
-            T03."id"          AS postId,
-            T03."title"       AS postTitle,
+    SELECT  T01."id"          AS category_id,  
+            T01."parentId"    AS parent_id, 
+            T01."name"        AS category_name,
+            COUNT(T03."id")  AS post_count
     FROM "${CATEGORIES_TABLE}" T01
     LEFT JOIN "${CATEGORIES_TABLE}" T02 
       -- 자기 자신을 부모로 가질 수 없음. CONSTRAINT:chk_no_self_reference
       ON T01."id" = T02."parentId"
     LEFT JOIN "POSTS" T03 
       ON T02."id" = T03."categoryId"
-    ORDER BY T01."id", T03."id";
+    GROUP BY 
+      T01."id", 
+      T01."parentId", 
+      T01."name"
+    ORDER BY 
+      T01."id";
   `;
 
-  const result = await client.query<{ id: number; parent_id: number | null; name: string }>(sql);
+  const result = await client.query<{
+    category_id: number;
+    parent_id: number | null;
+    category_name: string;
+    post_count: number;
+  }>(sql);
   return result.rows;
 });
 
