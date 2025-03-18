@@ -11,8 +11,6 @@ import PostsList from "@/components/home/PostList";
 import KakaoAdFit from "@/components/adBanner/KakaoAdfit";
 
 // css
-import "@/styles/swiper/swiper.css";
-import "@/styles/swiper/pagination.css";
 import * as css from "./page.css";
 
 const RECENT_POST_SIZE = 6;

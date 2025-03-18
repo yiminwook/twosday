@@ -1,12 +1,23 @@
+// css 순서변경 금지
+// thrid-party css
 import "@mantine/carousel/styles.css";
 import "@mantine/code-highlight/styles.css";
+import "@/styles/swiper/swiper.scss";
+import "@/styles/swiper/pagination.scss";
 
+// design system css
+import "@/styles/mantine/core.scss";
+import "@/styles/mantine/theme.scss";
+
+// application css (to-be)
 import "@/styles/global.scss";
 import "@/styles/theme.scss";
-import "@/styles/editor.css";
+import "@/styles/editor.scss";
 
+// as-is css
 import "@/styles/global.css";
 import "@/styles/globalTheme.css";
+
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import { PropsWithChildren } from "react";

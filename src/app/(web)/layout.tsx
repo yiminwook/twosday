@@ -3,7 +3,7 @@ import Header from "@/components/header/Header";
 import Navigation from "@/components/navigation/Navigation";
 import Footer from "@/components/footer/Footer";
 
-import "@/styles/cropper.css";
+import "@/styles/cropper.scss";
 import css from "./layout.module.scss";
 
 export default function Layout({ children }: PropsWithChildren) {
