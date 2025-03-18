@@ -48,6 +48,7 @@ export default function Client({ children }: Props) {
       </AppShell.Header>
       <AppShell.Navbar p="xs" onClick={onClickSidebarNav}>
         <NavItem direction="rtl" href="/admin" label="관리자 홈" />
+        <NavItem direction="rtl" href="/admin/categories" label="카테고리" />
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
