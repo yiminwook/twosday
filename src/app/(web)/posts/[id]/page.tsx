@@ -34,10 +34,11 @@ type Post = {
 };
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export default async function Page({ params }: PageProps) {
+export default async function Page(props: PageProps) {
+  const params = await props.params;
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/posts/${params.id}`, {
     method: "GET",
     headers: {

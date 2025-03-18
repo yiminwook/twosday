@@ -4,15 +4,16 @@ import Link from "next/link";
 import css from "./page.module.scss";
 
 interface PostProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
     order?: "popular";
-  };
+  }>;
 }
 
 const PAGE_SIZE = 10;
 
-export default async function Page({ searchParams }: PostProps) {
+export default async function Page(props: PostProps) {
+  const searchParams = await props.searchParams;
   const page = searchParams.page ? parseInt(searchParams.page) || 1 : 1;
 
   const urlSearchParams = new URLSearchParams({

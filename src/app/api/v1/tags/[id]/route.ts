@@ -5,8 +5,9 @@ import { deleteTag, putTag } from "@/libraries/pg/tags/tags.service";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
+    const params = await props.params;
     const body = await req.json();
     const dto = PutTagDto.safeParse({ ...body, id: params.id });
 
@@ -23,8 +24,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_req: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
+    const params = await props.params;
     const dto = z.preprocess((s) => Number(s), zInt).safeParse(params.id);
 
     if (dto.error) {

@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
+  const cookieStore = await cookies();
   try {
     const isSecure = req.nextUrl.protocol === "https:";
     const { email, password } = checkBasicAuth(req.headers.get("authorization"));
@@ -17,9 +18,9 @@ export async function POST(req: NextRequest) {
       iss: new Date(),
     };
 
-    const newRefreshToken = await generateRefreshToken(payload);
+    const newRefreshToken = generateRefreshToken(payload);
 
-    cookies().set(REFRESH_COOKIE_NAME, newRefreshToken, {
+    cookieStore.set(REFRESH_COOKIE_NAME, newRefreshToken, {
       maxAge: REFRESH_TOKEN_MAX_AGE,
       httpOnly: true,
       secure: isSecure,

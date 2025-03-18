@@ -1,14 +1,12 @@
 import { createVanillaExtractPlugin } from "@vanilla-extract/next-plugin";
-import path from "path";
-
-const __dirname = path.resolve();
+import { NextConfig } from "next";
+import path from "node:path";
 
 const withVanillaExtract = createVanillaExtractPlugin({
   identifiers: ({ hash }) => `css_${hash}`,
 });
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   typescript: {
     // !! WARN !!
     // ts빌드 에러를 무시하고 싶다면 아래 옵션을 true로 변경하세요.
@@ -27,12 +25,12 @@ const nextConfig = {
     `, // 위 파일은 import 하지 않아도 된다.
     silenceDeprecations: ["legacy-js-api"], // sass warning 제거
     logger: {
-      warn: (message) => console.warn(message),
-      debug: (message) => console.log(message),
+      warn: (message: any) => console.warn(message),
+      debug: (message: any) => console.log(message),
     },
   },
   webpack: (config) => {
-    const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.(".svg"));
+    const fileLoaderRule = config.module.rules.find((rule: any) => rule.test?.test?.(".svg"));
     config.module.rules.push(
       {
         ...fileLoaderRule,
@@ -67,6 +65,8 @@ const nextConfig = {
     ],
   },
   experimental: {
+    authInterrupts: true, // 401, 403
+    reactCompiler: true,
     optimizePackageImports: ["@mantine/core", "@mantine/hooks"], // tree shaking
   },
 };

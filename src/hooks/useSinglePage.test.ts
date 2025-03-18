@@ -1,6 +1,5 @@
-import { renderHook } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 import { useSinglePage } from "./useSinglePage";
-import { act } from "react-dom/test-utils";
 
 describe("useSinglePage hook test", () => {
   test("페이지 이동 테스트", () => {

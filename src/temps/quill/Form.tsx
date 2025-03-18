@@ -17,7 +17,7 @@ interface FormProps {
   tags: string[];
   value: string;
   onChange: (value: string) => void;
-  quillRef: RefObject<ReactQuill>;
+  quillRef: RefObject<ReactQuill | null>;
   session: Session;
 }
 

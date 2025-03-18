@@ -4,8 +4,9 @@ import { getPostById } from "@/libraries/pg/posts/posts.service";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
+    const params = await props.params;
     const dto = z.preprocess((s) => Number(s), zInt).safeParse(params.id);
 
     if (dto.error) {
