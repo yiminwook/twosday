@@ -32,7 +32,10 @@ export async function GET(req: NextRequest) {
       sameSite: "lax",
     });
 
-    return NextResponse.json({ session, message: "세션조회 성공" }, { headers });
+    return NextResponse.json(
+      { session: { ...jwt, accessToken }, message: "세션조회 성공" },
+      { headers },
+    );
   } catch (error) {
     cookieStore.set(REFRESH_COOKIE_NAME, "", { maxAge: 0 }); // remove refresh token
     console.error(error);

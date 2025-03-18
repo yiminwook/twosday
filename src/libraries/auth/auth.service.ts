@@ -1,9 +1,5 @@
-import { ForbiddenError, InternalServerError, NotFoundError, UnauthorizedError } from "../error";
+import { ForbiddenError, UnauthorizedError } from "../error";
 import { generateAccessToken, parseJwtToken } from "./jwt.service";
-import { cookies } from "next/headers";
-import { REFRESH_COOKIE_NAME } from "./config";
-import { redirect } from "next/navigation";
-import { base64ToUtf8 } from "@/utils/textEncode";
 import bcrypt from "bcryptjs";
 import { getUserByEmail } from "../pg/users/users.service";
 
@@ -30,15 +26,17 @@ export const signInService = async (email: string, password: string) => {
 
 export const signOutService = async (corpCd: string, externId: string) => {};
 
-export const sessionService = async (refreshToken: string): Promise<Session> => {
+export const sessionService = async (
+  refreshToken: string,
+): Promise<{ jwt: JWT; accessToken: string }> => {
   try {
-    const session = parseJwtToken(refreshToken, "refresh");
-    delete session.iat;
-    delete session.exp;
-    session.iss = new Date();
+    const jwt = parseJwtToken(refreshToken, "refresh");
+    delete jwt.iat;
+    delete jwt.exp;
+    jwt.iss = new Date();
 
-    const accessToken = generateAccessToken(session);
-    return { ...session, accessToken };
+    const accessToken = generateAccessToken(jwt);
+    return { jwt, accessToken };
   } catch (error) {
     console.error(error);
     throw new UnauthorizedError("Invalid Token");
