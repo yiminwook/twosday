@@ -44,7 +44,7 @@ export const viewport: Viewport = {
 export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     // https://github.com/mantinedev/mantine/issues/7008
-    <html lang="ko" suppressContentEditableWarning>
+    <html lang="ko" suppressHydrationWarning>
       <head>
         <ColorSchemeScript />
       </head>
