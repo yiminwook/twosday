@@ -1,0 +1,44 @@
+@use "sass:map";
+
+.wrap {
+  position: relative;
+  width: 0;
+  flex-shrink: 0;
+}
+
+@include util.min-width(sm) {
+  .wrap {
+    width: var.$sidebar-width;
+    flex-shrink: 0;
+  }
+}
+
+.position {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  background-color: red;
+  z-index: 1001;
+}
+
+@include util.min-width(sm) {
+  .position {
+    width: var.$sidebar-width;
+  }
+}
+
+.wrap[data-mobile-open="true"] .position {
+  opacity: 0.5;
+}
+
+.header {
+  height: var.$safe-header-height;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.body {
+}

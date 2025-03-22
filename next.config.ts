@@ -20,8 +20,9 @@ const nextConfig: NextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, "src", "styles")], // styles 폴더에 있는 파일은 이름만으로 import 가능(경로 축약)
     prependData: `
-      @use "var.scss";
-      @use "util.scss"; 
+      @use "var";
+      @use "util"; 
+      @use "placeholder";
     `, // 위 파일은 import 하지 않아도 된다.
     silenceDeprecations: ["legacy-js-api"], // sass warning 제거
     logger: {

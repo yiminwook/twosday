@@ -7,7 +7,6 @@ export async function GET() {
   try {
     const rows = await getCategories();
 
-    console.log(rows);
     const tree = buildCategoryTree(rows);
     return NextResponse.json({ data: tree, message: "카테고리 조회 성공" });
   } catch (error) {
