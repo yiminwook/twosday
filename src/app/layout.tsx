@@ -24,6 +24,9 @@ import { PropsWithChildren } from "react";
 import Configs from "@/components/config";
 import { ColorSchemeScript } from "@mantine/core";
 
+import MswProvider from "@/mocks/MswProvider";
+import "@/mocks/enableServer";
+
 const font = Noto_Sans_KR({
   weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
@@ -49,7 +52,9 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         <ColorSchemeScript />
       </head>
       <body className={font.className}>
-        <Configs>{children}</Configs>
+        <MswProvider>
+          <Configs>{children}</Configs>
+        </MswProvider>
       </body>
     </html>
   );

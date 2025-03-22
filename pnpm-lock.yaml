@@ -282,7 +282,7 @@ devDependencies:
     specifier: ^29.7.0
     version: 29.7.0
   msw:
-    specifier: ^2.3.4
+    specifier: ^2.7.0
     version: 2.7.0(@types/node@20.17.19)(typescript@5.7.3)
   sass:
     specifier: ^1.80.6
