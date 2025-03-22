@@ -1,9 +1,17 @@
 import { createVanillaExtractPlugin } from "@vanilla-extract/next-plugin";
+import NextBundleAnalyzer from "@next/bundle-analyzer";
 import { NextConfig } from "next";
+import { SentryBuildOptions, withSentryConfig } from "@sentry/nextjs";
 import path from "node:path";
 
 const withVanillaExtract = createVanillaExtractPlugin({
   identifiers: ({ hash }) => `css_${hash}`,
+});
+
+const withBundleAnalyzer = NextBundleAnalyzer({
+  enabled: process.env.NODE_ENV === "production",
+  analyzerMode: "static",
+  openAnalyzer: false,
 });
 
 const nextConfig: NextConfig = {
@@ -90,4 +98,23 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withVanillaExtract(nextConfig);
+const isEnableSentry = !!process.env.NEXT_PUBLIC_SENTRY_DSN && !!process.env.SENTRY_AUTH_TOKEN;
+
+const SENTRY_BUILD_OPTIONS: SentryBuildOptions = {
+  silent: !isEnableSentry, // Can be used to suppress logs
+  org: "yisp",
+  project: "twosday",
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  telemetry: false, // Sentry 서비스 개선에 활용되지 않도록 설정
+  autoInstrumentMiddleware: false,
+  autoInstrumentAppDirectory: true,
+  autoInstrumentServerFunctions: true,
+  sourcemaps: {
+    disable: true,
+  },
+};
+
+export default withSentryConfig(
+  withBundleAnalyzer(withVanillaExtract(nextConfig)),
+  SENTRY_BUILD_OPTIONS,
+);

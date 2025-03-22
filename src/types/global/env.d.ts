@@ -49,6 +49,9 @@ declare global {
       // MAIL
       readonly MAIL_USER: string;
       readonly MAIL_PASSWORD: string;
+
+      readonly NEXT_PUBLIC_SENTRY_DSN?: string;
+      readonly SENTRY_AUTH_TOKEN?: string;
     }
   }
 }
