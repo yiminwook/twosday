@@ -18,8 +18,8 @@
   position: fixed;
   top: 0;
   bottom: 0;
-  background-color: red;
   z-index: 1001;
+  border-right: 2px solid var(--mantine-color-default-border);
 }
 
 @include util.min-width(sm) {
@@ -40,5 +40,11 @@
   padding: 1rem;
 }
 
-.body {
+.card {
+  padding: 0 1rem;
+}
+
+.nav {
+  padding: 0 1rem;
+  margin-top: 1rem;
 }

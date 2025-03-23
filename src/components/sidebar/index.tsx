@@ -1,10 +1,11 @@
 "use client";
 import { CategoryTree } from "@/utils/tree";
 import css from "./Sidebar.module.scss";
-import NavItem from "./NavItem";
-import { ActionIcon } from "@mantine/core";
+import { ActionIcon, NavLink, TextInput } from "@mantine/core";
 import { useState } from "react";
-import { set } from "zod";
+import { CornerDownRight, PanelLeftClose, PanelLeftOpen, Search } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface SidebarProps {
   categories: CategoryTree[];
@@ -20,30 +21,72 @@ export default function Sidebar({ categories }: SidebarProps) {
       <div className={css.position}>
         <div className={css.header}>
           <span>
-            <ActionIcon onClick={toggleMobileShow}>X</ActionIcon>
+            <ActionIcon variant="transparent" onClick={toggleMobileShow}>
+              {mobileShow ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
+            </ActionIcon>
           </span>
-          <h1>Twosday</h1>
         </div>
-        <div className={css.body}>
+        <div className={css.card}>
+          <TextInput
+            placeholder="검색"
+            rightSection={
+              <ActionIcon>
+                <Search size={14} />
+              </ActionIcon>
+            }
+          />
+          <p>개발 블로그 입니다.</p>
+          <p>GitHub</p>
+        </div>
+        <div className={css.nav}>
           {categories.map((category) => (
-            <NavItem
-              direction="rtl"
-              key={category.categoriId}
-              label={category.categoryName}
-              href="#"
-            >
-              {category.children.map((child) => (
-                <NavItem
-                  direction="rtl"
-                  key={child.categoriId}
-                  label={category.categoryName}
-                  href="#"
-                />
-              ))}
-            </NavItem>
+            <NavItem key={category.categoriId} category={category} isFirstLoop />
           ))}
         </div>
       </div>
     </aside>
+  );
+}
+
+type NavItemProps = {
+  category: CategoryTree;
+  isFirstLoop: boolean;
+};
+
+function NavItem({ category, isFirstLoop = true }: NavItemProps) {
+  const pathname = usePathname();
+
+  const label = `${category.categoryName} (${category.postCount})`;
+  const leftSection = isFirstLoop ? null : <CornerDownRight size={14} />;
+
+  if (category.children.length === 0) {
+    return (
+      <NavLink
+        key={category.categoriId}
+        component={Link}
+        label={label}
+        active={pathname === category.categoriId.toString()}
+        href="#"
+        leftSection={leftSection}
+      />
+    );
+  }
+
+  return (
+    <NavLink
+      key={category.categoriId}
+      component={Link}
+      label={label}
+      active={pathname === category.categoriId.toString()}
+      href="#"
+      opened
+      leftSection={leftSection}
+      rightSection={true} // 안보이게
+      childrenOffset="xs"
+    >
+      {category.children.map((child) => (
+        <NavItem key={child.categoriId} category={child} isFirstLoop={false} />
+      ))}
+    </NavLink>
   );
 }

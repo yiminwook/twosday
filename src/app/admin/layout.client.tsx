@@ -1,6 +1,5 @@
 "use client";
-import NavItem from "@/components/sidebar/NavItem";
-import { AppShell, Burger, Button, Flex, Title } from "@mantine/core";
+import { AppShell, Burger, Button, Flex, NavLink, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
 import { MouseEvent } from "react";
@@ -47,8 +46,8 @@ export default function Client({ children }: Props) {
         </Flex>
       </AppShell.Header>
       <AppShell.Navbar p="xs" onClick={onClickSidebarNav}>
-        <NavItem direction="rtl" href="/admin" label="관리자 홈" />
-        <NavItem direction="rtl" href="/admin/categories" label="카테고리" />
+        <NavLink component={Link} href="/admin" label="관리자 홈" />
+        <NavLink component={Link} href="/admin/categories" label="카테고리" />
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
