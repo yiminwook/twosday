@@ -50,20 +50,3 @@
   align-items: center;
   gap: 10;
 }
-
-.link {
-  display: flex;
-  align-items: center;
-  gap: 5;
-  padding: 9px 18px;
-  border-radius: 10;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #f1f3f5;
-  }
-}
-
-.upload {
-  display: "none";
-}

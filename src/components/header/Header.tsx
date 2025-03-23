@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
-import Pencil from "@/assets/svg/pencil.svg?react";
-import LoginBtn from "../LoginBtn";
-import ThemeBtn from "../ThemeBtn";
-import LogoutBtn from "../LogoutBtn";
 import { useSession } from "@/libraries/auth/useSession";
 import { useMutation } from "@tanstack/react-query";
 import css from "./Header.module.scss";
 import { clientApi } from "@/apis/fetcher";
+import { Button } from "@mantine/core";
+import dynamic from "next/dynamic";
+
+const ThemeButton = dynamic(() => import("../ThemeButton"), { ssr: false });
 
 export default function Header() {
   const query = useSession();
@@ -40,22 +40,20 @@ export default function Header() {
           </div>
           <ul className={css.right}>
             <li>
-              <ThemeBtn />
-            </li>
-            <li className={css.upload}>
-              <Link href="/posts/edit" className={css.link}>
-                <Pencil />
-                <span>글쓰기</span>
-              </Link>
+              <ThemeButton />
             </li>
             {!query.isPending && !!query.data && (
               <li>
-                <LogoutBtn onClick={onClickLogout} />
+                <Button size="sm" variant="subtle" onClick={onClickLogout}>
+                  로그아웃
+                </Button>
               </li>
             )}
             {!query.isPending && !query.data && (
               <li>
-                <LoginBtn />
+                <Button size="sm" variant="subtle" component={Link} href="/signin">
+                  로그인
+                </Button>
               </li>
             )}
           </ul>

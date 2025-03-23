@@ -1,17 +1,17 @@
 "use client";
 import { CategoryTree } from "@/utils/tree";
-import css from "./Sidebar.module.scss";
+import css from "./AppSidebar.module.scss";
 import { ActionIcon, NavLink, TextInput } from "@mantine/core";
 import { useState } from "react";
-import { CornerDownRight, PanelLeftClose, PanelLeftOpen, Search } from "lucide-react";
+import { CornerDownRight, PanelLeftClose, PanelLeftOpen, PenLine, Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-interface SidebarProps {
+type Props = {
   categories: CategoryTree[];
-}
+};
 
-export default function Sidebar({ categories }: SidebarProps) {
+export default function AppSidebar({ categories }: Props) {
   const [mobileShow, setMobileShow] = useState(false);
 
   const toggleMobileShow = () => setMobileShow((prev) => !prev);
@@ -37,6 +37,9 @@ export default function Sidebar({ categories }: SidebarProps) {
           />
           <p>개발 블로그 입니다.</p>
           <p>GitHub</p>
+          <ActionIcon component={Link} href="/posts/edit" radius="lg">
+            <PenLine size={14} />
+          </ActionIcon>
         </div>
         <div className={css.nav}>
           {categories.map((category) => (

@@ -27,11 +27,6 @@ import { ColorSchemeScript } from "@mantine/core";
 import MswProvider from "@/mocks/MswProvider";
 import "@/mocks/enableServer";
 
-const font = Noto_Sans_KR({
-  weight: ["300", "400", "500", "700"],
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   title: "Twosday",
 };
@@ -49,9 +44,15 @@ export default async function RootLayout({ children }: PropsWithChildren) {
     // https://github.com/mantinedev/mantine/issues/7008
     <html lang="ko" suppressHydrationWarning>
       <head>
+        <link
+          rel="stylesheet"
+          as="style"
+          crossOrigin="anonymous"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+        />
         <ColorSchemeScript />
       </head>
-      <body className={font.className}>
+      <body>
         <MswProvider>
           <Configs>{children}</Configs>
         </MswProvider>

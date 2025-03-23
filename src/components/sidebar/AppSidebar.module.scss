@@ -19,7 +19,9 @@
   top: 0;
   bottom: 0;
   z-index: 1001;
+  background-color: #fff;
   border-right: 2px solid var(--mantine-color-default-border);
+  opacity: 0.5;
 }
 
 @include util.min-width(sm) {
@@ -29,7 +31,7 @@
 }
 
 .wrap[data-mobile-open="true"] .position {
-  opacity: 0.5;
+  opacity: 1;
 }
 
 .header {
