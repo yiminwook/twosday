@@ -1,7 +1,7 @@
 "use client";
 import parse from "html-react-parser";
 import hljs from "highlight.js";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import * as css from "@/components/editor/editor.css";
 import classNames from "classnames";
 
@@ -10,9 +10,17 @@ interface ViewerProps {
 }
 
 export default function Viewer({ content }: ViewerProps) {
+  const viewerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    hljs.highlightAll();
+    if (viewerRef.current) {
+      hljs.highlightElement(viewerRef.current);
+    }
   }, [content]);
 
-  return <div className={classNames(css.lightTheme, css.editor)}>{parse(content)}</div>;
+  return (
+    <div ref={viewerRef} className={classNames(css.lightTheme, css.editor)}>
+      {parse(content)}
+    </div>
+  );
 }

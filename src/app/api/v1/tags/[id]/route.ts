@@ -5,6 +5,7 @@ import { deleteTag, putTag } from "@/libraries/pg/tags/tags.service";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+// Admin에서 사용할 API
 export async function PUT(req: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
     const params = await props.params;

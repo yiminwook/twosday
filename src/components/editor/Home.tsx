@@ -1,17 +1,18 @@
 "use client";
 import { MouseEvent, useState } from "react";
 import Viewer from "./Viewer";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import * as css from "./home.css";
 import Form from "./Form";
-import { excuteThumnail } from "@/utils/excuteThumbnail";
 import { extensions } from "@/libraries/extentions";
 import { useEditor } from "@tiptap/react";
 import { useSession } from "@/libraries/auth/useSession";
 import { clientApi } from "@/apis/fetcher";
 import { IMAGE_URL } from "@/constances";
+import { TTag } from "@/types";
+import { deleteTagAction, getTagsAction, postTagAction } from "@/apis/tag";
 
 interface HomeProps {}
 
@@ -20,8 +21,10 @@ export default function Home({}: HomeProps) {
   const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+
   const router = useRouter();
   const [togglePreview, setTogglePreview] = useState(false);
+  const queryClient = useQueryClient();
 
   const editor = useEditor({
     extensions,
@@ -32,6 +35,88 @@ export default function Home({}: HomeProps) {
     content: `
       <p>Hello! This is a <code>tiptap</code> editor.</p>
       `,
+  });
+
+  const tagsQuery = useQuery({
+    queryKey: ["tags"],
+    // queryFn: async () => {
+    //   const res = await clientApi.get<{ message: string; data: TTag[] }>("tags");
+    //   const json = await res.json();
+    //   return json.data;
+    // },
+    queryFn: async () => {
+      const res = await getTagsAction();
+      if (!res.data) throw new Error(res.message);
+      return res.data;
+    },
+  });
+
+  const postTagMutation = useMutation({
+    // mutationFn: async (arg: { name: string; session: Session }) => {
+    //   const res = await clientApi.post<{ message: string; data: { id: number } }>("tags", {
+    //     body: JSON.stringify({ name: arg.name }),
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${arg.session.accessToken}`,
+    //     },
+    //   });
+
+    //   const json = await res.json();
+
+    //   return json.data;
+    // },
+    mutationFn: async (arg: { name: string; session: Session }) => {
+      const res = await postTagAction({ name: arg.name });
+      if (!res.data) throw new Error(res.message);
+      return res.data;
+    },
+    onSuccess: (data, arg) => {
+      queryClient.setQueryData(["tags"], (prev: TTag[] | undefined) => {
+        if (!prev) return prev;
+        return [...prev, { id: data.id, name: arg.name }];
+      });
+
+      toast.success("태그가 추가되었습니다.");
+    },
+    onError: async (error) => {
+      await queryClient.invalidateQueries({ queryKey: ["tags"] });
+      setTags((prev) => prev.filter((tag) => tag !== value));
+      toast.error(error.message);
+    },
+  });
+
+  const removeTagMutation = useMutation({
+    // mutationFn: async (arg: { id: number; session: Session }) => {
+    //   const res = await clientApi.delete<{ message: string; data: { id: number } }>(
+    //     `tags/${arg.id}`,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${arg.session.accessToken}`,
+    //       },
+    //     },
+    //   );
+
+    //   const json = await res.json();
+    //   return json.data;
+    // },
+    mutationFn: async (arg: { id: number; session: Session }) => {
+      const res = await deleteTagAction({ id: arg.id });
+      if (!res.data) throw new Error(res.message);
+      return res.data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["tags"], (prev: TTag[] | undefined) => {
+        if (!prev) return prev;
+        return prev.filter((tag) => tag.id !== data.id);
+      });
+
+      toast.success("태그가 삭제되었습니다.");
+    },
+    onError: async (error) => {
+      await queryClient.invalidateQueries({ queryKey: ["tags"] });
+      setTags((prev) => prev.filter((tag) => tag !== value));
+      toast.error(error.message);
+    },
   });
 
   const mutation = useMutation({
@@ -98,8 +183,23 @@ export default function Home({}: HomeProps) {
     });
   };
 
-  const addTag = (tag: string) => {
-    setTags((prev) => [...prev, tag]);
+  const onChangeSelect = async (value: string[]) => {
+    if (!tagsQuery.data) return;
+    if (postTagMutation.isPending) return;
+
+    value.forEach((v) => {
+      const index = tagsQuery.data.findIndex((tag) => tag.name === v);
+      if (index === -1) {
+        postTagMutation.mutate({ name: v, session });
+      }
+    });
+
+    setTags(() => value);
+  };
+
+  const removeTag = async (tagId: number) => {
+    if (removeTagMutation.isPending) return;
+    removeTagMutation.mutate({ id: tagId, session });
   };
 
   return (
@@ -135,8 +235,12 @@ export default function Home({}: HomeProps) {
               title={title}
               onChangeTitle={onChangeTitle}
               value={value}
+              tags={tagsQuery.data || []}
+              selectedTags={tags}
+              onChangeSelect={onChangeSelect}
+              removeTag={removeTag}
+              isLoadingTags={tagsQuery.isPending}
               onChange={onChange}
-              tags={tags}
               editor={editor}
               session={session}
             />
