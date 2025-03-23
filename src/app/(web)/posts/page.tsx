@@ -1,40 +1,46 @@
 import List from "@/components/editor/List";
+import { TSelectPost } from "@/libraries/pg/posts/posts.type";
 import Link from "next/link";
+import css from "./page.module.scss";
 
 interface PostProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
     order?: "popular";
-  };
+  }>;
 }
-export default async function Page({ searchParams }: PostProps) {
+
+const PAGE_SIZE = 10;
+
+export default async function Page(props: PostProps) {
+  const searchParams = await props.searchParams;
   const page = searchParams.page ? parseInt(searchParams.page) || 1 : 1;
 
   const urlSearchParams = new URLSearchParams({
     page: page.toString(),
-    size: "10",
+    size: PAGE_SIZE.toString(),
     order: searchParams.order === "popular" ? "popular" : "recent",
   });
 
-  // const response = await fetch(`${getWasUrl()}/api/twosday/post?${urlSearchParams.toString()}`, {
-  //   method: "GET",
-  //   headers: { "Content-Type": "application/json" },
-  //   // next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
-  // });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/posts?${urlSearchParams.toString()}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
+    },
+  );
 
-  // const body: {
-  //   data: { post: Post[]; total: number; size: number };
-  //   message: string[];
-  // } = await response.json();
-
-  // if (!response.ok) {
-  //   throw new Error(body.message[0]);
-  // }
+  const body: {
+    data: { list: TSelectPost[]; total: number };
+    message: string[];
+  } = await response.json();
 
   return (
-    <div>
+    <div className={css.page}>
       <h1 className="blind">조회 페이지</h1>
-      <div>
+      <div className={css.navBox}>
+        <div></div>
         <Link
           href={`/posts?order=${
             searchParams.order === "popular" ? "recent" : "popular"
@@ -43,8 +49,16 @@ export default async function Page({ searchParams }: PostProps) {
           {searchParams.order === "popular" ? "최근순" : "인기순"}
         </Link>
       </div>
-      <div>
-        <List post={[]} currentPage={page} total={0} size={0} order={searchParams.order} />
+      <div className={css.listBox}>
+        <div>
+          <List
+            post={body.data.list}
+            currentPage={page}
+            total={body.data.total}
+            size={PAGE_SIZE}
+            order={searchParams.order}
+          />
+        </div>
       </div>
     </div>
   );

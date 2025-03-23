@@ -1,9 +1,10 @@
 import { TPost, TPostOrderBy } from "@/libraries/pg/posts/posts.dto";
 import Card from "./Card";
 import { wrap } from "./cardSection.css";
+import { TSelectPost } from "@/libraries/pg/posts/posts.type";
 
 interface CardSectionProps {
-  post: TPost[];
+  post: TSelectPost[];
   order: TPostOrderBy;
 }
 

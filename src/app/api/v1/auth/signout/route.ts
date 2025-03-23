@@ -4,8 +4,9 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
+  const cookieStore = await cookies();
   try {
-    cookies().delete(REFRESH_COOKIE_NAME);
+    cookieStore.delete(REFRESH_COOKIE_NAME);
 
     return NextResponse.json({ message: "Signout success" });
   } catch (error) {

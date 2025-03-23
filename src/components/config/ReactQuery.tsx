@@ -5,10 +5,10 @@ import ErrorModal from "@/components/common/modal/ErrorModal";
 import { useSetModalStore } from "@/stores/modalStore";
 import { useApp } from "@/stores/app";
 import { useStore } from "zustand";
+import { toast } from "sonner";
 
 const checkSessionOutCode = (error: Error) => {
-  // return SESSION_OUT_CODES.includes(error.errCode || "");
-  return false;
+  return ["Invalid authorization"].includes(error.message);
 };
 
 export default function ReactQuery({ children }: PropsWithChildren) {
@@ -25,13 +25,14 @@ export default function ReactQuery({ children }: PropsWithChildren) {
 
           if (error instanceof Error) {
             if (checkSessionOutCode(error)) {
-              action.logout();
-              window.location.href = "/sessionout";
+              toast.warning("세션이 만료되었습니다. 잠시후 다시시도 해주세요.");
+              await querClient.invalidateQueries({ queryKey: ["session"] });
               return;
             }
           }
 
-          await modalStore.push(ErrorModal, { props: { error } });
+          // await 하지않음
+          modalStore.push(ErrorModal, { props: { error }, id: "rqClient-error" });
         },
       }),
       defaultOptions: {
@@ -58,14 +59,14 @@ export default function ReactQuery({ children }: PropsWithChildren) {
           onError: async (error) => {
             if (error instanceof Error) {
               if (checkSessionOutCode(error)) {
-                // await signOut({ redirect: false, callbackUrl: "/sessionout" });
-                action.logout();
-                window.location.href = "/sessionout";
+                toast.warning("세션이 만료되었습니다. 잠시후 다시시도 해주세요.");
+                await querClient.invalidateQueries({ queryKey: ["session"] });
                 return;
               }
             }
 
-            await modalStore.push(ErrorModal, { props: { error } });
+            // await 하지않음
+            modalStore.push(ErrorModal, { props: { error }, id: "rqClient-error" });
           },
         },
       },

@@ -1,17 +1,19 @@
 @use "sass:math";
+@use "sass:map";
+@use "var";
 
 @function rem($value) {
   @return #{math.div(math.div($value, $value * 0 + 1), 16)}rem;
 }
 
 @mixin light {
-  [data-mantine-color-scheme="light"] & {
+  [data-mantine-color-scheme="light"] {
     @content;
   }
 }
 
 @mixin dark {
-  [data-mantine-color-scheme="dark"] & {
+  [data-mantine-color-scheme="dark"] {
     @content;
   }
 }
@@ -30,14 +32,20 @@
   }
 }
 
-@mixin smaller-than($breakpoint) {
-  @media (max-width: $breakpoint) {
+@mixin min-width($breakpoint) {
+  $value: map.get(var.$breakpoints, $breakpoint);
+  $query-value: if($value, $value, $breakpoint);
+
+  @media screen and (min-width: #{$query-value}) {
     @content;
   }
 }
 
-@mixin larger-than($breakpoint) {
-  @media (min-width: $breakpoint) {
+@mixin max-width($breakpoint) {
+  $value: map.get(var.$breakpoints, $breakpoint);
+  $query-value: if($value, $value, $breakpoint);
+
+  @media screen and (max-width: #{$query-value}) {
     @content;
   }
 }
@@ -53,4 +61,16 @@
   [dir="ltr"] & {
     @content;
   }
+}
+
+@mixin text-line($line-count, $line-height) {
+  overflow: hidden;
+  white-space: pre-line;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $line-count;
+  line-height: $line-height;
+  height: #{$line-height * $line-count}em;
 }

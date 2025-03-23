@@ -27,7 +27,7 @@ interface EditorProps {
   session: Session;
   value: string;
   onChange: ReactQuillProps["onChange"];
-  editorRef: RefObject<ReactQuill>;
+  editorRef: RefObject<ReactQuill | null>;
 }
 
 export default function Editor({ session, onChange, value, editorRef }: EditorProps) {

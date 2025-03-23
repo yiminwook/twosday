@@ -4,6 +4,8 @@ declare global {
       readonly NODE_ENV: "development" | "production" | "test";
       readonly TZ?: string;
 
+      readonly NEXT_PUBLIC_MSW_ENABLED: "true" | "false" | undefined;
+
       // vercel env  - https://vercel.com/docs/projects/environment-variables/system-environment-variables
       readonly NEXT_PUBLIC_VERCEL_ENV: "production" | "preview" | "development";
       /** *.vercel.app */
@@ -40,6 +42,16 @@ declare global {
       readonly AUTH_SALT: string;
 
       readonly GOOGLE_API_KEY: string;
+
+      // LOG
+      readonly DISCORD_WEBHOOK_URL: string;
+
+      // MAIL
+      readonly MAIL_USER: string;
+      readonly MAIL_PASSWORD: string;
+
+      readonly NEXT_PUBLIC_SENTRY_DSN?: string;
+      readonly SENTRY_AUTH_TOKEN?: string;
     }
   }
 }

@@ -4,7 +4,7 @@ import { RefObject } from "react";
 import ReactQuill from "react-quill";
 
 export const imageHandler = async (
-  ref: RefObject<ReactQuill>,
+  ref: RefObject<ReactQuill | null>,
   session: Session,
   cb?: (error: Error) => void,
 ) => {

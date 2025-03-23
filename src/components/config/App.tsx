@@ -7,7 +7,7 @@ interface AppProps {
 }
 
 export default function App({ children }: AppProps) {
-  const store = useRef(createAppStore({ session: "guest", theme: "light" }));
+  const store = useRef(createAppStore({ session: "guest" }));
 
   useEffect(() => {
     // 쿠키와 로컬스토리지의 세션 정보를 동기화

@@ -4,50 +4,56 @@ import AdBanner from "@/components/adBanner/AdBanner";
 import CardSlider from "@/components/common/card/CardSlider";
 import HeroSection from "@/components/home/HeroSection";
 import TechBelt from "@/components/home/TechBelt";
-
-// css
-import "@/styles/swiper/swiper.css";
-import "@/styles/swiper/pagination.css";
-import * as css from "./page.css";
 import { cardList } from "@/components/refCard/refList.css";
 import { TReference } from "@/libraries/pg/references/references.dto";
-import { TPost } from "@/libraries/pg/posts/posts.dto";
+import { TSelectPost } from "@/libraries/pg/posts/posts.type";
+import PostsList from "@/components/home/PostList";
+import KakaoAdFit from "@/components/adBanner/KakaoAdfit";
+
+// css
+import * as css from "./page.css";
+
+const RECENT_POST_SIZE = 6;
+const POPULAR_POST_SIZE = 6;
+const REFERENCE_SIZE = 4;
 
 export default async function Page() {
-  const [
-    // popularPostResponse,
-    // recentPostResponse,
-    referenceResponse,
-  ] = await Promise.all([
-    // fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/posts?page=1&size=6&order=popular`, {
-    //   method: "GET",
-    //   headers: { "Content-Type": "application/json" },
-    //   next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
-    // }),
-    // fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/posts?page=1&size=6&order=recent`, {
-    //   method: "GET",
-    //   headers: { "Content-Type": "application/json" },
-    //   next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
-    // }),
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/references?page=1&size=4`, {
+  const [popularPostResponse, recentPostResponse, referenceResponse] = await Promise.all([
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/posts?page=1&size=${POPULAR_POST_SIZE}&order=popular`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
+      },
+    ),
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/posts?page=1&size=${RECENT_POST_SIZE}&order=recent`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
+      },
+    ),
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/references?page=1&size=${REFERENCE_SIZE}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       next: { revalidate: 300, tags: ["home", "reference"] }, //1분 간격으로 캐시 갱신
     }),
   ]);
 
-  // const popularBody: {
-  //   data: { post: TPost[]; total: number; size: number };
-  //   message: string;
-  // } = await popularPostResponse.json();
+  const popularBody: {
+    data: { list: TSelectPost[]; total: number };
+    message: string;
+  } = await popularPostResponse.json();
 
-  // const recentBody: {
-  //   data: { post: TPost[]; total: number; size: number };
-  //   message: string;
-  // } = await recentPostResponse.json();
+  const recentBody: {
+    data: { list: TSelectPost[]; total: number };
+    message: string;
+  } = await recentPostResponse.json();
 
   const referenceBody: {
-    data: { list: TReference[]; total: number; size: number };
+    data: { list: TReference[]; total: number };
     message: string;
   } = await referenceResponse.json();
 
@@ -60,7 +66,7 @@ export default async function Page() {
           <Link href="/posts?order=popluar">+ 더보기</Link>
         </div>
         <div className={css.cardSliderBox}>
-          <CardSlider order="popular" post={[]} />
+          <CardSlider order="popular" post={popularBody.data.list} />
         </div>
       </section>
       <section className={css.section}>
@@ -69,7 +75,7 @@ export default async function Page() {
           <Link href="/posts">+ 더보기</Link>
         </div>
         <div>
-          <CardSlider order="recent" post={[]} />
+          <PostsList posts={recentBody.data.list} />
         </div>
       </section>
 
@@ -85,9 +91,14 @@ export default async function Page() {
         </div>
       </section>
 
+      <KakaoAdFit width={728} height={90} unit="DAN-CScUcNvZZ5M7SER1" />
+
       <div className={css.beltBox}>
         <TechBelt />
       </div>
+
+      <KakaoAdFit width={728} height={90} unit="DAN-Nhtq8wVm3UoGpfEk" />
+      {/* <KakaoAdFit width={300} height={250} unit="DAN-ES71g0m2rjta1wHl" /> */}
 
       <AdBanner />
     </main>

@@ -1,32 +1,61 @@
-import { fixed, link, right, title, wrap, upload, inner } from "./header.css";
+"use client";
 import Link from "next/link";
-import Pencil from "@/assets/svg/pencil.svg?react";
-import LoginBtn from "../LoginBtn";
-import ThemeBtn from "../ThemeBtn";
-import LogoutBtn from "../LogoutBtn";
+import { useSession } from "@/libraries/auth/useSession";
+import { useMutation } from "@tanstack/react-query";
+import css from "./Header.module.scss";
+import { clientApi } from "@/apis/fetcher";
+import { Button } from "@mantine/core";
+import dynamic from "next/dynamic";
 
-export default async function Header() {
+const ThemeButton = dynamic(() => import("../ThemeButton"), { ssr: false });
+
+export default function Header() {
+  const query = useSession();
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const res = await clientApi.post("auth/signout", {
+        credentials: "include",
+      });
+      const data = await res.json();
+      return data;
+    },
+    onSuccess: () => {
+      window.location.href = "/";
+    },
+  });
+
+  const onClickLogout = () => {
+    if (mutation.isPending) return;
+    mutation.mutate();
+  };
+
   return (
-    <header className={wrap}>
-      <div className={fixed}>
-        <div className={inner}>
+    <header className={css.wrap}>
+      <div className={css.position}>
+        <div className={css.inner}>
           <div>
-            <Link className={title} href={"/"}>
+            <Link className={css.title} href="/">
               twosday
             </Link>
           </div>
-          <ul className={right}>
+          <ul className={css.right}>
             <li>
-              <ThemeBtn />
+              <ThemeButton />
             </li>
-            <li className={upload}>
-              <Link href="/posts/edit" className={link}>
-                <Pencil />
-                <span>글쓰기</span>
-              </Link>
-            </li>
-
-            <li>{true ? <LoginBtn /> : <LogoutBtn />}</li>
+            {!query.isPending && !!query.data && (
+              <li>
+                <Button size="sm" variant="subtle" onClick={onClickLogout}>
+                  로그아웃
+                </Button>
+              </li>
+            )}
+            {!query.isPending && !query.data && (
+              <li>
+                <Button size="sm" variant="subtle" component={Link} href="/signin">
+                  로그인
+                </Button>
+              </li>
+            )}
           </ul>
         </div>
       </div>

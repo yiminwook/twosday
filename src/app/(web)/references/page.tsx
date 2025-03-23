@@ -5,12 +5,13 @@ import { TReference } from "@/libraries/pg/references/references.dto";
 const PAGE_SIZE = 10;
 
 interface PageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
-  };
+  }>;
 }
 
-export default async function Page({ searchParams }: PageProps) {
+export default async function Page(props: PageProps) {
+  const searchParams = await props.searchParams;
   const page = searchParams.page ? parseInt(searchParams.page) || 1 : 1;
 
   const response = await fetch(

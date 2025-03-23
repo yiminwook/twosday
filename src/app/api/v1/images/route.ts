@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
 
     const pgResult = await postImage({ key, userId: 6 });
 
-    return NextResponse.json({ messages: "image uploaded", result: r2Result }, { status: 201 });
+    return NextResponse.json({ messages: "이미지 업로드 성공", key }, { status: 201 });
   } catch (error) {
     console.error(error);
     const { message, status } = serverErrorHandler(error);

@@ -1,0 +1,52 @@
+@use "sass:map";
+
+.wrap {
+  position: relative;
+  width: 0;
+  flex-shrink: 0;
+}
+
+@include util.min-width(sm) {
+  .wrap {
+    width: var.$sidebar-width;
+    flex-shrink: 0;
+  }
+}
+
+.position {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 1001;
+  background-color: #fff;
+  border-right: 2px solid var(--mantine-color-default-border);
+  opacity: 0.5;
+}
+
+@include util.min-width(sm) {
+  .position {
+    width: var.$sidebar-width;
+  }
+}
+
+.wrap[data-mobile-open="true"] .position {
+  opacity: 1;
+}
+
+.header {
+  height: var.$safe-header-height;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.card {
+  padding: 0 1rem;
+}
+
+.nav {
+  padding: 0 1rem;
+  margin-top: 1rem;
+}

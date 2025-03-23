@@ -1,24 +1,40 @@
 import { Editor as EditorType } from "@tiptap/react";
-import { ComboboxData, ComboboxItem, Input, Space, Stack, TagsInput } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  ComboboxData,
+  ComboboxItem,
+  ComboboxLikeRenderOptionInput,
+  Group,
+  Input,
+  Space,
+  Stack,
+  TagsInput,
+  TagsInputProps,
+  Text,
+} from "@mantine/core";
 import Editor from "./Editor";
+import { TTag } from "@/types";
+import { useCallback, useMemo } from "react";
+import css from "./Edit.module.scss";
+import { X } from "lucide-react";
 
 // const Editor = dynamic(() => import("@/components/editor/Editor"), {
 //   ssr: false,
 //   loading: () => <EditorPlaceholder />,
 // });
 
-export interface ColourOption {
-  readonly value: string;
-  readonly label: string;
-  readonly color: string;
-  readonly isFixed?: boolean;
-  readonly isDisabled?: boolean;
-}
-
 interface FormProps {
   title: string;
   onChangeTitle: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  tags: string[];
+
+  tags: TTag[];
+  selectedTags: string[];
+  onChangeSelect: (value: string[]) => void;
+  isLoadingTags: boolean;
+
+  removeTag: (tagId: number) => void;
+
   value: string;
   onChange: (value: string) => void;
   editor: EditorType | null;
@@ -29,23 +45,44 @@ export default function Form({
   title,
   value,
   onChangeTitle,
+  onChangeSelect,
   onChange,
+  removeTag,
   tags,
+  selectedTags,
   editor,
   session,
 }: FormProps) {
-  const colourOptions: ComboboxData = [
-    { value: "ocean", label: "Ocean" },
-    { value: "blue", label: "Blue" },
-    { value: "purple", label: "Purple" },
-    { value: "red", label: "Red" },
-    { value: "orange", label: "Orange" },
-    { value: "yellow", label: "Yellow" },
-    { value: "green", label: "Green" },
-    { value: "forest", label: "Forest" },
-    { value: "slate", label: "Slate" },
-    { value: "silver", label: "Silver" },
-  ];
+  const comboboxTags = useMemo<ComboboxData>(() => {
+    return tags.map((tag) => ({
+      value: tag.id.toString(),
+      label: tag.name,
+    }));
+  }, [tags]);
+
+  const renderTagsInputOption = useCallback(
+    (
+      input: ComboboxLikeRenderOptionInput<{
+        value: string;
+        label: string;
+      }>,
+    ) => (
+      <div className={css.tagsInputItem}>
+        <span>{input.option.label}</span>
+        <ActionIcon
+          variant="subtle"
+          size="md"
+          onClick={(e) => {
+            e.stopPropagation();
+            removeTag(Number(input.option.value));
+          }}
+        >
+          <X size={14} />
+        </ActionIcon>
+      </div>
+    ),
+    [removeTag],
+  );
 
   return (
     <Stack gap="md" component="form">
@@ -59,8 +96,12 @@ export default function Form({
       />
       <TagsInput
         size="md"
-        onChange={(e) => console.log(e)}
-        data={colourOptions}
+        onChange={onChangeSelect}
+        onRemove={(e) => console.log(e)}
+        onSearchChange={(e) => console.log(e)}
+        value={selectedTags}
+        data={comboboxTags}
+        renderOption={renderTagsInputOption as any}
         splitChars={[",", " ", "|"]}
         acceptValueOnBlur
         clearable

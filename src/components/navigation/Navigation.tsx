@@ -1,19 +1,18 @@
-import Link from "next/link";
-import * as css from "./navigation.css";
-import Pencil from "@/assets/svg/pencil.svg?react";
+import { UnstyledButton } from "@mantine/core";
+import css from "./Navigation.module.scss";
 
 export default function Navigation() {
   return (
     <div className={css.wrap}>
       <div className={css.inner}>
         <ul className={css.list}>
-          <li>list1</li>
           <li>
-            <Link href="/posts/edit" className={css.link}>
-              <Pencil className={css.pencil} />
-            </Link>
+            <UnstyledButton>list1</UnstyledButton>
           </li>
-          <li>list3</li>
+          <li></li>
+          <li>
+            <UnstyledButton>list3</UnstyledButton>
+          </li>
         </ul>
       </div>
     </div>

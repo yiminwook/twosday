@@ -2,8 +2,9 @@ import { NotFoundError, serverErrorHandler } from "@/libraries/error";
 import { getImageByKey } from "@/libraries/pg/images/images.service";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(_req: NextRequest, { params }: { params: { key: string } }) {
+export async function GET(_req: NextRequest, props: { params: Promise<{ key: string }> }) {
   try {
+    const params = await props.params;
     const data = await getImageByKey(params.key);
 
     if (!data) {
