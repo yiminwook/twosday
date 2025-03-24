@@ -1,24 +1,34 @@
 "use client";
-import { MouseEvent, useState } from "react";
-import Viewer from "./Viewer";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import * as css from "./home.css";
-import Form from "./Form";
-import { extensions } from "@/libraries/extentions";
-import { useEditor } from "@tiptap/react";
-import { useSession } from "@/libraries/auth/useSession";
 import { clientApi } from "@/apis/fetcher";
+import { serverActionHandler } from "@/apis/serverActionHandler";
 import { IMAGE_URL } from "@/constances";
-import { TTag } from "@/types";
+import { useSession } from "@/libraries/auth/useSession";
+import { extensions } from "@/libraries/extentions";
 import {
   deleteTagController,
   getTagsController,
   postTagController,
 } from "@/libraries/pg/tags/tag.controller";
-import { serverActionHandler } from "@/apis/serverActionHandler";
+import { TTag } from "@/types";
+import {
+  ActionIcon,
+  ComboboxData,
+  ComboboxItem,
+  ComboboxLikeRenderOptionInput,
+  Input,
+  Stack,
+  TagsInput,
+} from "@mantine/core";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEditor } from "@tiptap/react";
 import ky from "ky";
+import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { MouseEvent, useCallback, useMemo, useState } from "react";
+import { toast } from "sonner";
+import Editor from "./Editor";
+import * as css from "./home.css";
+import editCss from "./Edit.module.scss";
 
 interface HomeProps {}
 
@@ -32,16 +42,20 @@ export default function Home({}: HomeProps) {
   const [togglePreview, setTogglePreview] = useState(false);
   const queryClient = useQueryClient();
 
-  const editor = useEditor({
-    extensions,
-    /** 에디터가 초기화될 때 기다리지 않고 바로 콘텐츠를 렌더링 **/
-    immediatelyRender: false,
-    /** 에디터 내부에서 트랜잭션 발생시 리렌더링 **/
-    shouldRerenderOnTransaction: false,
-    content: `
+  const editor = useEditor(
+    {
+      extensions,
+      /** 에디터가 초기화될 때 기다리지 않고 바로 콘텐츠를 렌더링 **/
+      immediatelyRender: true,
+      /** 에디터 내부에서 트랜잭션 발생시 리렌더링 **/
+      shouldRerenderOnTransaction: false,
+      content: `
       <p>Hello! This is a <code>tiptap</code> editor.</p>
       `,
-  });
+      editable: !togglePreview,
+    },
+    [togglePreview],
+  );
 
   const tagsQuery = useQuery({
     queryKey: ["tags"],
@@ -109,7 +123,7 @@ export default function Home({}: HomeProps) {
     },
     onSuccess: (body) => {
       toast.success("업로드 성공");
-      // router.push(`/posts/${body?.data.id}`);
+      router.push(`/posts/${body?.data.id}`);
     },
     onSettled: async () => {
       await ky.get("/api/revalidate/tag?name=post");
@@ -157,10 +171,46 @@ export default function Home({}: HomeProps) {
     setTags(() => value);
   };
 
-  const removeTag = async (tagId: number) => {
-    if (removeTagMutation.isPending) return;
-    removeTagMutation.mutate({ id: tagId, session });
-  };
+  const removeTag = useCallback(
+    (tagId: number) => {
+      if (removeTagMutation.isPending) return;
+      removeTagMutation.mutate({ id: tagId, session });
+    },
+    [removeTagMutation, session],
+  );
+
+  const comboboxTags = useMemo<ComboboxData>(() => {
+    return (
+      tagsQuery.data?.map((tag) => ({
+        value: tag.id.toString(),
+        label: tag.name,
+      })) || []
+    );
+  }, [tagsQuery.data]);
+
+  const renderTagsInputOption = useCallback(
+    (
+      input: ComboboxLikeRenderOptionInput<{
+        value: string;
+        label: string;
+      }>,
+    ) => (
+      <div className={editCss.tagsInputItem}>
+        <span>{input.option.label}</span>
+        <ActionIcon
+          variant="subtle"
+          size="md"
+          onClick={(e) => {
+            e.stopPropagation();
+            removeTag(Number(input.option.value));
+          }}
+        >
+          <X size={14} />
+        </ActionIcon>
+      </div>
+    ),
+    [removeTag],
+  );
 
   return (
     <div className={css.main}>
@@ -188,21 +238,35 @@ export default function Home({}: HomeProps) {
           </button>
         </div>
         <div>
-          {togglePreview ? (
-            <Viewer content={value} />
-          ) : (
-            <Form
-              title={title}
-              onChangeTitle={onChangeTitle}
-              tags={tagsQuery.data || []}
-              selectedTags={tags}
-              onChangeSelect={onChangeSelect}
-              removeTag={removeTag}
-              isLoadingTags={tagsQuery.isPending}
-              editor={editor}
-              session={session}
+          <Stack gap="md" component="form">
+            <Input
+              size="md"
+              type="text"
+              placeholder="제목을 입력해주세요"
+              id="upload-tag"
+              onChange={onChangeTitle}
+              value={title}
             />
-          )}
+            <TagsInput
+              size="md"
+              onChange={onChangeSelect}
+              value={tags}
+              data={comboboxTags}
+              renderOption={renderTagsInputOption as any}
+              splitChars={[",", " ", "|"]}
+              acceptValueOnBlur
+              clearable
+              filter={({ options, search }) => {
+                const filtered = (options as ComboboxItem[]).filter((option) =>
+                  option.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+                );
+                // 알파벳 순서로 정렬
+                filtered.sort((a, b) => a.label.localeCompare(b.label));
+                return filtered;
+              }}
+            />
+            <Editor editor={editor} editable={!togglePreview} session={session} />
+          </Stack>
         </div>
       </section>
     </div>

@@ -1,0 +1,65 @@
+.wrap {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1280px;
+  padding: 1rem;
+
+  :global(.mantine-RichTextEditor-root) {
+    border: none;
+    margin-top: 100px;
+  }
+
+  :global(.tiptap) {
+    padding: 0px;
+  }
+}
+
+.viewerBox {
+}
+
+.header {
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+
+  .author {
+    display: flex;
+    gap: 1rem;
+  }
+}
+
+.adfitBox {
+  margin-top: 100px;
+  display: flex;
+
+  justify-content: center;
+
+  > div {
+    overflow: hidden;
+    display: flex;
+  }
+
+  iframe,
+  ins {
+    text-align: center;
+    min-width: 0px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+.commentBox {
+  margin-top: 100px;
+}
+
+.coupangBox {
+  margin-top: 100px;
+}

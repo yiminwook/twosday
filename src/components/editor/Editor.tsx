@@ -5,10 +5,11 @@ import Control from "./Control";
 
 interface EditorProps {
   editor: TEditor | null;
+  editable: boolean;
   session: Session;
 }
 
-export default function Editor({ editor, session }: EditorProps) {
+export default function Editor({ editor, editable, session }: EditorProps) {
   useEffect(() => {
     if (!editor) return;
     editor.on("transaction", (e) => {
@@ -23,7 +24,7 @@ export default function Editor({ editor, session }: EditorProps) {
 
   return (
     <RichTextEditor editor={editor}>
-      <Control editor={editor} session={session} />
+      {editable && <Control editor={editor} session={session} />}
       <RichTextEditor.Content />
     </RichTextEditor>
   );

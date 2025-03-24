@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { isMobile } from "react-device-detect";
 
 type Props = {
   unit: string;
@@ -7,7 +8,7 @@ type Props = {
   height: number;
 };
 
-export default function KakaoAdFit({ unit, width, height }: Props) {
+export function KakaoAdFit({ unit, width, height }: Props) {
   const scriptElementWrapper = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,5 +32,21 @@ export default function KakaoAdFit({ unit, width, height }: Props) {
         data-ad-height={height}
       ></ins>
     </div>
+  );
+}
+
+export function MediaKakaoAdfit() {
+  const [isMount, setIsMount] = useState(false);
+
+  useEffect(() => {
+    setIsMount(() => true);
+  }, []);
+
+  if (!isMount) return null;
+
+  return isMobile ? (
+    <KakaoAdFit width={320} height={250} unit="DAN-ES71g0m2rjta1wHl" />
+  ) : (
+    <KakaoAdFit width={728} height={90} unit="DAN-CScUcNvZZ5M7SER1" />
   );
 }

@@ -8,7 +8,7 @@ import { cardList } from "@/components/refCard/refList.css";
 import { TReference } from "@/libraries/pg/references/references.dto";
 import { TSelectPost } from "@/libraries/pg/posts/posts.type";
 import PostsList from "@/components/home/PostList";
-import KakaoAdFit from "@/components/adBanner/KakaoAdfit";
+import { KakaoAdFit } from "@/components/adBanner/KakaoAdfit";
 
 // css
 import * as css from "./page.css";

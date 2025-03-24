@@ -6,6 +6,8 @@ export const wrap = style([
     padding: 7,
     display: "flex",
     maxWidth: "100%",
+    minWidth: "0px",
+    overflow: "hidden",
     justifyContent: "center",
   },
 ]);

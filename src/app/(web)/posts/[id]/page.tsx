@@ -1,11 +1,11 @@
-import Viewer from "@/components/editor/Viewer";
 import { notFound } from "next/navigation";
-import Comment from "@/components/editor/Comment";
-import * as css from "./page.css";
-import AdBanner from "@/components/adBanner/AdBanner";
+import css from "./page.module.scss";
 import { TSelectPost } from "@/libraries/pg/posts/posts.type";
-import { body } from "@/components/editor/editor.css";
-import KakaoAdFit from "@/components/adBanner/KakaoAdfit";
+import Viewer from "@/components/editor/Viewer";
+import { DisqusComment } from "@/components/Comment";
+import { MediaKakaoAdfit } from "@/components/adBanner/KakaoAdfit";
+import AdBanner from "@/components/adBanner/AdBanner";
+import dayjs from "@/libraries/dayjs";
 
 type Author = {
   id: number;
@@ -56,24 +56,56 @@ export default async function Page(props: PageProps) {
     throw new Error(json.message);
   }
 
-  console.log(json.data);
-
   return (
     <div className={css.wrap}>
-      <h1 className="blind">단건 조회 페이지</h1>
       <div className={css.viewerBox}>
-        <div className={css.viewerHead}>
-          <h2>{json.data.title}</h2>
-          <p>{json.data.createdAt}</p>
-          <p>{json.data.updatedAt}</p>
+        <div className={css.header}>
+          <h2 className={css.title}>{json.data.title}</h2>
+          <div className={css.info}>
+            <div className={css.author}>
+              <p>
+                <span>작성자: </span>
+                <span>{json.data.authorId}</span>
+              </p>
+
+              <span>{json.data.isPublic ? "공개" : "비공개"}</span>
+
+              <p>
+                <span>조회수: </span>
+                <span>{json.data.viewCount}</span>
+              </p>
+            </div>
+
+            <div>
+              <p>
+                <span>작성일: </span>
+                <time>{dayjs(json.data.createdAt).format("YYYY년 MM월 DD일")}</time>
+              </p>
+
+              <p>
+                <span>수정일: </span>
+                <time>{dayjs(json.data.updatedAt).format("YYYY년 MM월 DD일")}</time>
+              </p>
+            </div>
+          </div>
         </div>
         <Viewer content={json.data.content} />
       </div>
 
-      <KakaoAdFit width={728} height={90} unit="DAN-CScUcNvZZ5M7SER1" />
+      <div className={css.adfitBox}>
+        <MediaKakaoAdfit />
+      </div>
 
       <div className={css.commentBox}>
-        <Comment />
+        <DisqusComment
+          url={`https://twosday.live/posts/${params.id}`}
+          title={`post-${params.id}의 댓글`}
+          identifier={`post-${params.id}`}
+        />
+      </div>
+
+      <div className={css.coupangBox}>
+        <AdBanner />
       </div>
     </div>
   );
