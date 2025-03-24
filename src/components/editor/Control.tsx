@@ -1,14 +1,14 @@
 import { useSetModalStore } from "@/stores/modalStore";
-import * as css from "./editor.css";
 import { Editor } from "@tiptap/react";
 import { readFile } from "./readFile";
 import CropModal, { CroppedData } from "./CropModal";
 import { LuImage } from "react-icons/lu";
-import { FaYoutube } from "react-icons/fa";
 import { RichTextEditor } from "@mantine/tiptap";
 import { clientApi } from "@/apis/fetcher";
 import { IMAGE_URL } from "@/constances";
 import { toast } from "sonner";
+import { Upload } from "lucide-react";
+import Youtube from "@/assets/svg/youtube.svg?react";
 
 interface ControlProps {
   editor: Editor;
@@ -19,7 +19,7 @@ export default function Control({ editor, session }: ControlProps) {
   const modalStore = useSetModalStore();
 
   const addYoutubeVideo = () => {
-    const src = prompt("Enter YouTube URL");
+    const src = prompt("유투브 링크를 입력해주세요");
 
     if (!src) return;
     editor.commands.setYoutubeVideo({ src, width: 640, height: 360 });
@@ -87,6 +87,13 @@ export default function Control({ editor, session }: ControlProps) {
     editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
   };
 
+  const addImageLink = () => {
+    const src = window.prompt("Image URL");
+
+    if (!src) return;
+    editor.chain().focus().setImage({ src }).run();
+  };
+
   return (
     <RichTextEditor.Toolbar>
       <RichTextEditor.ControlsGroup>
@@ -94,6 +101,26 @@ export default function Control({ editor, session }: ControlProps) {
         <RichTextEditor.Italic />
         <RichTextEditor.Underline />
         <RichTextEditor.Strikethrough />
+        <RichTextEditor.Highlight />
+        <RichTextEditor.ColorPicker
+          colors={[
+            "#25262b",
+            "#868e96",
+            "#fa5252",
+            "#e64980",
+            "#be4bdb",
+            "#7950f2",
+            "#4c6ef5",
+            "#228be6",
+            "#15aabf",
+            "#12b886",
+            "#40c057",
+            "#82c91e",
+            "#fab005",
+            "#fd7e14",
+          ]}
+        />
+        <RichTextEditor.UnsetColor />
         <RichTextEditor.ClearFormatting />
         <RichTextEditor.Highlight />
         <RichTextEditor.CodeBlock />
@@ -118,11 +145,15 @@ export default function Control({ editor, session }: ControlProps) {
       <RichTextEditor.ControlsGroup>
         <RichTextEditor.Link />
         <RichTextEditor.Unlink />
+
         <RichTextEditor.Control onClick={upload}>
-          <LuImage size={16} />
+          <Upload size={16} />
         </RichTextEditor.Control>
         <RichTextEditor.Control onClick={addYoutubeVideo}>
-          <FaYoutube size={16} />
+          <Youtube width={14} height={14} />
+        </RichTextEditor.Control>
+        <RichTextEditor.Control onClick={addImageLink}>
+          <LuImage size={16} />
         </RichTextEditor.Control>
       </RichTextEditor.ControlsGroup>
 

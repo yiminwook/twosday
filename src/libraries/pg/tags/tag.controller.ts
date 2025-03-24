@@ -1,11 +1,11 @@
 "use server";
 import { BadRequestError, serverErrorHandler } from "@/libraries/error";
 import { zInt } from "@/libraries/pg";
-import { PostTagDto, PutTagDto, TPostTagDto, TPutTagDto } from "@/libraries/pg/tags/tags.dto";
-import { deleteTag, getTags, postTag, putTag } from "@/libraries/pg/tags/tags.service";
+import { PostTagDto, PutTagDto, TPostTagDto, TPutTagDto } from "./tags.dto";
+import { deleteTag, getTags, postTag, putTag } from "./tags.service";
 import { z } from "zod";
 
-export async function getTagsAction() {
+export async function getTagsController() {
   try {
     const data = await getTags();
     return { message: "태그리스트를 조회했습니다.", data };
@@ -15,7 +15,7 @@ export async function getTagsAction() {
   }
 }
 
-export async function postTagAction(body: TPostTagDto) {
+export async function postTagController(body: TPostTagDto) {
   try {
     const dto = PostTagDto.safeParse(body);
 
@@ -32,7 +32,7 @@ export async function postTagAction(body: TPostTagDto) {
 }
 
 // Admin에서 사용할 API
-export async function putTagAction(body: TPutTagDto) {
+export async function putTagController(body: TPutTagDto) {
   try {
     const dto = PutTagDto.safeParse(body);
 
@@ -49,7 +49,7 @@ export async function putTagAction(body: TPutTagDto) {
   }
 }
 
-export async function deleteTagAction({ id }: { id: number }) {
+export async function deleteTagController({ id }: { id: number }) {
   try {
     const dto = z.preprocess((s) => Number(s), zInt).safeParse(id);
 

@@ -12,7 +12,13 @@ import { useSession } from "@/libraries/auth/useSession";
 import { clientApi } from "@/apis/fetcher";
 import { IMAGE_URL } from "@/constances";
 import { TTag } from "@/types";
-import { deleteTagAction, getTagsAction, postTagAction } from "@/apis/tag";
+import {
+  deleteTagController,
+  getTagsController,
+  postTagController,
+} from "@/libraries/pg/tags/tag.controller";
+import { serverActionHandler } from "@/apis/serverActionHandler";
+import ky from "ky";
 
 interface HomeProps {}
 
@@ -39,37 +45,12 @@ export default function Home({}: HomeProps) {
 
   const tagsQuery = useQuery({
     queryKey: ["tags"],
-    // queryFn: async () => {
-    //   const res = await clientApi.get<{ message: string; data: TTag[] }>("tags");
-    //   const json = await res.json();
-    //   return json.data;
-    // },
-    queryFn: async () => {
-      const res = await getTagsAction();
-      if (!res.data) throw new Error(res.message);
-      return res.data;
-    },
+    queryFn: () => serverActionHandler(getTagsController()),
   });
 
   const postTagMutation = useMutation({
-    // mutationFn: async (arg: { name: string; session: Session }) => {
-    //   const res = await clientApi.post<{ message: string; data: { id: number } }>("tags", {
-    //     body: JSON.stringify({ name: arg.name }),
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: `Bearer ${arg.session.accessToken}`,
-    //     },
-    //   });
-
-    //   const json = await res.json();
-
-    //   return json.data;
-    // },
-    mutationFn: async (arg: { name: string; session: Session }) => {
-      const res = await postTagAction({ name: arg.name });
-      if (!res.data) throw new Error(res.message);
-      return res.data;
-    },
+    mutationFn: async (arg: { name: string; session: Session }) =>
+      serverActionHandler(postTagController({ name: arg.name })),
     onSuccess: (data, arg) => {
       queryClient.setQueryData(["tags"], (prev: TTag[] | undefined) => {
         if (!prev) return prev;
@@ -78,32 +59,16 @@ export default function Home({}: HomeProps) {
 
       toast.success("태그가 추가되었습니다.");
     },
-    onError: async (error) => {
+    onError: async (error, arg) => {
       await queryClient.invalidateQueries({ queryKey: ["tags"] });
-      setTags((prev) => prev.filter((tag) => tag !== value));
+      setTags((prev) => prev.filter((tag) => tag !== arg.name));
       toast.error(error.message);
     },
   });
 
   const removeTagMutation = useMutation({
-    // mutationFn: async (arg: { id: number; session: Session }) => {
-    //   const res = await clientApi.delete<{ message: string; data: { id: number } }>(
-    //     `tags/${arg.id}`,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${arg.session.accessToken}`,
-    //       },
-    //     },
-    //   );
-
-    //   const json = await res.json();
-    //   return json.data;
-    // },
-    mutationFn: async (arg: { id: number; session: Session }) => {
-      const res = await deleteTagAction({ id: arg.id });
-      if (!res.data) throw new Error(res.message);
-      return res.data;
-    },
+    mutationFn: async (arg: { id: number; session: Session }) =>
+      serverActionHandler(deleteTagController({ id: arg.id })),
     onSuccess: (data) => {
       queryClient.setQueryData(["tags"], (prev: TTag[] | undefined) => {
         if (!prev) return prev;
@@ -147,13 +112,9 @@ export default function Home({}: HomeProps) {
       // router.push(`/posts/${body?.data.id}`);
     },
     onSettled: async () => {
-      await fetch("/api/revalidate/tag?name=post");
+      await ky.get("/api/revalidate/tag?name=post");
     },
   });
-
-  const onChange = (value: string) => {
-    setValue(() => value);
-  };
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(() => e.target.value);
@@ -176,7 +137,6 @@ export default function Home({}: HomeProps) {
       })
       .filter((src): src is string => typeof src === "string");
 
-    console.log("images", savedImageKeys);
     mutation.mutate({
       content: editor.getHTML(),
       imageKeys: savedImageKeys || [],
@@ -234,13 +194,11 @@ export default function Home({}: HomeProps) {
             <Form
               title={title}
               onChangeTitle={onChangeTitle}
-              value={value}
               tags={tagsQuery.data || []}
               selectedTags={tags}
               onChangeSelect={onChangeSelect}
               removeTag={removeTag}
               isLoadingTags={tagsQuery.isPending}
-              onChange={onChange}
               editor={editor}
               session={session}
             />

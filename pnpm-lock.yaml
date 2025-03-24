@@ -63,6 +63,9 @@ dependencies:
   '@tiptap/extension-code-block-lowlight':
     specifier: ^2.6.6
     version: 2.11.5(@tiptap/core@2.11.5)(@tiptap/extension-code-block@2.11.5)(@tiptap/pm@2.11.5)(highlight.js@11.11.1)(lowlight@3.3.0)
+  '@tiptap/extension-color':
+    specifier: ^2.11.5
+    version: 2.11.5(@tiptap/core@2.11.5)(@tiptap/extension-text-style@2.11.5)
   '@tiptap/extension-highlight':
     specifier: ^2.9.1
     version: 2.11.5(@tiptap/core@2.11.5)
@@ -80,6 +83,9 @@ dependencies:
     version: 2.11.5(@tiptap/core@2.11.5)
   '@tiptap/extension-text-align':
     specifier: ^2.6.6
+    version: 2.11.5(@tiptap/core@2.11.5)
+  '@tiptap/extension-text-style':
+    specifier: ^2.11.5
     version: 2.11.5(@tiptap/core@2.11.5)
   '@tiptap/extension-underline':
     specifier: ^2.6.6
@@ -208,7 +214,7 @@ dependencies:
     specifier: ^11.1.10
     version: 11.2.4
   tiptap-extension-resize-image:
-    specifier: ^1.1.8
+    specifier: ^1.2.1
     version: 1.2.1(@tiptap/core@2.11.5)(@tiptap/extension-image@2.11.5)(@tiptap/pm@2.11.5)
   uuid:
     specifier: ^9.0.1
@@ -5361,6 +5367,16 @@ packages:
       '@tiptap/core': ^2.7.0
     dependencies:
       '@tiptap/core': 2.11.5(@tiptap/pm@2.11.5)
+    dev: false
+
+  /@tiptap/extension-color@2.11.5(@tiptap/core@2.11.5)(@tiptap/extension-text-style@2.11.5):
+    resolution: {integrity: sha512-9gZF6EIpfOJYUt1TtFY37e8iqwKcOmBl8CkFaxq+4mWVvYd2D7KbA0r4tYTxSO0fOBJ5fA/1qJrpvgRlyocp/A==}
+    peerDependencies:
+      '@tiptap/core': ^2.7.0
+      '@tiptap/extension-text-style': ^2.7.0
+    dependencies:
+      '@tiptap/core': 2.11.5(@tiptap/pm@2.11.5)
+      '@tiptap/extension-text-style': 2.11.5(@tiptap/core@2.11.5)
     dev: false
 
   /@tiptap/extension-document@2.11.5(@tiptap/core@2.11.5):

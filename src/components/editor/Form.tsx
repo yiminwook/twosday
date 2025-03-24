@@ -27,26 +27,19 @@ import { X } from "lucide-react";
 interface FormProps {
   title: string;
   onChangeTitle: (e: React.ChangeEvent<HTMLInputElement>) => void;
-
   tags: TTag[];
   selectedTags: string[];
   onChangeSelect: (value: string[]) => void;
   isLoadingTags: boolean;
-
   removeTag: (tagId: number) => void;
-
-  value: string;
-  onChange: (value: string) => void;
   editor: EditorType | null;
   session: Session;
 }
 
 export default function Form({
   title,
-  value,
   onChangeTitle,
   onChangeSelect,
-  onChange,
   removeTag,
   tags,
   selectedTags,
@@ -97,8 +90,6 @@ export default function Form({
       <TagsInput
         size="md"
         onChange={onChangeSelect}
-        onRemove={(e) => console.log(e)}
-        onSearchChange={(e) => console.log(e)}
         value={selectedTags}
         data={comboboxTags}
         renderOption={renderTagsInputOption as any}
