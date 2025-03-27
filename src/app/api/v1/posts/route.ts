@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
     }));
 
     return NextResponse.json(
-      { message: "글목록이 검색 되었습니다.", data: { ...data, list: parsedPosts } },
+      { message: "글목록이 검색 되었습니다.", data: { total: data.total, list: parsedPosts } },
       { status: 200 },
     );
   } catch (error) {

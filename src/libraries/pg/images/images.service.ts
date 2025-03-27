@@ -7,7 +7,7 @@ export const getImageByKey = withPgConnection(async (client, key: string) => {
   const sql = `
     SELECT *
     FROM "${IMAGES_TABLE}" T01
-    WHERE T01."deletedAt" IS NULL
+    WHERE T01."deleted_at" IS NULL
       AND T01."key" = $1
     LIMIT 1
   `;
@@ -20,7 +20,7 @@ export const getImages = withPgConnection(async (client, dto: TGetImagesDto) => 
   const countSql = `
     SELECT COUNT(DISTINCT T01."id") as "count"
     FROM "${IMAGES_TABLE}" T01
-    WHERE T01."deletedAt" IS NULL 
+    WHERE T01."deleted_at" IS NULL 
       AND ($1::int IS NULL OR T01."userId" = $1::int)
   `;
 
@@ -29,9 +29,9 @@ export const getImages = withPgConnection(async (client, dto: TGetImagesDto) => 
   const sql = `
     SELECT *
     FROM "${IMAGES_TABLE}" T01
-    WHERE T01."deletedAt" IS NULL 
-      AND ($1::int IS NULL OR T01."userId" = $1::int)
-    ORDER BY T01."createdAt" DESC
+    WHERE T01."deleted_at" IS NULL 
+      AND ($1::int IS NULL OR T01."user_id" = $1::int)
+    ORDER BY T01."created_at" DESC
     OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY
   `;
 
@@ -45,7 +45,7 @@ export const getImages = withPgConnection(async (client, dto: TGetImagesDto) => 
 
 export const postImage = withPgTransaction(async (client, dto: TCreateImageDto) => {
   const sql = `
-    INSERT INTO "${IMAGES_TABLE}" ("key", "userId")
+    INSERT INTO "${IMAGES_TABLE}" ("key", "user_id")
     VALUES ($1, $2)
     RETURNING id
   `;
@@ -57,7 +57,7 @@ export const postImage = withPgTransaction(async (client, dto: TCreateImageDto) 
 export const deleteImage = withPgTransaction(async (client, key: string) => {
   const sql = `
     UPDATE "${IMAGES_TABLE}"
-    SET "deletedAt" = CURRENT_TIMESTAMP
+    SET "deleted_at" = CURRENT_TIMESTAMP
     WHERE "key" = $1
     RETURNING id
   `;
@@ -84,7 +84,7 @@ export const addImagesQueryByTransaction = async (
     .join(", ");
 
   const multiPostImageSql = `
-    INSERT INTO "${POSTS_IMAGES_TABLE}" ("postsId", "imagesId")
+    INSERT INTO "${POSTS_IMAGES_TABLE}" ("posts_id", "images_id")
     VALUES ${multiPostImagePlaceholders}
   `;
 
@@ -101,7 +101,7 @@ export const removeImagesQueryByTransaction = async (
 
   const multiPostImageSql = `
     DELETE FROM "${POSTS_IMAGES_TABLE}"
-    WHERE "postsId" = $1 AND "imagesId" IN (
+    WHERE "posts_id" = $1 AND "images_id" IN (
       SELECT "id" FROM "${IMAGES_TABLE}" WHERE "key" = ANY($2)
     )
   `;

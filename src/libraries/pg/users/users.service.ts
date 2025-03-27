@@ -7,7 +7,7 @@ export const getUserByEmail = withPgConnection(async (client, email: string) => 
             T01."email"    AS "email", 
             T01."password" AS "password"
     FROM "${USERS_TABLE}" T01
-    WHERE T01."email" = $1 AND T01."deletedAt" IS NULL
+    WHERE T01."email" = $1 AND T01."deleted_at" IS NULL
   `;
 
   const result = await client.query<{

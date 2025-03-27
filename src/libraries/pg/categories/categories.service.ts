@@ -1,23 +1,23 @@
 import { withPgConnection, withPgTransaction } from "..";
-import { CATEGORIES_TABLE } from "../tables";
+import { CATEGORIES_TABLE, POSTS_TABLE } from "../tables";
 import { TPostCategoryDto, TPutCategoryDto } from "./categories.dto";
 
 export const getCategories = withPgConnection(async (client) => {
   const sql = `
     -- 페이지네이션 없이 모든 카테고리를 조회
-    SELECT  T01."id"          AS category_id,  
-            T01."parentId"    AS parent_id, 
-            T01."name"        AS category_name,
-            COUNT(T03."id")  AS post_count
+    SELECT  T01."id"           AS categoryId,  
+            T01."parent_id"    AS parentId, 
+            T01."name"         AS name,
+            COUNT(T03."id")    AS postCount
     FROM "${CATEGORIES_TABLE}" T01
     LEFT JOIN "${CATEGORIES_TABLE}" T02 
       -- 자기 자신을 부모로 가질 수 없음. CONSTRAINT:chk_no_self_reference
-      ON T01."id" = T02."parentId"
-    LEFT JOIN "POSTS" T03 
-      ON T02."id" = T03."categoryId"
+      ON T01."id" = T02."parent_id"
+    LEFT JOIN "${POSTS_TABLE}" T03 
+      ON T02."id" = T03."category_id"
     GROUP BY 
       T01."id", 
-      T01."parentId", 
+      T01."parent_id", 
       T01."name"
     ORDER BY 
       T01."id";
@@ -34,7 +34,7 @@ export const getCategories = withPgConnection(async (client) => {
 
 export const postCategory = withPgTransaction(async (client, dto: TPostCategoryDto) => {
   const sql = `
-    INSERT INTO "${CATEGORIES_TABLE}" (parentId, name)
+    INSERT INTO "${CATEGORIES_TABLE}" (parent_id, name)
     VALUES ($1, $2)
     RETURNING id
   `;
@@ -46,7 +46,7 @@ export const postCategory = withPgTransaction(async (client, dto: TPostCategoryD
 export const putCategory = withPgTransaction(async (client, dto: TPutCategoryDto) => {
   const sql = `
     UPDATE "${CATEGORIES_TABLE}"
-    SET parentId = $2, name = $3
+    SET parent_id = $2, name = $3
     WHERE id = $1
   `;
 
@@ -56,7 +56,7 @@ export const putCategory = withPgTransaction(async (client, dto: TPutCategoryDto
 
 export const deleteCategory = withPgTransaction(async (client, id: number) => {
   const sql = `
-    -- HARD DELETE, 삭제시 자식 CATEGORIRES.parentId와 POSTS.categoryId가 NULL로 변경됨
+    -- HARD DELETE, 삭제시 자식 categories.parent_id와 posts.category_id가 NULL로 변경됨
     DELETE FROM "${CATEGORIES_TABLE}"
     WHERE id = $1
   `;

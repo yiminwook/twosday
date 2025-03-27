@@ -7,22 +7,22 @@ export const getReferences = withPgConnection(async (connection, dto: TGetRefere
   const countSql = `
     SELECT COUNT(DISTINCT T01."id") as "count"
     FROM "${REFERENCES_TABLE}" T01
-    WHERE T01."deletedAt" IS NULL
+    WHERE T01."deleted_at" IS NULL
   `;
 
   const countResult = await connection.query<{ count: number }>(countSql);
 
   const sql = `
-    SELECT  T01."id"           AS "id", 
-            T01."url"          AS "url", 
-            T01."thumbnail"    AS "thumbnail", 
-            T01."title"        AS "title", 
-            T01."description"  AS "description", 
-            T01."createdAt"    AS "createdAt", 
-            T01."updatedAt"    AS "updatedAt"
+    SELECT  T01."id"            AS "id", 
+            T01."url"           AS "url", 
+            T01."thumbnail"     AS "thumbnail", 
+            T01."title"         AS "title", 
+            T01."description"   AS "description", 
+            T01."created_at"    AS "createdAt", 
+            T01."updated_at"    AS "updatedAt"
     FROM "${REFERENCES_TABLE}" T01
-    WHERE T01."deletedAt" is NULL
-    ORDER BY T01."createdAt" DESC
+    WHERE T01."deleted_at" is NULL
+    ORDER BY T01."created_at" DESC
     OFFSET $1 ROWS FETCH NEXT $2 ROWS ONLY
   `;
 
@@ -64,7 +64,7 @@ export const postReference = withPgTransaction(async (connection, dto: TCreateRe
 export const deleteReferenceById = withPgTransaction(async (connection, id: number) => {
   const sql = `
     UPDATE "${REFERENCES_TABLE}"
-    SET "deletedAt" = CURRENT_TIMESTAMP
+    SET "deleted_at" = CURRENT_TIMESTAMP
     WHERE "id" = $1
     RETURNING id
   `;
