@@ -41,14 +41,16 @@ export function DisqusComment({ identifier, url, title }: DisqusProps) {
         코멘트
       </CommentCount> */}
 
-      <DiscussionEmbed
-        shortname={"twosday-live"}
-        config={{
-          url,
-          identifier,
-          title,
-        }}
-      />
+      <div style={{ colorScheme: "initial" }}>
+        <DiscussionEmbed
+          shortname={"twosday-live"}
+          config={{
+            url,
+            identifier,
+            title,
+          }}
+        />
+      </div>
     </>
   );
 }

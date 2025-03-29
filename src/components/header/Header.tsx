@@ -6,6 +6,8 @@ import css from "./Header.module.scss";
 import { clientApi } from "@/apis/fetcher";
 import { Button } from "@mantine/core";
 import dynamic from "next/dynamic";
+import Image from "next/image";
+import Logo from "@/assets/images/logo-92x50.png";
 
 const ThemeButton = dynamic(() => import("../ThemeButton"), { ssr: false });
 
@@ -35,7 +37,7 @@ export default function Header() {
         <div className={css.inner}>
           <div>
             <Link className={css.title} href="/">
-              twosday
+              <Image src={Logo} alt="twosday-logo" height={36} />
             </Link>
           </div>
           <ul className={css.right}>

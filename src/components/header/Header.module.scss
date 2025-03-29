@@ -10,9 +10,8 @@
   z-index: 1000;
   height: var.$safe-header-height;
   width: 100%;
-  background-color: #fff;
-  box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
-  opacity: 0.85;
+  background: var(--mantine-color-body);
+  box-shadow: rgba(233, 172, 131, 0.782) 0px 1px 0px;
 }
 
 @include util.min-width(sm) {
