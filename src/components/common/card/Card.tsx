@@ -3,17 +3,17 @@ import Gravatar from "react-gravatar";
 import * as css from "./card.css";
 import { useRouter } from "next/navigation";
 import dayjs from "@/libraries/dayjs";
-import { TSelectPost } from "@/libraries/pg/posts/posts.type";
+import { TPublicPost } from "@/libraries/pg/posts/posts.type";
 
 interface CardProps {
-  post: TSelectPost;
+  post: TPublicPost;
 }
 
 /* eslint-disable @next/next/no-img-element */
 export default function Card({ post }: CardProps) {
   const router = useRouter();
   const updateTime = dayjs(post.updatedAt).format("yy년 MM월 dd일");
-  const onClick = () => router.push(`/posts/${post.id}`);
+  const onClick = () => router.push(`/posts/${post.postId}`);
   return (
     <article className={css.wrap}>
       <div className={css.imageBox} onClick={onClick}>

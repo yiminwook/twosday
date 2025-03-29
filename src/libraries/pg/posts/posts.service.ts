@@ -14,23 +14,7 @@ import {
   removeImagesQueryByTransaction,
 } from "../images/images.service";
 import { addTagsQueryByTransaction, removeTagsQueryByTransaction } from "../tags/tags.service";
-import { TSelectPost } from "./posts.type";
-
-export type TPublicPost = {
-  postId: number;
-  title: string;
-  content: string;
-  viewCount: number;
-  createdAt: Date;
-  updatedAt: Date;
-  authorId: number;
-  email: string;
-  nickname: string;
-  avatar: string | null;
-  imageKeys: string[];
-  tagIds: { id: number; name: string }[];
-  category: { id: number; name: string } | null;
-};
+import { TPublicPost } from "./posts.type";
 
 export const getPosts = withPgConnection(async (client, dto: TGetPostsDto) => {
   const countSql = `
@@ -177,6 +161,7 @@ export const putPost = withPgTransaction(async (client, postId: number, dto: TCr
     UPDATE "${POSTS_TABLE}"
     SET "title" = $2, "content" = $3, "is_public" = $4, "category_id" = $5
     WHERE "id" = $1
+    RETURNING id
   `;
 
   const currentTagIds = currnetPost.tagIds.map((tag) => tag.id);
@@ -207,6 +192,19 @@ export const deletePost = withPgTransaction(async (client, postId: number) => {
     UPDATE "${POSTS_TABLE}"
     SET "deleted_at" = CURRENT_TIMESTAMP, "is_public" = FALSE
     WHERE "id" = $1
+    RETURNING id
+  `;
+
+  await client.query(sql, [postId]);
+  return { id: postId };
+});
+
+export const increasePostViewCount = withPgConnection(async (client, postId: number) => {
+  const sql = `
+    UPDATE "${POSTS_TABLE}"
+    SET "view_count" = "view_count" + 1
+    WHERE "id" = $1
+    RETURNING id
   `;
 
   await client.query(sql, [postId]);

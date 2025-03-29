@@ -6,9 +6,9 @@ import HeroSection from "@/components/home/HeroSection";
 import TechBelt from "@/components/home/TechBelt";
 import { cardList } from "@/components/refCard/refList.css";
 import { TReference } from "@/libraries/pg/references/references.dto";
-import { TSelectPost } from "@/libraries/pg/posts/posts.type";
 import PostsList from "@/components/home/PostList";
 import { KakaoAdFit } from "@/components/adBanner/KakaoAdfit";
+import { TPublicPost } from "@/libraries/pg/posts/posts.type";
 
 // css
 import * as css from "./page.css";
@@ -43,12 +43,12 @@ export default async function Page() {
   ]);
 
   const popularBody: {
-    data: { list: TSelectPost[]; total: number };
+    data: { list: TPublicPost[]; total: number };
     message: string;
   } = await popularPostResponse.json();
 
   const recentBody: {
-    data: { list: TSelectPost[]; total: number };
+    data: { list: TPublicPost[]; total: number };
     message: string;
   } = await recentPostResponse.json();
 

@@ -1,14 +1,8 @@
 "use client";
 import { clientApi } from "@/apis/fetcher";
-import { serverActionHandler } from "@/apis/serverActionHandler";
 import { IMAGE_URL } from "@/constances";
 import { useSession } from "@/libraries/auth/useSession";
 import { extensions } from "@/libraries/extentions";
-import {
-  deleteTagController,
-  getTagsController,
-  postTagController,
-} from "@/libraries/pg/tags/tag.controller";
 import { TTag } from "@/types";
 import {
   ActionIcon,
@@ -59,12 +53,27 @@ export default function Home({}: HomeProps) {
 
   const tagsQuery = useQuery({
     queryKey: ["tags"],
-    queryFn: () => serverActionHandler(getTagsController()),
+    queryFn: async () => {
+      const res = await clientApi.get<{ message: string; data: TTag[] }>("tags");
+      const json = await res.json();
+      return json.data;
+    },
   });
 
   const postTagMutation = useMutation({
-    mutationFn: async (arg: { name: string; session: Session }) =>
-      serverActionHandler(postTagController({ name: arg.name })),
+    mutationFn: async (arg: { name: string; session: Session }) => {
+      const res = await clientApi.post<{ message: string; data: { id: number } }>("tags", {
+        body: JSON.stringify({ name: arg.name }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${arg.session.accessToken}`,
+        },
+      });
+
+      const json = await res.json();
+
+      return json.data;
+    },
     onSuccess: (data, arg) => {
       queryClient.setQueryData(["tags"], (prev: TTag[] | undefined) => {
         if (!prev) return prev;
@@ -81,16 +90,29 @@ export default function Home({}: HomeProps) {
   });
 
   const removeTagMutation = useMutation({
-    mutationFn: async (arg: { id: number; session: Session }) =>
-      serverActionHandler(deleteTagController({ id: arg.id })),
-    onSuccess: (data) => {
+    onMutate: (arg) => {
+      // Optimistic UI update
       queryClient.setQueryData(["tags"], (prev: TTag[] | undefined) => {
         if (!prev) return prev;
-        return prev.filter((tag) => tag.id !== data.id);
+        return prev.filter((tag) => tag.id !== arg.id);
       });
 
       toast.success("태그가 삭제되었습니다.");
     },
+    mutationFn: async (arg: { id: number; session: Session }) => {
+      const res = await clientApi.delete<{ message: string; data: { id: number } }>(
+        `tags/${arg.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${arg.session.accessToken}`,
+          },
+        },
+      );
+
+      const json = await res.json();
+      return json.data;
+    },
+    onSuccess: (data) => {},
     onError: async (error) => {
       await queryClient.invalidateQueries({ queryKey: ["tags"] });
       setTags((prev) => prev.filter((tag) => tag !== value));
@@ -98,7 +120,7 @@ export default function Home({}: HomeProps) {
     },
   });
 
-  const mutation = useMutation({
+  const mutationPost = useMutation({
     mutationFn: async (arg: { content: string; imageKeys: string[] }) => {
       const response = await clientApi("posts", {
         method: "POST",
@@ -135,7 +157,7 @@ export default function Home({}: HomeProps) {
   };
 
   const onSave = (e: MouseEvent<HTMLButtonElement>) => {
-    if (mutation.isPending) return;
+    if (mutationPost.isPending) return;
     if (!editor) {
       toast.warning("에디터를 로드하지 못했습니다.");
       return;
@@ -151,7 +173,7 @@ export default function Home({}: HomeProps) {
       })
       .filter((src): src is string => typeof src === "string");
 
-    mutation.mutate({
+    mutationPost.mutate({
       content: editor.getHTML(),
       imageKeys: savedImageKeys || [],
     });
@@ -231,7 +253,7 @@ export default function Home({}: HomeProps) {
           <button
             className={css.navBtn}
             type="submit"
-            disabled={mutation.isPending}
+            disabled={mutationPost.isPending}
             onClick={onSave}
           >
             저장

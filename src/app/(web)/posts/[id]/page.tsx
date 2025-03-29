@@ -5,10 +5,8 @@ import { DisqusComment } from "@/components/Comment";
 import { MediaKakaoAdfit } from "@/components/adBanner/KakaoAdfit";
 import AdBanner from "@/components/adBanner/AdBanner";
 import dayjs from "@/libraries/dayjs";
-import { z } from "zod";
-import { zInt } from "@/libraries/pg";
-import { BadRequestError } from "@/libraries/error";
-import { getPublicPostById } from "@/libraries/pg/posts/posts.service";
+import { TPublicPost } from "@/libraries/pg/posts/posts.type";
+import ViewObserver from "@/components/post/ViewObserver";
 
 type Author = {
   id: number;
@@ -28,50 +26,45 @@ interface PageProps {
 
 export default async function Page(props: PageProps) {
   const params = await props.params;
-  const dto = z.preprocess((s) => Number(s), zInt).safeParse(params.id);
 
-  if (dto.error) {
-    throw new BadRequestError(dto.error.errors[0].message);
-  }
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/posts/${params.id}`);
+  const json: { message: string; data: TPublicPost } = await res.json();
 
-  const data = await getPublicPostById(dto.data);
-
-  console.log(data);
-
-  if (!data) notFound();
+  if (!json.data) notFound();
 
   return (
     <div className={css.wrap}>
+      <ViewObserver postId={params.id} />
       <div className={css.viewerBox}>
         <div className={css.header}>
-          <h2 className={css.title}>{data.title}</h2>
+          <h2 className={css.title}>{json.data.title}</h2>
           <div className={css.info}>
             <div className={css.author}>
               <p>
                 <span>작성자: </span>
-                <span>{data.authorId}</span>
+                <span>{json.data.authorId}</span>
               </p>
 
               <p>
                 <span>조회수: </span>
-                <span>{data.viewCount}</span>
+                <span>{json.data.viewCount}</span>
               </p>
             </div>
 
             <div>
               <p>
                 <span>작성일: </span>
-                <time>{dayjs(data.createdAt).format("YYYY년 MM월 DD일")}</time>
+                <time>{dayjs(json.data.createdAt).format("YYYY년 MM월 DD일")}</time>
               </p>
 
               <p>
                 <span>수정일: </span>
-                <time>{dayjs(data.updatedAt).format("YYYY년 MM월 DD일")}</time>
+                <time>{dayjs(json.data.updatedAt).format("YYYY년 MM월 DD일")}</time>
               </p>
             </div>
           </div>
         </div>
-        <Viewer content={data.content} />
+        <Viewer content={json.data.content} />
       </div>
 
       <div className={css.adfitBox}>
