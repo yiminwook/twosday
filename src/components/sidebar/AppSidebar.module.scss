@@ -19,9 +19,8 @@
   top: 0;
   bottom: 0;
   z-index: 1001;
-  background-color: #fff;
+  background-color: var(--mantine-color-dark-light);
   border-right: 2px solid var(--mantine-color-default-border);
-  opacity: 0.5;
 }
 
 @include util.min-width(sm) {
@@ -47,6 +46,7 @@
 }
 
 .nav {
+  --nl-offset: 5px; // nav-link offset
   padding: 0 1rem;
   margin-top: 1rem;
 }

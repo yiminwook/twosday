@@ -74,3 +74,19 @@
   line-height: $line-height;
   height: #{$line-height * $line-count}em;
 }
+
+@mixin line-clamp($line-count) {
+  @if $line-count == "none" {
+    overflow: visible;
+    display: block;
+    -webkit-box-orient: horizontal;
+    -webkit-line-clamp: none;
+  } @else if type-of($line-count) == "number" and $line-count > 1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $line-count;
+  } @else {
+    @error "Invalid argument: line-count must be a number or 'none'.";
+  }
+}

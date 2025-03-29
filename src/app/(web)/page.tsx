@@ -17,6 +17,7 @@ const RECENT_POST_SIZE = 6;
 const POPULAR_POST_SIZE = 6;
 const REFERENCE_SIZE = 4;
 
+// http://localhost:3000/api/revalidate/tag?name=home
 export default async function Page() {
   const [popularPostResponse, recentPostResponse, referenceResponse] = await Promise.all([
     fetch(

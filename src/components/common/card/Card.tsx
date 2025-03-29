@@ -1,9 +1,12 @@
 "use client";
-import Gravatar from "react-gravatar";
-import * as css from "./card.css";
+import gravatar from "gravatar";
+import css from "./Card.module.scss";
 import { useRouter } from "next/navigation";
 import dayjs from "@/libraries/dayjs";
 import { TPublicPost } from "@/libraries/pg/posts/posts.type";
+import PlaceholderImage from "@/assets/images/neon-512x512.png";
+import Image from "next/image";
+import { Avatar } from "@mantine/core";
 
 interface CardProps {
   post: TPublicPost;
@@ -17,26 +20,31 @@ export default function Card({ post }: CardProps) {
   return (
     <article className={css.wrap}>
       <div className={css.imageBox} onClick={onClick}>
+        <Image className={css.image} src={PlaceholderImage} alt="placeholder_image" />
         {/* {post.thumbnail ? (
           // <img className={css.image} src={post.thumbnail} alt="placeholder_image" />
         ) : ( */}
-        <div className={css.image}>
-          <span className={css.placeholderText}>{post.title}</span>
-        </div>
+        {/* <div className={css.image}>
+          <span className={css.placeholderText}>
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos temporibus aspernatur
+            ipsam libero obcaecati. Commodi optio recusandae enim quis beatae non quas quam vitae
+            quaerat, atque eos repudiandae, necessitatibus ab.
+          </span>
+        </div> */}
         {/* )} */}
       </div>
       <div className={css.descBox}>
         <h4 className={css.title} onClick={onClick}>
           {post.title}
         </h4>
-        <div className={css.editorBox}>
-          <div className={css.avatarBox}>
-            {/* {post.author.avatar ? (
-              <img src={post.author.avatar} alt="avatar" width={20} height={20} />
-            ) : ( */}
-            <Gravatar email={post.nickname} size={20} />
-            {/* )} */}
-          </div>
+        <div className={css.authorBox}>
+          <Avatar
+            className={css.avatar}
+            src={post.avatar ?? gravatar.url(post.email, { s: "20px", d: "retro" })}
+            alt={post.nickname}
+            radius="lg"
+            size={20}
+          />
           <span className={css.editor}>{post.nickname}</span>
         </div>
         <div className={css.timeBox}>
