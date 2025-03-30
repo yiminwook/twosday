@@ -1,12 +1,15 @@
-export type TSelectPost = {
-  id: number;
-  authorId: number;
+export type TPublicPost = {
+  postId: number;
   title: string;
   content: string;
-  isPublic: boolean;
   viewCount: number;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  authorId: number;
+  email: string;
   nickname: string;
+  avatar: string | null;
+  imageKeys: string[];
+  tagIds: { id: number; name: string }[];
+  category: { id: number; name: string } | null;
 };

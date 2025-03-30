@@ -1,6 +1,6 @@
 import { BadRequestError, serverErrorHandler } from "@/libraries/error";
 import { zInt } from "@/libraries/pg";
-import { getPostById } from "@/libraries/pg/posts/posts.service";
+import { getPublicPostById } from "@/libraries/pg/posts/posts.service";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -13,7 +13,7 @@ export async function GET(req: NextRequest, props: { params: Promise<{ id: strin
       throw new BadRequestError(dto.error.errors[0].message);
     }
 
-    const data = await getPostById(dto.data);
+    const data = await getPublicPostById(dto.data);
 
     return NextResponse.json({ message: `${params.id} 포스트 조회성공`, data });
   } catch (error) {

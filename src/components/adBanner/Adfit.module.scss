@@ -1,0 +1,12 @@
+.wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  :global(.kakao_ad_area) {
+    max-width: 728px;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+}

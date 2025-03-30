@@ -11,7 +11,7 @@ import vanillaExtract from "@/assets/svg/vanilla-extract.svg?url";
 import zustand from "@/assets/svg/zustand.svg?url";
 import Image from "next/image";
 import Belt from "../Belt";
-import { techBeltItem } from "../belt.css";
+import css from "../Belt.module.scss";
 
 const items = [
   { name: "TypeScript", src: typescript, color: "#017ACB" },
@@ -32,7 +32,7 @@ export default function TechBelt() {
     <Belt itemWidth={150}>
       {items.map((item) => {
         return (
-          <div key={item.name} className={techBeltItem}>
+          <div key={item.name} className={css.techBeltItem}>
             <Image src={item.src} alt={`${item.name}_symbol`} width={25} height={25} />
             <span style={{ color: item.color }}>{item.name}</span>
           </div>

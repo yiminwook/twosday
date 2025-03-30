@@ -1,4 +1,3 @@
-import { getPureText } from "@/libraries/dompurify";
 import { BadRequestError, serverErrorHandler } from "@/libraries/error";
 import { getPosts, postPost } from "@/libraries/pg/posts/posts.service";
 import { createPostDto, getPostsDto } from "@/libraries/pg/posts/posts.dto";
@@ -6,8 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { parse } from "qs";
 import { headers } from "next/headers";
 import { checkBearerAuth } from "@/libraries/auth/jwt.service";
-
-const CONTENT_PREVIEW_STRING_MAX_LENGTH = 200;
+import { parsePosts } from "@/utils/helper";
 
 // GET /api/v1/posts?order=popular&size=10&page=1&query=검색어
 export async function GET(req: NextRequest) {
@@ -22,13 +20,10 @@ export async function GET(req: NextRequest) {
     }
 
     const data = await getPosts(dto.data);
-    const parsedPosts = data.posts.map((post) => ({
-      ...post,
-      content: getPureText(post.content).slice(0, CONTENT_PREVIEW_STRING_MAX_LENGTH),
-    }));
+    const parsedPosts = parsePosts(data.posts);
 
     return NextResponse.json(
-      { message: "글목록이 검색 되었습니다.", data: { ...data, list: parsedPosts } },
+      { message: "글목록이 검색 되었습니다.", data: { total: data.total, list: parsedPosts } },
       { status: 200 },
     );
   } catch (error) {

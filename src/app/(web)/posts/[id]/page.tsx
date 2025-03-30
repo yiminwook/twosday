@@ -1,37 +1,12 @@
-import Viewer from "@/components/editor/Viewer";
 import { notFound } from "next/navigation";
-import Comment from "@/components/editor/Comment";
-import * as css from "./page.css";
+import css from "./page.module.scss";
+import Viewer from "@/components/editor/Viewer";
+import { DisqusComment } from "@/components/Comment";
+import { ResponsiveAdfit } from "@/components/adBanner/Adfit";
 import AdBanner from "@/components/adBanner/AdBanner";
-import { TSelectPost } from "@/libraries/pg/posts/posts.type";
-import { body } from "@/components/editor/editor.css";
-import KakaoAdFit from "@/components/adBanner/KakaoAdfit";
-
-type Author = {
-  id: number;
-  updatedAt: string;
-  createdAt: string;
-  deletedAt: string | null;
-  email: string;
-  nickname: string;
-  avartar: string | null;
-};
-
-type Tag = string[];
-
-type Post = {
-  id: number;
-  updatedAt: string;
-  createdAt: string;
-  deletedAt: string | null;
-  title: string;
-  thumbnail: string | null;
-  content: string;
-  isPublic: boolean;
-  viewCount: number;
-  author: Author;
-  tags: Tag;
-};
+import dayjs from "@/libraries/dayjs";
+import { TPublicPost } from "@/libraries/pg/posts/posts.type";
+import ViewObserver from "@/components/post/ViewObserver";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -39,41 +14,57 @@ interface PageProps {
 
 export default async function Page(props: PageProps) {
   const params = await props.params;
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/posts/${params.id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
 
-  const json: { data: TSelectPost; message: string } = await response.json();
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/posts/${params.id}`);
+  const json: { message: string; data: TPublicPost } = await res.json();
 
-  if (!response.ok) {
-    if (response.status === 404) {
-      notFound();
-    }
-
-    throw new Error(json.message);
-  }
-
-  console.log(json.data);
+  if (!json.data) notFound();
 
   return (
     <div className={css.wrap}>
-      <h1 className="blind">단건 조회 페이지</h1>
+      <ViewObserver postId={params.id} />
       <div className={css.viewerBox}>
-        <div className={css.viewerHead}>
-          <h2>{json.data.title}</h2>
-          <p>{json.data.createdAt}</p>
-          <p>{json.data.updatedAt}</p>
+        <div className={css.header}>
+          <h2 className={css.title}>{json.data.title}</h2>
+          <div className={css.info}>
+            <div className={css.author}>
+              <p>
+                <span>작성자: </span>
+                <span>{json.data.authorId}</span>
+              </p>
+
+              <p>
+                <span>조회수: </span>
+                <span>{json.data.viewCount}</span>
+              </p>
+            </div>
+
+            <div>
+              <p>
+                <span>작성일: </span>
+                <time>{dayjs(json.data.createdAt).format("YYYY년 MM월 DD일")}</time>
+              </p>
+
+              <p>
+                <span>수정일: </span>
+                <time>{dayjs(json.data.updatedAt).format("YYYY년 MM월 DD일")}</time>
+              </p>
+            </div>
+          </div>
         </div>
         <Viewer content={json.data.content} />
       </div>
 
-      <KakaoAdFit width={728} height={90} unit="DAN-CScUcNvZZ5M7SER1" />
+      <div className={css.adfitBox}>
+        <ResponsiveAdfit />
+      </div>
 
       <div className={css.commentBox}>
-        <Comment />
+        <DisqusComment
+          url={`https://twosday.live/posts/${params.id}`}
+          title={`post-${params.id}의 댓글`}
+          identifier={`post-${params.id}`}
+        />
       </div>
     </div>
   );

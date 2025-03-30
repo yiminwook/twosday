@@ -10,9 +10,8 @@
   z-index: 1000;
   height: var.$safe-header-height;
   width: 100%;
-  background-color: #fff;
-  box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
-  opacity: 0.85;
+  background: var(--mantine-color-body);
+  box-shadow: rgba(233, 172, 131, 0.782) 0px 1px 0px;
 }
 
 @include util.min-width(sm) {
@@ -25,7 +24,7 @@
 .inner {
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 var(--app-layout-padding);
   width: 100%;
   height: 100%;
   justify-content: space-between;
@@ -39,9 +38,21 @@
   }
 }
 
+.toggleButton {
+  display: block;
+}
+
+@include util.min-width(sm) {
+  .toggleButton {
+    display: none;
+  }
+}
+
 .title {
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: initial;
+  color: var(--mantine-color-primary-3);
 }
 
 .right {

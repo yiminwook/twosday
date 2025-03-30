@@ -1,6 +1,13 @@
 :root {
   --app-shell-header-height: #{var.$safe-header-height};
   --app-shell-header-offset: #{var.$safe-header-height};
+  --app-layout-padding: 0.5rem;
+}
+
+@include util.min-width(sm) {
+  :root {
+    --app-layout-padding: 1rem;
+  }
 }
 
 [data-mantine-color-scheme="light"] .mantine-light-hidden {
@@ -6739,7 +6746,7 @@ fieldset:disabled .m_c9ade57f:where([data-inverted]),
 }
 .m_d6493fad :where(img) {
   max-width: 100%;
-  margin-bottom: var(--mantine-spacing-xs);
+  // margin-bottom: var(--mantine-spacing-xs);
 }
 .m_d6493fad :where(p) {
   margin-top: 0;

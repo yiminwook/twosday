@@ -1,7 +1,10 @@
-import List from "@/components/editor/List";
-import { TSelectPost } from "@/libraries/pg/posts/posts.type";
+import List from "@/components/PostList";
 import Link from "next/link";
 import css from "./page.module.scss";
+import { getPostsDto } from "@/libraries/pg/posts/posts.dto";
+import { BadRequestError } from "@/libraries/error";
+import { getPosts } from "@/libraries/pg/posts/posts.service";
+import { parsePosts } from "@/utils/helper";
 
 interface PostProps {
   searchParams: Promise<{
@@ -22,19 +25,19 @@ export default async function Page(props: PostProps) {
     order: searchParams.order === "popular" ? "popular" : "recent",
   });
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/posts?${urlSearchParams.toString()}`,
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      next: { revalidate: 300, tags: ["home", "post"] }, //1분 간격으로 캐시 갱신
-    },
-  );
+  const dto = getPostsDto.safeParse({
+    page: page.toString(),
+    size: PAGE_SIZE.toString(),
+    order: searchParams.order === "popular" ? "popular" : "recent",
+  });
 
-  const body: {
-    data: { list: TSelectPost[]; total: number };
-    message: string[];
-  } = await response.json();
+  if (dto.error) {
+    console.error(dto.error);
+    throw new BadRequestError(dto.error.errors[0].message);
+  }
+
+  const data = await getPosts(dto.data);
+  const parsedPosts = parsePosts(data.posts);
 
   return (
     <div className={css.page}>
@@ -52,9 +55,9 @@ export default async function Page(props: PostProps) {
       <div className={css.listBox}>
         <div>
           <List
-            post={body.data.list}
+            posts={parsedPosts}
             currentPage={page}
-            total={body.data.total}
+            total={data.total}
             size={PAGE_SIZE}
             order={searchParams.order}
           />

@@ -1,6 +1,10 @@
 import { UnstyledButton } from "@mantine/core";
 import css from "./Navigation.module.scss";
 
+// 태그검색 링크
+// 리스트 이동링크
+// 레퍼런스 이동링크
+// 맨위로 이동버튼
 export default function Navigation() {
   return (
     <div className={css.wrap}>

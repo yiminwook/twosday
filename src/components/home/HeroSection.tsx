@@ -25,12 +25,6 @@ export default function HeroSection() {
       <SwiperSlide>
         <Hero />
       </SwiperSlide>
-      <SwiperSlide>
-        <Hero />
-      </SwiperSlide>
-      <SwiperSlide>
-        <Hero />
-      </SwiperSlide>
     </Swiper>
   );
 }

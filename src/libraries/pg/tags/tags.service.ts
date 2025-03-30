@@ -113,7 +113,7 @@ export const addTagsQueryByTransaction = async (
     .join(", ");
 
   const multiPostTagSql = `
-    INSERT INTO "${POSTS_TAGS_TABLE}" ("postsId", "tagsId")
+    INSERT INTO "${POSTS_TAGS_TABLE}" ("posts_id", "tags_id")
     VALUES ${multiPostTagPlaceholders}
   `;
 
@@ -130,7 +130,7 @@ export const removeTagsQueryByTransaction = async (
 
   const multiPostTagSql = `
     DELETE FROM "${POSTS_TAGS_TABLE}"
-    WHERE "postsId" = $1 AND "tagsId" = ANY($2)
+    WHERE "posts_id" = $1 AND "tags_id" = ANY($2)
   `;
 
   return client.query(multiPostTagSql, [postId, tagIds]);

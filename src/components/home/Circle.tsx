@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import * as css from "./circle.css";
+import css from "./Circle.module.scss";
 
 export default function Circle() {
   return (

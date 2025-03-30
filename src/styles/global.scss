@@ -95,3 +95,23 @@ body {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
 }
+
+.mobileOnly {
+  display: block;
+}
+
+@include util.min-width(sm) {
+  .mobileOnly {
+    display: none;
+  }
+}
+
+.desktopOnly {
+  display: none;
+}
+
+@include util.min-width(sm) {
+  .desktopOnly {
+    display: block;
+  }
+}
