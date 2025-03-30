@@ -53,11 +53,11 @@ $sidebar-background-dark: #606060;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  padding: var(--app-layout-padding);
 }
 
 .overviewBox {
-  padding: 0 20px;
+  padding: 0 var(--app-layout-padding);
 }
 
 .actionIconBox {
@@ -65,13 +65,13 @@ $sidebar-background-dark: #606060;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  padding: 1rem;
+  padding: var(--app-layout-padding);
   margin-top: 20px;
 }
 
 .nav {
   --nl-offset: 10px; // nav-link offset
-  padding: 0 20px;
+  padding: 0 var(--app-layout-padding);
   margin-top: 20px;
 
   :global(.mantine-NavLink-root) {

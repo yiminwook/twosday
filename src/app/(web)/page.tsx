@@ -11,7 +11,7 @@ import { KakaoAdFit } from "@/components/adBanner/KakaoAdfit";
 import { TPublicPost } from "@/libraries/pg/posts/posts.type";
 
 // css
-import * as css from "./page.css";
+import css from "./page.module.scss";
 
 const RECENT_POST_SIZE = 6;
 const POPULAR_POST_SIZE = 6;

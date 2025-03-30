@@ -1,6 +1,13 @@
 :root {
   --app-shell-header-height: #{var.$safe-header-height};
   --app-shell-header-offset: #{var.$safe-header-height};
+  --app-layout-padding: 0.5rem;
+}
+
+@include util.min-width(sm) {
+  :root {
+    --app-layout-padding: 1rem;
+  }
 }
 
 [data-mantine-color-scheme="light"] .mantine-light-hidden {

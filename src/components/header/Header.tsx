@@ -23,7 +23,7 @@ export default function Header() {
               <PanelLeftOpen size={20} />
             </ActionIcon>
             <Link className={css.title} href="/">
-              <Image src={Logo} alt="twosday-logo" height={36} />
+              Twosday
             </Link>
           </div>
           <ul className={css.right}>
