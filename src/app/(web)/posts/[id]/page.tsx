@@ -2,23 +2,11 @@ import { notFound } from "next/navigation";
 import css from "./page.module.scss";
 import Viewer from "@/components/editor/Viewer";
 import { DisqusComment } from "@/components/Comment";
-import { MediaKakaoAdfit } from "@/components/adBanner/KakaoAdfit";
+import { ResponsiveAdfit } from "@/components/adBanner/Adfit";
 import AdBanner from "@/components/adBanner/AdBanner";
 import dayjs from "@/libraries/dayjs";
 import { TPublicPost } from "@/libraries/pg/posts/posts.type";
 import ViewObserver from "@/components/post/ViewObserver";
-
-type Author = {
-  id: number;
-  updatedAt: string;
-  createdAt: string;
-  deletedAt: string | null;
-  email: string;
-  nickname: string;
-  avartar: string | null;
-};
-
-type Tag = string[];
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -68,7 +56,7 @@ export default async function Page(props: PageProps) {
       </div>
 
       <div className={css.adfitBox}>
-        <MediaKakaoAdfit />
+        <ResponsiveAdfit />
       </div>
 
       <div className={css.commentBox}>
@@ -77,10 +65,6 @@ export default async function Page(props: PageProps) {
           title={`post-${params.id}의 댓글`}
           identifier={`post-${params.id}`}
         />
-      </div>
-
-      <div className={css.coupangBox}>
-        <AdBanner />
       </div>
     </div>
   );

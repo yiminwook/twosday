@@ -69,16 +69,44 @@ $sidebar-background-dark: #606060;
   margin-top: 20px;
 }
 
-.nav {
+.categoryBox {
   --nl-offset: 10px; // nav-link offset
   padding: 0 var(--app-layout-padding);
   margin-top: 20px;
+
+  h3 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
 
   :global(.mantine-NavLink-root) {
     transition: color 0.2s ease;
 
     &:hover {
       background-color: unset;
+      color: var(--mantine-color-primary-5);
+    }
+  }
+}
+
+.nav {
+  padding: 0 var(--app-layout-padding);
+  margin-top: 20px;
+
+  h3 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
+
+  ul {
+    font-size: 0.9rem;
+  }
+
+  li {
+    transition: color 0.2s ease;
+    padding: 8px var(--mantine-spacing-sm);
+
+    &:hover {
       color: var(--mantine-color-primary-5);
     }
   }

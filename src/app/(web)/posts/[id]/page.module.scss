@@ -2,7 +2,7 @@
   margin: 0 auto;
   width: 100%;
   max-width: 1280px;
-  padding: 1rem;
+  padding: var(--app-layout-padding);
 
   :global(.mantine-RichTextEditor-root) {
     border: none;
@@ -38,6 +38,7 @@
 
 .adfitBox {
   margin-top: 100px;
+  margin-bottom: 100px;
   display: flex;
 
   justify-content: center;
@@ -58,8 +59,5 @@
 
 .commentBox {
   margin-top: 100px;
-}
-
-.coupangBox {
-  margin-top: 100px;
+  margin-bottom: 100px;
 }

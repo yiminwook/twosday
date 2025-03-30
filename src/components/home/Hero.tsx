@@ -1,5 +1,5 @@
 import Circle from "./Circle";
-import * as css from "./hero.css";
+import css from "./Hero.module.scss";
 
 export default function Hero() {
   return (

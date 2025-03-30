@@ -1,7 +1,6 @@
 import { PropsWithChildren } from "react";
 import Header from "@/components/header/Header";
 import Navigation from "@/components/navigation/Navigation";
-import Footer from "@/components/footer/Footer";
 import AppSidebar from "@/components/sidebar/AppSidebar";
 import { CategoryTree } from "@/utils/tree";
 
@@ -19,7 +18,6 @@ export default async function Layout({ children }: PropsWithChildren) {
       <div className={css.app}>
         <Header />
         <div className={css.expand}>{children}</div>
-        <Footer />
         <Navigation />
       </div>
     </div>

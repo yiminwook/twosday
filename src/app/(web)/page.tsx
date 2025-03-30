@@ -6,8 +6,8 @@ import HeroSection from "@/components/home/HeroSection";
 import TechBelt from "@/components/home/TechBelt";
 import { cardList } from "@/components/refCard/refList.css";
 import { TReference } from "@/libraries/pg/references/references.dto";
-import PostsList from "@/components/home/PostList";
-import { KakaoAdFit } from "@/components/adBanner/KakaoAdfit";
+import PostsList from "@/components/post/PostList";
+import { ResponsiveAdfit } from "@/components/adBanner/Adfit";
 import { TPublicPost } from "@/libraries/pg/posts/posts.type";
 
 // css
@@ -61,6 +61,7 @@ export default async function Page() {
   return (
     <main className={css.wrap}>
       <HeroSection />
+
       <section className={css.section}>
         <div className={css.sectionTitleBox}>
           <h2>인기 게시글</h2>
@@ -70,6 +71,7 @@ export default async function Page() {
           <CardSlider order="popular" post={popularBody.data.list} />
         </div>
       </section>
+
       <section className={css.section}>
         <div className={css.sectionTitleBox}>
           <h2>최근 게시글</h2>
@@ -92,16 +94,13 @@ export default async function Page() {
         </div>
       </section>
 
-      <KakaoAdFit width={728} height={90} unit="DAN-CScUcNvZZ5M7SER1" />
-
-      <div className={css.beltBox}>
-        <TechBelt />
+      <div className={css.adBox}>
+        <ResponsiveAdfit />
       </div>
 
-      <KakaoAdFit width={728} height={90} unit="DAN-Nhtq8wVm3UoGpfEk" />
-      {/* <KakaoAdFit width={300} height={250} unit="DAN-ES71g0m2rjta1wHl" /> */}
+      <div className={css.beltBox}>{/* <TechBelt /> */}</div>
 
-      <AdBanner />
+      {/* <AdBanner /> */}
     </main>
   );
 }

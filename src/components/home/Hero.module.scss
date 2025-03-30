@@ -1,0 +1,62 @@
+.wrap {
+  @extend %flex-center;
+  position: relative;
+  height: 450px;
+  width: 100%;
+  background-color: #1f1212;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.circleBox {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(0%, -75%);
+  height: 50%;
+  aspect-ratio: 1 / 1;
+  mask-image: linear-gradient(to top, transparent 5%, black 100%);
+}
+
+@include util.min-width(sm) {
+  .circleBox {
+    height: 75%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.heroText {
+  position: relative;
+
+  font-size: 58px;
+  font-weight: 600;
+  margin-left: 20px;
+  letter-spacing: 0.025em;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 172, 154, 1) 0%,
+    rgba(240, 195, 181, 1) 35%,
+    rgba(225, 219, 209, 1) 100%
+  );
+  background-clip: text;
+  color: transparent;
+}
+
+@include util.min-width(md) {
+  .heroText {
+    font-size: 7.5vw;
+  }
+}
+
+@include util.min-width(sm) {
+  .heroText {
+    margin-left: 0px;
+  }
+}
+
+.subtitle {
+  position: relative;
+  color: #e1dbd1;
+  font-size: 24px;
+  margin-top: 24px;
+}

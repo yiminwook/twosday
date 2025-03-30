@@ -105,11 +105,24 @@ export default function AppSidebar({ categories }: Props) {
             )}
           </div>
         </div>
-        <div className={css.nav}>
+        <div className={css.categoryBox}>
+          <h3>Catrgory</h3>
           {categories.map((category) => (
             <NavItem key={category.categoryId} category={category} isFirstLoop />
           ))}
         </div>
+
+        <nav className={css.nav}>
+          <h3>Link</h3>
+          <ul>
+            <li>
+              <Link href="/about">About</Link>
+            </li>
+            <li>
+              <Link href="/admin">Admin</Link>
+            </li>
+          </ul>
+        </nav>
       </div>
     </aside>
   );

@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { isMobile } from "react-device-detect";
+import css from "./Adfit.module.scss";
 
 type Props = {
   unit: string;
@@ -23,7 +24,7 @@ export function KakaoAdFit({ unit, width, height }: Props) {
   }, []);
 
   return (
-    <div ref={scriptElementWrapper}>
+    <div ref={scriptElementWrapper} className={css.wrap}>
       <ins
         className="kakao_ad_area"
         style={{ display: "none" }}
@@ -35,18 +36,30 @@ export function KakaoAdFit({ unit, width, height }: Props) {
   );
 }
 
-export function MediaKakaoAdfit() {
+export const ResponsiveAdfit = memo(function ResponsiveAdfit_() {
   const [isMount, setIsMount] = useState(false);
 
   useEffect(() => {
+    if (isMount) return;
     setIsMount(() => true);
-  }, []);
+  }, [isMount]);
 
   if (!isMount) return null;
 
-  return isMobile ? (
-    <KakaoAdFit width={320} height={250} unit="DAN-ES71g0m2rjta1wHl" />
-  ) : (
-    <KakaoAdFit width={728} height={90} unit="DAN-CScUcNvZZ5M7SER1" />
+  return (
+    <>
+      {isMobile ? (
+        <KakaoAdFit width={300} height={250} unit="DAN-ES71g0m2rjta1wHl" />
+      ) : (
+        <KakaoAdFit width={728} height={90} unit="DAN-Nhtq8wVm3UoGpfEk" />
+      )}
+    </>
   );
+});
+
+{
+  /* <KakaoAdFit width={728} height={90} unit="DAN-CScUcNvZZ5M7SER1" /> */
+}
+{
+  /*  <KakaoAdFit width={300} height={250} unit="DAN-ES71g0m2rjta1wHl" /> */
 }

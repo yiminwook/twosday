@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import * as css from "./belt.css";
+import css from "./Belt.module.scss";
 import React from "react";
 
 interface BeltProps {
