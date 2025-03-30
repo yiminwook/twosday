@@ -3,8 +3,6 @@ import { PropsWithChildren, useState } from "react";
 import { QueryClient, QueryCache, QueryClientProvider } from "@tanstack/react-query";
 import ErrorModal from "@/components/common/modal/ErrorModal";
 import { useSetModalStore } from "@/stores/modalStore";
-import { useApp } from "@/stores/app";
-import { useStore } from "zustand";
 import { toast } from "sonner";
 
 const checkSessionOutCode = (error: Error) => {
@@ -13,8 +11,6 @@ const checkSessionOutCode = (error: Error) => {
 
 export default function ReactQuery({ children }: PropsWithChildren) {
   const modalStore = useSetModalStore();
-  const store = useApp();
-  const action = useStore(store, (store) => store.actions);
 
   const [querClient] = useState(() => {
     return new QueryClient({

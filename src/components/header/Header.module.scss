@@ -38,6 +38,16 @@
   }
 }
 
+.toggleButton {
+  display: block;
+}
+
+@include util.min-width(sm) {
+  .toggleButton {
+    display: none;
+  }
+}
+
 .title {
   font-size: 1rem;
   font-weight: 500;

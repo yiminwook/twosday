@@ -1,5 +1,8 @@
 @use "sass:map";
 
+$sidebar-background-light: #eeeeee;
+$sidebar-background-dark: #606060;
+
 .wrap {
   position: relative;
   width: 0;
@@ -19,18 +22,30 @@
   top: 0;
   bottom: 0;
   z-index: 1001;
-  background-color: var(--mantine-color-dark-light);
-  border-right: 2px solid var(--mantine-color-default-border);
+  background-color: $sidebar-background-light;
+  border-right: 1px solid var(--mantine-color-default-border);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+@include util.dark {
+  .position {
+    background-color: $sidebar-background-dark;
+  }
 }
 
 @include util.min-width(sm) {
   .position {
+    transform: translateX(0);
+    transition: none;
     width: var.$sidebar-width;
+    border-right: none;
   }
 }
 
 .wrap[data-mobile-open="true"] .position {
-  opacity: 1;
+  display: block;
+  transform: translateX(0);
 }
 
 .header {
@@ -38,15 +53,33 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 20px;
 }
 
-.card {
-  padding: 0 1rem;
+.overviewBox {
+  padding: 0 20px;
+}
+
+.actionIconBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-top: 20px;
 }
 
 .nav {
-  --nl-offset: 5px; // nav-link offset
-  padding: 0 1rem;
-  margin-top: 1rem;
+  --nl-offset: 10px; // nav-link offset
+  padding: 0 20px;
+  margin-top: 20px;
+
+  :global(.mantine-NavLink-root) {
+    transition: color 0.2s ease;
+
+    &:hover {
+      background-color: unset;
+      color: var(--mantine-color-primary-5);
+    }
+  }
 }

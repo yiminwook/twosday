@@ -6,6 +6,7 @@ import {
   MantineColorScheme,
   MantineColorSchemeManager,
   LocalStorageColorSchemeManagerOptions,
+  Tooltip,
 } from "@mantine/core";
 
 export const theme = createTheme({
@@ -34,4 +35,5 @@ export const theme = createTheme({
       "#b12100",
     ],
   },
+  components: {},
 });

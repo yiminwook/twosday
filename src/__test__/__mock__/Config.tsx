@@ -1,7 +1,6 @@
 /* eslint-disable react/display-name */
 import { render } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import App from "@/components/config/App";
 import { Toaster } from "sonner";
 import Hotkeys from "@/components/config/Hotkeys";
 import ModalContainer from "@/components/common/modal/ModalContainer";
@@ -22,15 +21,13 @@ interface InitialProps {
 export function renderWithClient(ui: React.ReactElement, initialProps: InitialProps) {
   const testQueryClient = createTestQueryClient();
   const { rerender, ...result } = render(
-    <App>
-      <Hotkeys>
-        <QueryClientProvider client={testQueryClient}>
-          {ui}
-          <ModalContainer />
-          <Toaster />
-        </QueryClientProvider>
-      </Hotkeys>
-    </App>,
+    <Hotkeys>
+      <QueryClientProvider client={testQueryClient}>
+        {ui}
+        <ModalContainer />
+        <Toaster />
+      </QueryClientProvider>
+    </Hotkeys>,
   );
   return {
     ...result,
