@@ -18,11 +18,13 @@ import { useEditor } from "@tiptap/react";
 import ky from "ky";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { MouseEvent, useCallback, useMemo, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import Editor from "./Editor";
 import * as css from "./home.css";
 import editCss from "./Edit.module.scss";
+import { useSetModalStore } from "@/stores/modalStore";
+import ConfirmModal from "../common/modal/ConfirmModal";
 
 interface HomeProps {}
 
@@ -35,6 +37,7 @@ export default function Home({}: HomeProps) {
   const router = useRouter();
   const [togglePreview, setTogglePreview] = useState(false);
   const queryClient = useQueryClient();
+  const modalStore = useSetModalStore();
 
   const editor = useEditor(
     {
@@ -122,7 +125,7 @@ export default function Home({}: HomeProps) {
 
   const mutationPost = useMutation({
     mutationFn: async (arg: { content: string; imageKeys: string[] }) => {
-      const response = await clientApi("posts", {
+      const response = await clientApi<{ data: { id: number }; message: string }>("posts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -139,9 +142,9 @@ export default function Home({}: HomeProps) {
         credentials: "include",
       });
 
-      const body: { data: { id: number }; message: string } = await response.json();
+      const json = await response.json();
 
-      return body;
+      return json;
     },
     onSuccess: (body) => {
       toast.success("업로드 성공");
@@ -233,6 +236,26 @@ export default function Home({}: HomeProps) {
     ),
     [removeTag],
   );
+
+  const text = editor.getText();
+  console.log("text", text);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      // 새로고침 방지
+      const text = editor.getText();
+      if (!text) return;
+
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [editor, router, modalStore]);
 
   return (
     <div className={css.main}>
