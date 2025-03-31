@@ -88,7 +88,7 @@ export default function AppSidebar({ categories }: Props) {
               </ActionIcon>
             )}
 
-            {!query.isPending && !!query.data && (
+            {!query.isPending && !query.data && (
               <Tooltip label="로그인" withArrow zIndex={TOOLTIP_Z_INDEX}>
                 <ActionIcon component={Link} href="/signin" radius="lg">
                   <KeyRound size={14} />
@@ -96,7 +96,7 @@ export default function AppSidebar({ categories }: Props) {
               </Tooltip>
             )}
 
-            {!query.isPending && !query.data && (
+            {!query.isPending && !!query.data && (
               <Tooltip label="로그아웃" withArrow zIndex={TOOLTIP_Z_INDEX}>
                 <ActionIcon radius="lg" loading={mutation.isPending} onClick={onClickLogout}>
                   <LogOut size={14} />
