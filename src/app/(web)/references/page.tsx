@@ -2,6 +2,7 @@ import RefList from "@/components/refCard/RefList";
 import Nav from "@/components/reference/Nav";
 import { REFERENCE_PAGE_SIZE } from "@/constances";
 import { TReference } from "@/libraries/pg/references/references.dto";
+import css from "./page.module.scss";
 
 interface PageProps {
   searchParams: Promise<{
@@ -32,9 +33,9 @@ export default async function Page(props: PageProps) {
   }
 
   return (
-    <div>
-      <Nav session={null} />
-      <div>
+    <div className={css.wrap}>
+      <Nav />
+      <div className={css.listWrap}>
         <RefList
           references={body.data.list}
           currentPage={page}

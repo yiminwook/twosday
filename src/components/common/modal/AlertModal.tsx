@@ -1,11 +1,8 @@
 import { ModalProps } from "@/stores/modalStore";
-import Modal from "./Modal";
 import { useTransition } from "@/hooks/useTransition";
 import classNames from "classnames";
 import css from "./Modal.module.scss";
-import { Button } from "@mantine/core";
-
-export const ID = "alertModal";
+import { Button, Modal } from "@mantine/core";
 
 interface AlertModalProps {
   title?: string;
@@ -24,17 +21,19 @@ export default function AlertModal({
   };
 
   return (
-    <Modal id={ID} onClose={onCloseWithExit}>
-      <div className={classNames(css.modalCenterContent, modifier)} onAnimationEnd={onAnimationEnd}>
-        <div>
-          <div className={css.modalHeader}>
-            <h3 className={css.modalTitle}>{title}</h3>
-          </div>
-          <p>{content}</p>
-        </div>
-        <div className={css.modalBtnBox}>
-          <Button onClick={onCloseWithExit}>확인</Button>
-        </div>
+    <Modal
+      onClose={onCloseWithExit}
+      title={title}
+      opened
+      centered
+      withinPortal={false}
+      overlayProps={{ opacity: 0 }}
+    >
+      <div>
+        <p>{content}</p>
+      </div>
+      <div className={css.modalBtnBox}>
+        <Button onClick={onCloseWithExit}>확인</Button>
       </div>
     </Modal>
   );

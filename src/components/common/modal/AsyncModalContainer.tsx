@@ -1,11 +1,12 @@
 "use client";
+import { ASYNC_MODAL_CONTAINER_ID } from "@/constances";
 import { useModalStore } from "@/stores/modalStore";
+import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import css from "./Modal.module.scss";
 
-const MODAL_ID = "modalRoot";
-
-export default function ModalContainer() {
+export default function AsyncModalContainer() {
   const store = useModalStore();
   const pathname = usePathname();
 
@@ -15,7 +16,10 @@ export default function ModalContainer() {
   }, [pathname]);
 
   return (
-    <div id={MODAL_ID}>
+    <div
+      id={ASYNC_MODAL_CONTAINER_ID}
+      className={classNames(css.modalContainer, { active: store.modals.length > 0 })}
+    >
       {store.modals.map((modalInfo) => (
         <modalInfo.Component key={modalInfo.key} {...modalInfo.props} />
       ))}

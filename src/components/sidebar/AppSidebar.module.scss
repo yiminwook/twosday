@@ -21,7 +21,7 @@ $sidebar-background-dark: #606060;
   position: fixed;
   top: 0;
   bottom: 0;
-  z-index: 1001;
+  z-index: map.get(var.$z-indexes, sidebar);
   background-color: $sidebar-background-light;
   border-right: 1px solid var(--mantine-color-default-border);
   transform: translateX(-100%);
