@@ -1,10 +1,8 @@
-import List from "@/components/PostList";
+import PostList from "@/components/PostList";
 import Link from "next/link";
 import css from "./page.module.scss";
-import { getPostsDto } from "@/libraries/pg/posts/posts.dto";
-import { BadRequestError } from "@/libraries/error";
-import { getPosts } from "@/libraries/pg/posts/posts.service";
-import { parsePosts } from "@/utils/helper";
+import { POSTS_PAGE_SIZE } from "@/constances";
+import { TPublicPost } from "@/libraries/pg/posts/posts.type";
 
 interface PostProps {
   searchParams: Promise<{
@@ -13,31 +11,28 @@ interface PostProps {
   }>;
 }
 
-const PAGE_SIZE = 10;
-
 export default async function Page(props: PostProps) {
   const searchParams = await props.searchParams;
   const page = searchParams.page ? parseInt(searchParams.page) || 1 : 1;
 
   const urlSearchParams = new URLSearchParams({
     page: page.toString(),
-    size: PAGE_SIZE.toString(),
+    size: POSTS_PAGE_SIZE.toString(),
     order: searchParams.order === "popular" ? "popular" : "recent",
   });
 
-  const dto = getPostsDto.safeParse({
-    page: page.toString(),
-    size: PAGE_SIZE.toString(),
-    order: searchParams.order === "popular" ? "popular" : "recent",
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/posts?${urlSearchParams.toString()}`,
+  );
 
-  if (dto.error) {
-    console.error(dto.error);
-    throw new BadRequestError(dto.error.errors[0].message);
+  const body: {
+    data: { list: TPublicPost[]; total: number };
+    message: string;
+  } = await response.json();
+
+  if (!response.ok) {
+    throw new Error(body.message);
   }
-
-  const data = await getPosts(dto.data);
-  const parsedPosts = parsePosts(data.posts);
 
   return (
     <div className={css.page}>
@@ -54,11 +49,10 @@ export default async function Page(props: PostProps) {
       </div>
       <div className={css.listBox}>
         <div>
-          <List
-            posts={parsedPosts}
+          <PostList
+            posts={body.data.list}
             currentPage={page}
-            total={data.total}
-            size={PAGE_SIZE}
+            total={Math.ceil(body.data.total / POSTS_PAGE_SIZE)}
             order={searchParams.order}
           />
         </div>

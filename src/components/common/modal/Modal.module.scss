@@ -1,0 +1,100 @@
+@use "sass:map";
+
+@keyframes enter {
+  from {
+    transform: translateY(25px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modalLayout {
+  z-index: map.get(var.$z-indexes, modal);
+  @extend %flex-center;
+  @extend %fixed-max-size;
+
+  &::-webkit-scrollbar {
+    width: 3px; // 스크롤바 너비
+  }
+}
+
+.modalLayout:global(.enter) {
+  animation: enter 0.3s forwards;
+}
+
+.modalLayout:global(.show) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.modalLayout:global(.exit) {
+  animation: enter 0.3s forwards;
+  animation-direction: reverse;
+}
+
+.modalCenterContent {
+  position: relative;
+  width: 500px;
+  padding: 14px;
+  background-color: #fff;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  border-radius: 10px;
+
+  max-width: calc(100% - 20px);
+  max-height: calc(100% - 20px);
+  min-height: 200;
+
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.modalBottomContent {
+  position: relative;
+  width: 100%;
+  padding: 14px;
+  background-color: #fff;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  border-radius: 10px 10px 0 0;
+
+  max-height: calc(100% - 10px);
+  min-height: 150px;
+
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  margin-top: auto; // 아래로 붙이기
+}
+
+@include util.min-width(sm) {
+  .modalBottomContent {
+    width: auto; // 태블릿 이상에서는 컨텐츠 너비에 맞춰서
+  }
+}
+
+.modalHeader {
+  margin-bottom: 7px;
+}
+
+.modalTitle {
+  font-size: 16px;
+}
+
+.modalBtnBox {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.modalBtnBox > button {
+  width: 100px;
+}

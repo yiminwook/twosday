@@ -15,10 +15,6 @@ import "@/styles/global.scss";
 import "@/styles/theme.scss";
 import "@/styles/editor.scss";
 
-// as-is css
-import "@/styles/global.css";
-import "@/styles/globalTheme.css";
-
 import type { Metadata, Viewport } from "next";
 import { PropsWithChildren } from "react";
 import Configs from "@/components/config";

@@ -1,9 +1,9 @@
 import { ModalProps } from "@/stores/modalStore";
 import Modal from "./Modal";
-import * as css from "./modal.css";
-import { modalCancelBtn, modalDefaultBtn } from "./modalBtn.css";
+import css from "./Modal.module.scss";
 import { useTransition } from "@/hooks/useTransition";
 import classNames from "classnames";
+import { Button } from "@mantine/core";
 
 const ID = "confirmModal";
 
@@ -34,16 +34,10 @@ export default function ConfirmModal({
           <p>{content}</p>
         </div>
         <div className={css.modalBtnBox}>
-          <button className={modalCancelBtn} type="button" onClick={onCloseWithExit}>
+          <Button variant="outline" onClick={onCloseWithExit}>
             취소
-          </button>
-          <button
-            className={modalDefaultBtn}
-            type="button"
-            onClick={() => exit(() => onSuccess(true))}
-          >
-            확인
-          </button>
+          </Button>
+          <Button onClick={() => exit(() => onSuccess(true))}>확인</Button>
         </div>
       </div>
     </Modal>

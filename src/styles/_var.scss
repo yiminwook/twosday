@@ -24,6 +24,7 @@ $breakpoints: (
 );
 
 $mobile-boundary: sm; // breakpoint for mobile devices
+$main-max-width: 1200px; // max width of main content
 
 $z-indexes: (
   app: 100,

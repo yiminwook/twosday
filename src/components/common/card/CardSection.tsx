@@ -1,6 +1,6 @@
 import { TPost, TPostOrderBy } from "@/libraries/pg/posts/posts.dto";
 import Card from "./Card";
-import { wrap } from "./cardSection.css";
+import css from "./CardSection.module.scss";
 import { TPublicPost } from "@/libraries/pg/posts/posts.type";
 
 interface CardSectionProps {
@@ -10,7 +10,7 @@ interface CardSectionProps {
 
 export default function CardSection({ post, order }: CardSectionProps) {
   return (
-    <section className={wrap}>
+    <section className={css.wrap}>
       {post.map((item) => (
         <Card key={`${item.postId}_${order}`} post={item} />
       ))}

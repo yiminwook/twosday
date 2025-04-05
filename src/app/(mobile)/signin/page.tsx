@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import * as layout from "../layout.css";
+import css from "../layout.module.scss";
 import LoginForm from "@/components/signin/LoginForm";
 
 export default function Page() {
@@ -8,9 +8,9 @@ export default function Page() {
 
   return (
     <>
-      <h1 className={layout.title}>이메일 로그인</h1>
+      <h1 className={css.title}>이메일 로그인</h1>
       <LoginForm />
-      <button className={layout.backBtn} onClick={router.back}>
+      <button className={css.backBtn} onClick={router.back}>
         뒤로 돌아가기
       </button>
     </>

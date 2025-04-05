@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { useHotkeys, useHotkeysContext } from "react-hotkeys-hook";
 import { RemoveScroll } from "react-remove-scroll";
-import Backdrop from "../Backdrop";
-import { modalLayout } from "./modal.css";
+import css from "./Modal.module.scss";
 
 interface ModalProps {
   className?: string;
@@ -37,8 +36,8 @@ export default function Modal({
 
   return (
     <RemoveScroll removeScrollBar={removeScrollBar}>
-      <div className={modalLayout} id={id}>
-        {showBackdrop && <Backdrop onClick={onClose} />}
+      <div className={css.modalLayout} id={id}>
+        {/* {showBackdrop && <Backdrop onClick={onClose} />} */}
         {children}
       </div>
     </RemoveScroll>

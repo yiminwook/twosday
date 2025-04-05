@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { modalCenterContent, modalTitle } from "@/components/common/modal/modal.css";
 import { globalStyle, style } from "@vanilla-extract/css";
 

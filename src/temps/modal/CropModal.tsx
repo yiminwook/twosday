@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable @next/next/no-img-element */
 import Modal from "@/components/common/modal/Modal";
 import * as css from "@/components/common/modal/modal.css";
@@ -6,7 +7,7 @@ import { modalCancelBtn, modalDefaultBtn } from "@/components/common/modal/modal
 import { useEffect, useRef } from "react";
 import * as modal from "./cropModal.css";
 import Cropper from "cropperjs";
-import { readFile } from "./readFile";
+import { readFile } from "../../utils/readFile";
 import { useTransition } from "@/hooks/useTransition";
 import classNames from "classnames";
 

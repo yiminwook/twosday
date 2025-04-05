@@ -1,12 +1,7 @@
-import { createVanillaExtractPlugin } from "@vanilla-extract/next-plugin";
 import NextBundleAnalyzer from "@next/bundle-analyzer";
 import { NextConfig } from "next";
 import { SentryBuildOptions, withSentryConfig } from "@sentry/nextjs";
 import path from "node:path";
-
-const withVanillaExtract = createVanillaExtractPlugin({
-  identifiers: ({ hash }) => `css_${hash}`,
-});
 
 const withBundleAnalyzer = NextBundleAnalyzer({
   enabled: process.env.NODE_ENV === "production",
@@ -114,7 +109,4 @@ const SENTRY_BUILD_OPTIONS: SentryBuildOptions = {
   },
 };
 
-export default withSentryConfig(
-  withBundleAnalyzer(withVanillaExtract(nextConfig)),
-  SENTRY_BUILD_OPTIONS,
-);
+export default withSentryConfig(withBundleAnalyzer(nextConfig), SENTRY_BUILD_OPTIONS);

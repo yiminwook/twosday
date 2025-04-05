@@ -1,8 +1,6 @@
 import { useSetModalStore } from "@/stores/modalStore";
 import { Editor } from "@tiptap/react";
-import { readFile } from "./readFile";
-import CropModal, { CroppedData } from "./CropModal";
-import { LuImage } from "react-icons/lu";
+import { Image as ImageIcon } from "lucide-react";
 import { RichTextEditor } from "@mantine/tiptap";
 import { clientApi } from "@/apis/fetcher";
 import { ACCEPTED_IMAGE_MIME_TYPES, IMAGE_URL } from "@/constances";
@@ -160,7 +158,7 @@ export default function Control({ editor, session }: ControlProps) {
           <Youtube width={14} height={14} />
         </RichTextEditor.Control>
         <RichTextEditor.Control onClick={addImageLink}>
-          <LuImage size={16} />
+          <ImageIcon size={16} />
         </RichTextEditor.Control>
       </RichTextEditor.ControlsGroup>
 

@@ -1,7 +1,7 @@
 "use client";
-import { defaultBtn } from "@/components/common/btn/btn.css";
 import { useSetModalStore } from "@/stores/modalStore";
 import PostModal from "./PostModal";
+import { Button } from "@mantine/core";
 
 interface NavProps {
   session: Session | null;
@@ -20,11 +20,7 @@ export default function Nav({ session }: NavProps) {
     <div>
       <h2>참고자료</h2>
       {/* TODO: 로그인한 관리자만 추가가능 하도록 변경 */}
-      {!!session && (
-        <button className={defaultBtn} onClick={onClick}>
-          추가하기
-        </button>
-      )}
+      {!!session && <Button onClick={onClick}>추가하기</Button>}
     </div>
   );
 }

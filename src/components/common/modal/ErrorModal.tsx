@@ -1,10 +1,10 @@
 import { ModalProps } from "@/stores/modalStore";
 import Modal from "./Modal";
 import ModalCloseBtn from "./ModalCloseBtn";
-import * as css from "./modal.css";
-import { modalDefaultBtn } from "./modalBtn.css";
+import css from "./Modal.module.scss";
 import { useTransition } from "@/hooks/useTransition";
 import classNames from "classnames";
+import { Button } from "@mantine/core";
 
 const ID = "errorModal";
 
@@ -35,9 +35,7 @@ export default function ErrorModal({
           <p>{error.message}</p>
         </div>
         <div className={css.modalBtnBox}>
-          <button className={modalDefaultBtn} type="button" onClick={onCloseWithExit}>
-            확인
-          </button>
+          <Button onClick={onCloseWithExit}>확인</Button>
         </div>
       </div>
     </Modal>

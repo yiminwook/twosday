@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import Editor from "./Editor";
-import * as css from "./home.css";
+import css from "./Home.module.scss";
 import editCss from "./Edit.module.scss";
 import { useSetModalStore } from "@/stores/modalStore";
 import ConfirmModal from "../common/modal/ConfirmModal";
@@ -64,15 +64,17 @@ export default function Home({}: HomeProps) {
 
   const postTagMutation = useMutation({
     mutationFn: async (arg: { name: string; session: Session }) => {
-      const json = await clientApi.post<{ message: string; data: { id: number } }>("tags", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${arg.session.accessToken}`,
-        },  
-        json: {
-          name: arg.name
-        },
-      }).json();
+      const json = await clientApi
+        .post<{ message: string; data: { id: number } }>("tags", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${arg.session.accessToken}`,
+          },
+          json: {
+            name: arg.name,
+          },
+        })
+        .json();
 
       return json.data;
     },
@@ -102,14 +104,13 @@ export default function Home({}: HomeProps) {
       toast.success("태그가 삭제되었습니다.");
     },
     mutationFn: async (arg: { id: number; session: Session }) => {
-      const json = await clientApi.delete<{ message: string; data: { id: number } }>(
-        `tags/${arg.id}`,
-        {
+      const json = await clientApi
+        .delete<{ message: string; data: { id: number } }>(`tags/${arg.id}`, {
           headers: {
             Authorization: `Bearer ${arg.session.accessToken}`,
           },
-        },
-      ).json();
+        })
+        .json();
 
       return json.data;
     },
@@ -130,7 +131,7 @@ export default function Home({}: HomeProps) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.accessToken}`,
         },
-        json:{
+        json: {
           title,
           content: arg.content,
           tagIds: [],

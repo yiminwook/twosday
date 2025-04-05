@@ -1,11 +1,11 @@
 import Modal from "@/components/common/modal/Modal";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import * as css from "@/components/common/modal/modal.css";
+import css from "@/components/common/modal/Modal.module.scss";
 import { ModalProps } from "@/stores/modalStore";
-import { modalDefaultBtn } from "@/components/common/modal/modalBtn.css";
 import { useRouter } from "next/navigation";
 import ModalCloseBtn from "@/components/common/modal/ModalCloseBtn";
+import { Button } from "@mantine/core";
 
 const ID = "referencePostModal";
 
@@ -61,9 +61,7 @@ export default function PostModal({ onClose, onSuccess, session }: ModalProps<Po
           </div>
         </div>
         <div className={css.modalBtnBox}>
-          <button className={modalDefaultBtn} type="submit">
-            확인
-          </button>
+          <Button type="submit">확인</Button>
         </div>
       </form>
     </Modal>

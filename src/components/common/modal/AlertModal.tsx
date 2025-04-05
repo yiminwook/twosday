@@ -1,9 +1,9 @@
 import { ModalProps } from "@/stores/modalStore";
 import Modal from "./Modal";
-import * as css from "./modal.css";
-import { modalDefaultBtn } from "./modalBtn.css";
 import { useTransition } from "@/hooks/useTransition";
 import classNames from "classnames";
+import css from "./Modal.module.scss";
+import { Button } from "@mantine/core";
 
 export const ID = "alertModal";
 
@@ -33,9 +33,7 @@ export default function AlertModal({
           <p>{content}</p>
         </div>
         <div className={css.modalBtnBox}>
-          <button className={modalDefaultBtn} type="button" onClick={onCloseWithExit}>
-            확인
-          </button>
+          <Button onClick={onCloseWithExit}>확인</Button>
         </div>
       </div>
     </Modal>

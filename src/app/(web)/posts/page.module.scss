@@ -1,5 +1,5 @@
 .page {
-  max-width: 1280px;
+  max-width: var.$main-max-width;
   margin: 0 auto;
 }
 
@@ -11,7 +11,4 @@
 
 .listBox {
   position: relative;
-  overflow-x: scroll;
-  max-width: 100%;
-  min-width: 0;
 }

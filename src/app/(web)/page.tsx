@@ -4,7 +4,6 @@ import AdBanner from "@/components/adBanner/AdBanner";
 import CardSlider from "@/components/common/card/CardSlider";
 import HeroSection from "@/components/home/HeroSection";
 import TechBelt from "@/components/home/TechBelt";
-import { cardList } from "@/components/refCard/refList.css";
 import { TReference } from "@/libraries/pg/references/references.dto";
 import PostsList from "@/components/post/PostList";
 import { ResponsiveAdfit } from "@/components/adBanner/Adfit";
@@ -12,6 +11,7 @@ import { TPublicPost } from "@/libraries/pg/posts/posts.type";
 
 // css
 import css from "./page.module.scss";
+import refListCss from "@/components/refCard/RefList.module.scss";
 
 const RECENT_POST_SIZE = 6;
 const POPULAR_POST_SIZE = 6;
@@ -87,7 +87,7 @@ export default async function Page() {
           <h2>레퍼런스</h2>
           <Link href="/references">+ 더보기</Link>
         </div>
-        <div className={cardList}>
+        <div className={refListCss.cardList}>
           {referenceBody.data.list.map((reference) => (
             <RefCard reference={reference} key={reference.id} />
           ))}

@@ -7,3 +7,6 @@ export const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/bmp",
   "image/svg+xml",
 ];
+
+export const POSTS_PAGE_SIZE = 10;
+export const REFERENCE_PAGE_SIZE = 10;
