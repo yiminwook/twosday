@@ -57,23 +57,22 @@ export default function Home({}: HomeProps) {
   const tagsQuery = useQuery({
     queryKey: ["tags"],
     queryFn: async () => {
-      const res = await clientApi.get<{ message: string; data: TTag[] }>("tags");
-      const json = await res.json();
+      const json = await clientApi.get<{ message: string; data: TTag[] }>("tags").json();
       return json.data;
     },
   });
 
   const postTagMutation = useMutation({
     mutationFn: async (arg: { name: string; session: Session }) => {
-      const res = await clientApi.post<{ message: string; data: { id: number } }>("tags", {
-        body: JSON.stringify({ name: arg.name }),
+      const json = await clientApi.post<{ message: string; data: { id: number } }>("tags", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${arg.session.accessToken}`,
+        },  
+        json: {
+          name: arg.name
         },
-      });
-
-      const json = await res.json();
+      }).json();
 
       return json.data;
     },
@@ -103,16 +102,15 @@ export default function Home({}: HomeProps) {
       toast.success("태그가 삭제되었습니다.");
     },
     mutationFn: async (arg: { id: number; session: Session }) => {
-      const res = await clientApi.delete<{ message: string; data: { id: number } }>(
+      const json = await clientApi.delete<{ message: string; data: { id: number } }>(
         `tags/${arg.id}`,
         {
           headers: {
             Authorization: `Bearer ${arg.session.accessToken}`,
           },
         },
-      );
+      ).json();
 
-      const json = await res.json();
       return json.data;
     },
     onSuccess: (data) => {},
@@ -125,30 +123,28 @@ export default function Home({}: HomeProps) {
 
   const mutationPost = useMutation({
     mutationFn: async (arg: { content: string; imageKeys: string[] }) => {
-      const response = await clientApi<{ data: { id: number }; message: string }>("posts", {
+      const json = await clientApi<{ data: { id: number }; message: string }>("posts", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session.accessToken}`,
         },
-        body: JSON.stringify({
+        json:{
           title,
           content: arg.content,
           tagIds: [],
           imageKeys: arg.imageKeys,
           categoryId: null,
           isPublic: true,
-        }),
-        credentials: "include",
-      });
+        },
+      }).json();
 
-      const json = await response.json();
-
-      return json;
+      return json.data;
     },
-    onSuccess: (body) => {
+    onSuccess: (data) => {
       toast.success("업로드 성공");
-      router.push(`/posts/${body?.data.id}`);
+      router.push(`/posts/${data.id}`);
     },
     onSettled: async () => {
       await ky.get("/api/revalidate/tag?name=post");

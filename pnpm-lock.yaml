@@ -163,8 +163,8 @@ dependencies:
     specifier: ^9.0.2
     version: 9.0.2
   ky:
-    specifier: ^1.7.5
-    version: 1.7.5
+    specifier: ^1.8.0
+    version: 1.8.0
   lowlight:
     specifier: ^3.1.0
     version: 3.3.0
@@ -9615,8 +9615,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /ky@1.7.5:
-    resolution: {integrity: sha512-HzhziW6sc5m0pwi5M196+7cEBtbt0lCYi67wNsiwMUmz833wloE0gbzJPWKs1gliFKQb34huItDQX97LyOdPdA==}
+  /ky@1.8.0:
+    resolution: {integrity: sha512-DoKGmG27nT8t/1F9gV8vNzggJ3mLAyD49J8tTMWHeZvS8qLc7GlyTieicYtFzvDznMe/q2u38peOjkWc5/pjvw==}
     engines: {node: '>=18'}
     dev: false
 

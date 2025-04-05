@@ -17,7 +17,6 @@ export default function PostModal({ onClose, onSuccess, session }: ModalProps<Po
   const [url, setUrl] = useState("");
   const router = useRouter();
   const mutation = useMutation({
-    mutationKey: ["post:reference"],
     mutationFn: async () => {
       // const response = await fetch(`${getWasUrl()}/api/twosday/reference`, {
       //   method: "POST",

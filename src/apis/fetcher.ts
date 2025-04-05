@@ -20,6 +20,7 @@ export const clientApi = ky.create({
             error.message = body.message;
           }
         } catch (parseError) {
+          console.log("ky parseError");
         } finally {
           return error;
         }

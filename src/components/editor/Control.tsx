@@ -48,15 +48,13 @@ export default function Control({ editor, session }: ControlProps) {
             const formData = new FormData();
             formData.append("image", file);
 
-            const res = await clientApi<{ key: string; message: string }>("images", {
+            const json = await clientApi<{ key: string; message: string }>("images", {
               method: "POST",
               headers: {
                 Authorization: `Bearer ${session.accessToken}`,
               },
               body: formData,
-            });
-
-            const json = await res.json();
+            }).json();
 
             editor
               .chain()

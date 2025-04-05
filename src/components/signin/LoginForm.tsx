@@ -2,7 +2,7 @@ import ResetButton from "@/components/common/btn/ResetBtn";
 import DotsLoading from "@/components/common/loading/DotsLoading";
 import ErrorModal from "@/components/common/modal/ErrorModal";
 import { useSetModalStore } from "@/stores/modalStore";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import * as css from "./loginForm.css";
 import { signInFn } from "@/apis/auth";
@@ -14,11 +14,15 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const modalStore = useSetModalStore();
+  const queryClient = useQueryClient();
 
   const mutateEmailLogin = useMutation({
     mutationFn: signInFn,
     onMutate: () => setIsLoading(() => true),
-    onSuccess: () => router.replace("/"),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["session"] })
+      router.replace("/")
+    },
     onError: async (error) => {
       await modalStore.push(ErrorModal, { props: { error } });
       setIsLoading(() => false);

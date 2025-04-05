@@ -6,9 +6,10 @@ import { CornerDownRight, KeyRound, LogOut, PanelLeftClose, PenLine } from "luci
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAppStore } from "@/stores/app";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { clientApi } from "@/apis/fetcher";
 import { useSession } from "@/libraries/auth/useSession";
+import {useRouter} from 'next/navigation';
 
 const TOOLTIP_Z_INDEX = 10002;
 
@@ -17,22 +18,26 @@ type Props = {
 };
 
 export default function AppSidebar({ categories }: Props) {
+  const router = useRouter();
   const showMobileSidebar = useAppStore((state) => state.showMobileSidebar);
   const setShowMobileSidebar = useAppStore((state) => state.actions.setShowMobileSidebar);
   const closeMobileView = () => setShowMobileSidebar(false);
+  const queryClient = useQueryClient();
 
   const query = useSession();
   const mutation = useMutation({
     mutationFn: async () => {
-      const res = await clientApi.post("auth/signout", {
+      const json = await clientApi.post<{
+        message: string
+      }>("auth/signout", {
         credentials: "include",
-      });
-      const data = await res.json();
-      return data;
+      }).json();
+      return json;
     },
-    onSuccess: () => {
-      window.location.href = "/";
-    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["session"] })
+      router.replace("/")
+    }
   });
 
   const onClickLogout = () => {

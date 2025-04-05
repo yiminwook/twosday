@@ -52,9 +52,7 @@ describe("업로드 페이지 테스트", () => {
       iss: new Date(),
     };
 
-    const { container } = await waitFor(() =>
-      renderWithClient(<Home session={mockSession} />, { session: mockSession }),
-    );
+    const { container } = await waitFor(() => renderWithClient(<Home />, { session: mockSession }));
 
     const submitBtn = screen.getByText("저장");
     const titleInput = screen.getByPlaceholderText("제목을 입력해주세요");
