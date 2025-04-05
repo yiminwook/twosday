@@ -22,6 +22,7 @@ import { ColorSchemeScript } from "@mantine/core";
 
 import MswProvider from "@/mocks/MswProvider";
 import "@/mocks/enableServer";
+import { THEME_LOCAL_STORAGE_KEY } from "@/constances";
 
 export const metadata: Metadata = {
   title: "Twosday",
@@ -46,7 +47,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
-        <ColorSchemeScript />
+        <ColorSchemeScript localStorageKey={THEME_LOCAL_STORAGE_KEY} />
       </head>
       <body>
         <MswProvider>

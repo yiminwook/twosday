@@ -13,3 +13,4 @@ export const REFERENCE_PAGE_SIZE = 10;
 
 export const ASYNC_MODAL_CONTAINER_ID = "asyncModalContainer";
 export const PORTAL_MODAL_CONTAINER_ID = "portalModalContainer";
+export const THEME_LOCAL_STORAGE_KEY = "twosdayTheme";
