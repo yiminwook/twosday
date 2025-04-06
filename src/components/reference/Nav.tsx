@@ -31,24 +31,6 @@ export default function Nav({}: NavProps) {
           />
         </Portal>
       )}
-      {session && showPostModal && (
-        <Portal>
-          <PostRefernceModal
-            session={session}
-            onClose={closePostModal}
-            onSuccess={closePostModal}
-          />
-        </Portal>
-      )}
-      {session && showPostModal && (
-        <Portal>
-          <PostRefernceModal
-            session={session}
-            onClose={closePostModal}
-            onSuccess={closePostModal}
-          />
-        </Portal>
-      )}
     </>
   );
 }

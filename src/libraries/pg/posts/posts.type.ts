@@ -13,3 +13,13 @@ export type TPublicPost = {
   tags: { id: number; name: string }[];
   category: { id: number; name: string } | null;
 };
+
+export type TGetPostsResponse = {
+  data: { list: TPublicPost[]; total: number };
+  message: string;
+};
+
+export type TGetPostResponse = {
+  data: TPublicPost;
+  message: string;
+};

@@ -1,6 +1,6 @@
 "use client";
 import { clientApi } from "@/apis/fetcher";
-import { IMAGE_URL } from "@/constances";
+import { IMAGE_URL, POST_TAG } from "@/constances";
 import { useSession } from "@/libraries/auth/useSession";
 import { extensions } from "@/libraries/extentions";
 import {
@@ -85,7 +85,7 @@ export default function PostHome({}: Props) {
       router.push(`/posts/${data.id}`);
     },
     onSettled: async () => {
-      await ky.get("/api/revalidate/tag?name=post");
+      await clientApi.get(`revalidate/tag?name=${POST_TAG}`);
     },
   });
 

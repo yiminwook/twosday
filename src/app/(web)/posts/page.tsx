@@ -1,17 +1,18 @@
 import PostList from "@/components/PostList";
 import Link from "next/link";
 import css from "./page.module.scss";
-import { POSTS_PAGE_SIZE } from "@/constances";
-import { TPublicPost } from "@/libraries/pg/posts/posts.type";
+import { CATEGORY_TAG, POST_TAG, POSTS_PAGE_SIZE, TAG_TAG, USER_TAG } from "@/constances";
+import { TGetPostsResponse } from "@/libraries/pg/posts/posts.type";
+import { serverApi } from "@/apis/fetcher";
 
-interface PostProps {
+type Props = {
   searchParams: Promise<{
     page?: string;
     order?: "popular";
   }>;
-}
+};
 
-export default async function Page(props: PostProps) {
+export default async function Page(props: Props) {
   const searchParams = await props.searchParams;
   const page = searchParams.page ? parseInt(searchParams.page) || 1 : 1;
 
@@ -21,18 +22,11 @@ export default async function Page(props: PostProps) {
     order: searchParams.order === "popular" ? "popular" : "recent",
   });
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/posts?${urlSearchParams.toString()}`,
-  );
-
-  const body: {
-    data: { list: TPublicPost[]; total: number };
-    message: string;
-  } = await response.json();
-
-  if (!response.ok) {
-    throw new Error(body.message);
-  }
+  const postJson = await serverApi
+    .get<TGetPostsResponse>(`posts?${urlSearchParams.toString()}`, {
+      next: { revalidate: 300, tags: [POST_TAG, TAG_TAG, CATEGORY_TAG, USER_TAG] },
+    })
+    .json();
 
   return (
     <div className={css.page}>
@@ -50,9 +44,9 @@ export default async function Page(props: PostProps) {
       <div className={css.listBox}>
         <div>
           <PostList
-            posts={body.data.list}
+            posts={postJson.data.list}
             currentPage={page}
-            total={Math.ceil(body.data.total / POSTS_PAGE_SIZE)}
+            total={Math.ceil(postJson.data.total / POSTS_PAGE_SIZE)}
             order={searchParams.order}
           />
         </div>

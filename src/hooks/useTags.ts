@@ -1,4 +1,5 @@
 import { clientApi } from "@/apis/fetcher";
+import { TAG_TAG } from "@/constances";
 import { TTag } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -34,12 +35,12 @@ export const useManageTags = (session: Session) => {
 
       return json.data;
     },
-    onSuccess: (data, arg) => {
+    onSuccess: async (data, arg) => {
       queryClient.setQueryData(["tags"], (prev: TTag[] | undefined) => {
         if (!prev) return prev;
         return [...prev, { id: data.id, name: arg.name }];
       });
-
+      await clientApi.get(`revalidate/tag?name=${TAG_TAG}`);
       toast.success("태그가 추가되었습니다.");
     },
     onError: async (error) => {
@@ -49,13 +50,13 @@ export const useManageTags = (session: Session) => {
   });
 
   const removeTagMutation = useMutation({
-    onMutate: (arg) => {
+    onMutate: async (arg) => {
       // Optimistic UI update
       queryClient.setQueryData(["tags"], (prev: TTag[] | undefined) => {
         if (!prev) return prev;
         return prev.filter((tag) => tag.id !== arg.id);
       });
-
+      await clientApi.get(`revalidate/tag?name=${TAG_TAG}`);
       toast.success("태그가 삭제되었습니다.");
     },
     mutationFn: async (arg: { id: number; session: Session }) => {

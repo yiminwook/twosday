@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button, Modal, TextInput } from "@mantine/core";
 import { clientApi } from "@/apis/fetcher";
 import { toast } from "sonner";
+import { REFERENCE_TAG } from "@/constances";
 
 type Props = {
   session: Session;
@@ -14,6 +15,7 @@ type Props = {
 export default function PostRefernceModal({ onClose, onSuccess, session }: ModalProps<Props>) {
   const [url, setUrl] = useState("");
   const router = useRouter();
+
   const mutation = useMutation({
     mutationFn: async (arg: { url: string }) => {
       await clientApi
@@ -29,12 +31,12 @@ export default function PostRefernceModal({ onClose, onSuccess, session }: Modal
         .json();
     },
     onSuccess: () => {
-      router.refresh();
       onSuccess(true);
     },
     onSettled: async () => {
       // https://nextjs.org/docs/app/api-reference/functions/revalidateTag
-      await fetch("/api/revalidate/tag?name=reference");
+      await clientApi.get(`revalidate/tag?name=${REFERENCE_TAG}`);
+      router.refresh();
     },
   });
 
