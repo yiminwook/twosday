@@ -28,12 +28,19 @@ import { useManageTags, useServerTags } from "@/hooks/useTags";
 
 type Props = {
   session: Session;
+  postId: string;
   initialValue: string;
   initialTitle: string;
   initialTags: string[];
 };
 
-export default function PatchHome({ session, initialValue, initialTitle, initialTags }: Props) {
+export default function PatchHome({
+  session,
+  postId,
+  initialValue,
+  initialTitle,
+  initialTags,
+}: Props) {
   const router = useRouter();
 
   const [title, setTitle] = useState(initialTitle);
@@ -60,9 +67,9 @@ export default function PatchHome({ session, initialValue, initialTitle, initial
   const { postTagMutation, removeTagMutation } = useManageTags(session);
 
   const mutationPost = useMutation({
-    mutationFn: async (arg: { content: string; imageKeys: string[] }) => {
+    mutationFn: async (arg: { content: string; imageKeys: string[]; tagIds: number[] }) => {
       const json = await clientApi
-        .post<{ data: { id: number }; message: string }>("posts", {
+        .patch<{ data: { id: number }; message: string }>("posts/" + postId, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${session.accessToken}`,
@@ -70,7 +77,7 @@ export default function PatchHome({ session, initialValue, initialTitle, initial
           json: {
             title,
             content: arg.content,
-            tagIds: [],
+            tagIds: arg.tagIds,
             imageKeys: arg.imageKeys,
             categoryId: null,
             isPublic: true,
@@ -95,6 +102,7 @@ export default function PatchHome({ session, initialValue, initialTitle, initial
 
   const onSave = (e: MouseEvent<HTMLButtonElement>) => {
     if (mutationPost.isPending) return;
+    if (!tagsQuery.data) return;
     if (!editor) {
       toast.warning("에디터를 로드하지 못했습니다.");
       return;
@@ -113,6 +121,9 @@ export default function PatchHome({ session, initialValue, initialTitle, initial
     mutationPost.mutate({
       content: editor.getHTML(),
       imageKeys: savedImageKeys || [],
+      tagIds: tags
+        .map((tag) => tagsQuery.data.find((t) => t.name === tag)?.id)
+        .filter((tagId): tagId is number => typeof tagId === "number"),
     });
   };
 

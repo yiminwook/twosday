@@ -53,6 +53,7 @@ function InjectedDataHome() {
   return (
     <PatchHome
       session={session}
+      postId={postId}
       initialValue={query.data.content}
       initialTitle={query.data.title}
       initialTags={query.data.tags.map((t) => t.name)}

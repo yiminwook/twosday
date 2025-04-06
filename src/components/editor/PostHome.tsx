@@ -60,7 +60,7 @@ export default function PostHome({}: Props) {
   const { postTagMutation, removeTagMutation } = useManageTags(session);
 
   const mutationPost = useMutation({
-    mutationFn: async (arg: { content: string; imageKeys: string[] }) => {
+    mutationFn: async (arg: { content: string; imageKeys: string[]; tagIds: number[] }) => {
       const json = await clientApi
         .post<{ data: { id: number }; message: string }>("posts", {
           headers: {
@@ -70,7 +70,7 @@ export default function PostHome({}: Props) {
           json: {
             title,
             content: arg.content,
-            tagIds: [],
+            tagIds: arg.tagIds,
             imageKeys: arg.imageKeys,
             categoryId: null,
             isPublic: true,
@@ -95,6 +95,7 @@ export default function PostHome({}: Props) {
 
   const onSave = (e: MouseEvent<HTMLButtonElement>) => {
     if (mutationPost.isPending) return;
+    if (!tagsQuery.data) return;
     if (!editor) {
       toast.warning("에디터를 로드하지 못했습니다.");
       return;
@@ -113,6 +114,9 @@ export default function PostHome({}: Props) {
     mutationPost.mutate({
       content: editor.getHTML(),
       imageKeys: savedImageKeys || [],
+      tagIds: tags
+        .map((tag) => tagsQuery.data.find((t) => t.name === tag)?.id)
+        .filter((tagId): tagId is number => typeof tagId === "number"),
     });
   };
 
