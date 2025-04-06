@@ -17,7 +17,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEditor } from "@tiptap/react";
 import ky from "ky";
 import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import Editor from "./Editor";
@@ -26,11 +26,9 @@ import editCss from "./Edit.module.scss";
 import { useSetModalStore } from "@/stores/modalStore";
 import ConfirmModal from "../common/modal/ConfirmModal";
 
-interface HomeProps {}
-
-export default function Home({}: HomeProps) {
+type Props = {};
+export default function PostHome({}: Props) {
   const session = useSession().data!;
-  const [value, setValue] = useState("");
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState<string[]>([]);
 
@@ -117,7 +115,6 @@ export default function Home({}: HomeProps) {
     onSuccess: (data) => {},
     onError: async (error) => {
       await queryClient.invalidateQueries({ queryKey: ["tags"] });
-      setTags((prev) => prev.filter((tag) => tag !== value));
       toast.error(error.message);
     },
   });

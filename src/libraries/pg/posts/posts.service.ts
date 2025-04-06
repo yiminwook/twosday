@@ -164,7 +164,7 @@ export const putPost = withPgTransaction(async (client, postId: number, dto: TCr
     RETURNING id
   `;
 
-  const currentTagIds = currnetPost.tagIds.map((tag) => tag.id);
+  const currentTagIds = currnetPost.tags.map((tag) => tag.id);
 
   const addImageList = dto.imageKeys.filter(
     (imageKey) => !currnetPost.imageKeys.includes(imageKey),

@@ -10,6 +10,6 @@ export type TPublicPost = {
   nickname: string;
   avatar: string | null;
   imageKeys: string[];
-  tagIds: { id: number; name: string }[];
+  tags: { id: number; name: string }[];
   category: { id: number; name: string } | null;
 };
