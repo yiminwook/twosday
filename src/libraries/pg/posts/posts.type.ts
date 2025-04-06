@@ -10,6 +10,16 @@ export type TPublicPost = {
   nickname: string;
   avatar: string | null;
   imageKeys: string[];
-  tagIds: { id: number; name: string }[];
+  tags: { id: number; name: string }[];
   category: { id: number; name: string } | null;
+};
+
+export type TGetPostsResponse = {
+  data: { list: TPublicPost[]; total: number };
+  message: string;
+};
+
+export type TGetPostResponse = {
+  data: TPublicPost;
+  message: string;
 };

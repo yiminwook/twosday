@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import * as css from "./layout.css";
+import css from "./layout.module.scss";
 
 export default function MobileLayout({ children }: PropsWithChildren) {
   return (

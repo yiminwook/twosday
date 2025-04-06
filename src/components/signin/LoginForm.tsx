@@ -1,12 +1,12 @@
-import ResetButton from "@/components/common/btn/ResetBtn";
 import DotsLoading from "@/components/common/loading/DotsLoading";
 import ErrorModal from "@/components/common/modal/ErrorModal";
 import { useSetModalStore } from "@/stores/modalStore";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import * as css from "./loginForm.css";
+import css from "./LoginForm.module.scss";
 import { signInFn } from "@/apis/auth";
 import { useRouter } from "next/navigation";
+import { Button, TextInput } from "@mantine/core";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -14,11 +14,15 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const modalStore = useSetModalStore();
+  const queryClient = useQueryClient();
 
   const mutateEmailLogin = useMutation({
     mutationFn: signInFn,
     onMutate: () => setIsLoading(() => true),
-    onSuccess: () => router.replace("/"),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["session"] });
+      router.replace("/");
+    },
     onError: async (error) => {
       await modalStore.push(ErrorModal, { props: { error } });
       setIsLoading(() => false);
@@ -54,14 +58,14 @@ export default function LoginForm() {
             이메일
           </label>
           <div className={css.inputBox}>
-            <input
+            <TextInput
               className={css.input}
               id="loginEmailInput"
               type="text"
               value={email}
               onChange={handleInput}
+              onReset={() => setEmail("")}
             />
-            <ResetButton isShow={email !== ""} onClick={() => setEmail("")} />
           </div>
         </div>
         <div className={css.inputWrap}>
@@ -69,14 +73,14 @@ export default function LoginForm() {
             비밀번호
           </label>
           <div className={css.inputBox}>
-            <input
+            <TextInput
               className={css.input}
               id="loginPasswordInput"
               type="password"
               value={password}
               onChange={handleInput}
+              onReset={() => setPassword("")}
             />
-            <ResetButton isShow={password !== ""} onClick={() => setPassword("")} />
           </div>
         </div>
         <div className={css.btnBox}>
@@ -89,9 +93,9 @@ export default function LoginForm() {
         <div className={css.signUp}>
           <p className={css.division}>또는</p>
           <div className={css.btnBox}>
-            <button className={css.singUpBtn} type="button" onClick={() => router.push("/signup")}>
+            <Button className={css.singUpBtn} type="button" onClick={() => router.push("/signup")}>
               이메일로 회원가입
-            </button>
+            </Button>
           </div>
         </div>
       </div>

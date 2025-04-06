@@ -6,17 +6,14 @@ const queryKey = ["session"] as const;
 type SessionFnData = Promised<typeof fetchSession>;
 
 const fetchSession: QueryFunction<Session | null, typeof queryKey, never> = async () => {
-  const res = await clientApi.get("auth/session", {
-    method: "GET",
-    credentials: "include",
-  });
-
-  const json: {
-    message: string;
-    session: Session | null;
-  } = await res.json();
-
-  if (!res.ok) throw new Error(json.message);
+  const json = await clientApi
+    .get<{
+      message: string;
+      session: Session | null;
+    }>("auth/session", {
+      credentials: "include",
+    })
+    .json();
 
   return json.session;
 };

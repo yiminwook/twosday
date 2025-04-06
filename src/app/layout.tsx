@@ -5,19 +5,12 @@ import "@mantine/code-highlight/styles.css";
 import "@/styles/swiper/swiper.scss";
 import "@/styles/swiper/pagination.scss";
 
-// design system css
 import "@/styles/mantine/core.scss";
 import "@/styles/mantine/theme.scss";
 import "@/styles/mantine/tiptap.scss";
 
-// application css (to-be)
 import "@/styles/global.scss";
 import "@/styles/theme.scss";
-import "@/styles/editor.scss";
-
-// as-is css
-import "@/styles/global.css";
-import "@/styles/globalTheme.css";
 
 import type { Metadata, Viewport } from "next";
 import { PropsWithChildren } from "react";
@@ -26,6 +19,7 @@ import { ColorSchemeScript } from "@mantine/core";
 
 import MswProvider from "@/mocks/MswProvider";
 import "@/mocks/enableServer";
+import { THEME_LOCAL_STORAGE_KEY } from "@/constances";
 
 export const metadata: Metadata = {
   title: "Twosday",
@@ -50,7 +44,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
-        <ColorSchemeScript />
+        <ColorSchemeScript localStorageKey={THEME_LOCAL_STORAGE_KEY} />
       </head>
       <body>
         <MswProvider>

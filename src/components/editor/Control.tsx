@@ -1,11 +1,9 @@
 import { useSetModalStore } from "@/stores/modalStore";
 import { Editor } from "@tiptap/react";
-import { readFile } from "./readFile";
-import CropModal, { CroppedData } from "./CropModal";
-import { LuImage } from "react-icons/lu";
+import { Image as ImageIcon } from "lucide-react";
 import { RichTextEditor } from "@mantine/tiptap";
 import { clientApi } from "@/apis/fetcher";
-import { IMAGE_URL } from "@/constances";
+import { ACCEPTED_IMAGE_MIME_TYPES, IMAGE_URL } from "@/constances";
 import { toast } from "sonner";
 import { Upload } from "lucide-react";
 import Youtube from "@/assets/svg/youtube.svg?react";
@@ -28,42 +26,49 @@ export default function Control({ editor, session }: ControlProps) {
   const upload = () => {
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = "image/*";
-    input.addEventListener("change", async () => {
-      try {
-        if (input.files && input.files.length > 0) {
-          const file = input.files[0];
-          const url = await readFile(file);
+    input.accept = ACCEPTED_IMAGE_MIME_TYPES.join(",");
 
-          const result: CroppedData | undefined = await modalStore.push(CropModal, {
-            props: { file, imageUrl: url },
-          });
+    input.addEventListener("change", () => {
+      if (input.files && input.files.length > 0) {
+        const file = input.files[0];
 
-          if (!result) return;
+        if (!file) return;
 
-          const formData = new FormData();
-          formData.append("image", result.file);
+        // Cropper
+        // const url = await readFile(file);
+        // const result: CroppedData | undefined = await modalStore.push(CropModal, {
+        //   props: { file, imageUrl: url },
+        // });
+        // if (!result) return;
 
-          const wasRes = await clientApi("images", {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${session.accessToken}`,
-            },
-            body: formData,
-          });
+        toast.promise(
+          async () => {
+            const formData = new FormData();
+            formData.append("image", file);
 
-          const json: { key: string; message: string } = await wasRes.json();
+            const json = await clientApi<{ key: string; message: string }>("images", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${session.accessToken}`,
+              },
+              body: formData,
+            }).json();
 
-          editor
-            .chain()
-            .focus()
-            .setImage({ src: IMAGE_URL + "/" + json.key })
-            .run();
-        }
-        input.remove();
-      } catch (error) {
-        toast.error("이미지 업로드에 실패했습니다.");
+            editor
+              .chain()
+              .focus()
+              .setImage({ src: IMAGE_URL + "/" + json.key })
+              .run();
+          },
+          {
+            loading: "업로드중입니다...",
+            success: () => "업로드 완료",
+            error: (error) => "업로드 실패, " + error?.message,
+          },
+        );
       }
+
+      input.remove();
     });
     input.click();
   };
@@ -95,7 +100,7 @@ export default function Control({ editor, session }: ControlProps) {
   };
 
   return (
-    <RichTextEditor.Toolbar>
+    <RichTextEditor.Toolbar sticky stickyOffset="3.5rem">
       <RichTextEditor.ControlsGroup>
         <RichTextEditor.Bold />
         <RichTextEditor.Italic />
@@ -153,7 +158,7 @@ export default function Control({ editor, session }: ControlProps) {
           <Youtube width={14} height={14} />
         </RichTextEditor.Control>
         <RichTextEditor.Control onClick={addImageLink}>
-          <LuImage size={16} />
+          <ImageIcon size={16} />
         </RichTextEditor.Control>
       </RichTextEditor.ControlsGroup>
 

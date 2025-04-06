@@ -15,6 +15,7 @@ import {
 } from "../images/images.service";
 import { addTagsQueryByTransaction, removeTagsQueryByTransaction } from "../tags/tags.service";
 import { TPublicPost } from "./posts.type";
+import { ForbiddenError } from "@/libraries/error";
 
 export const getPosts = withPgConnection(async (client, dto: TGetPostsDto) => {
   const countSql = `
@@ -153,38 +154,46 @@ export const postPost = withPgTransaction(async (client, authorId: number, dto: 
   return postSqlResult.rows[0];
 });
 
-export const putPost = withPgTransaction(async (client, postId: number, dto: TCreatePostDto) => {
-  const currnetPost = await getPublicPostById(postId);
+export const patchPost = withPgTransaction(
+  async (client, authorId: number, postId: number, dto: TCreatePostDto) => {
+    const currentPost = await getPublicPostById(postId);
 
-  // category insert
-  const postSql = `
+    if (currentPost.authorId !== authorId) {
+      throw new ForbiddenError("접근 권한이 없습니다.");
+    }
+
+    // category insert
+    const postSql = `
     UPDATE "${POSTS_TABLE}"
     SET "title" = $2, "content" = $3, "is_public" = $4, "category_id" = $5
     WHERE "id" = $1
     RETURNING id
   `;
 
-  const currentTagIds = currnetPost.tagIds.map((tag) => tag.id);
+    const currentTagIds = currentPost.tags.map((tag) => tag.id);
+    const currentTagIdSet = new Set(currentTagIds);
+    const currentImageKeySet = new Set(currentPost.imageKeys);
 
-  const addImageList = dto.imageKeys.filter(
-    (imageKey) => !currnetPost.imageKeys.includes(imageKey),
-  );
-  const removeImageList = currnetPost.imageKeys.filter(
-    (imageKey) => !dto.imageKeys.includes(imageKey),
-  );
-  const addTagsList = dto.tagIds.filter((tagId) => !currentTagIds.some((tag) => tag === tagId));
-  const removeTagsList = currentTagIds.filter((tag) => !dto.tagIds.some((tagId) => tag === tagId));
+    const newImageKeySet = new Set(dto.imageKeys);
+    const newTagIdSet = new Set(dto.tagIds);
 
-  await Promise.all([
-    client.query(postSql, [postId, dto.title, dto.content, dto.isPublic, dto.categoryId]),
-    addImagesQueryByTransaction(client, postId, addImageList),
-    removeImagesQueryByTransaction(client, postId, removeImageList),
-    addTagsQueryByTransaction(client, postId, addTagsList),
-    removeTagsQueryByTransaction(client, postId, removeTagsList),
-  ]);
+    const addImageList = dto.imageKeys.filter((key) => !currentImageKeySet.has(key));
+    const removeImageList = currentPost.imageKeys.filter((key) => !newImageKeySet.has(key));
 
-  return { id: postId };
-});
+    const addTagsList = dto.tagIds.filter((id) => !currentTagIdSet.has(id));
+    const removeTagsList = currentTagIds.filter((id) => !newTagIdSet.has(id));
+
+    await Promise.all([
+      client.query(postSql, [postId, dto.title, dto.content, dto.isPublic, dto.categoryId]),
+      addImageList.length > 0 && addImagesQueryByTransaction(client, postId, addImageList),
+      removeImageList.length > 0 && removeImagesQueryByTransaction(client, postId, removeImageList),
+      addTagsList.length > 0 && addTagsQueryByTransaction(client, postId, addTagsList),
+      removeTagsList.length > 0 && removeTagsQueryByTransaction(client, postId, removeTagsList),
+    ]);
+
+    return { id: postId };
+  },
+);
 
 export const deletePost = withPgTransaction(async (client, postId: number) => {
   const sql = `

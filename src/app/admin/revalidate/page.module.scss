@@ -1,0 +1,22 @@
+.wrap {
+}
+
+.tableBox {
+  position: relative;
+  margin-top: 30px;
+  max-width: var.$main-max-width;
+}
+
+.table {
+  th {
+    background-color: var(--mantine-color-gray-0);
+  }
+}
+
+@include util.dark {
+  .table {
+    th {
+      background-color: var(--mantine-color-dark-6);
+    }
+  }
+}

@@ -1,43 +1,32 @@
-import List from "@/components/PostList";
+import PostList from "@/components/PostList";
 import Link from "next/link";
 import css from "./page.module.scss";
-import { getPostsDto } from "@/libraries/pg/posts/posts.dto";
-import { BadRequestError } from "@/libraries/error";
-import { getPosts } from "@/libraries/pg/posts/posts.service";
-import { parsePosts } from "@/utils/helper";
+import { CATEGORY_TAG, POST_TAG, POSTS_PAGE_SIZE, TAG_TAG, USER_TAG } from "@/constances";
+import { TGetPostsResponse } from "@/libraries/pg/posts/posts.type";
+import { serverApi } from "@/apis/fetcher";
 
-interface PostProps {
+type Props = {
   searchParams: Promise<{
     page?: string;
     order?: "popular";
   }>;
-}
+};
 
-const PAGE_SIZE = 10;
-
-export default async function Page(props: PostProps) {
+export default async function Page(props: Props) {
   const searchParams = await props.searchParams;
   const page = searchParams.page ? parseInt(searchParams.page) || 1 : 1;
 
   const urlSearchParams = new URLSearchParams({
     page: page.toString(),
-    size: PAGE_SIZE.toString(),
+    size: POSTS_PAGE_SIZE.toString(),
     order: searchParams.order === "popular" ? "popular" : "recent",
   });
 
-  const dto = getPostsDto.safeParse({
-    page: page.toString(),
-    size: PAGE_SIZE.toString(),
-    order: searchParams.order === "popular" ? "popular" : "recent",
-  });
-
-  if (dto.error) {
-    console.error(dto.error);
-    throw new BadRequestError(dto.error.errors[0].message);
-  }
-
-  const data = await getPosts(dto.data);
-  const parsedPosts = parsePosts(data.posts);
+  const postJson = await serverApi
+    .get<TGetPostsResponse>(`posts?${urlSearchParams.toString()}`, {
+      next: { revalidate: 300, tags: [POST_TAG, TAG_TAG, CATEGORY_TAG, USER_TAG] },
+    })
+    .json();
 
   return (
     <div className={css.page}>
@@ -54,11 +43,10 @@ export default async function Page(props: PostProps) {
       </div>
       <div className={css.listBox}>
         <div>
-          <List
-            posts={parsedPosts}
+          <PostList
+            posts={postJson.data.list}
             currentPage={page}
-            total={data.total}
-            size={PAGE_SIZE}
+            total={Math.ceil(postJson.data.total / POSTS_PAGE_SIZE)}
             order={searchParams.order}
           />
         </div>

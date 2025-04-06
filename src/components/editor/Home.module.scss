@@ -1,0 +1,17 @@
+.main {
+  margin: 0 auto;
+  width: 100%; //컨텐츠가 없어도 늘어나게 하기 위해
+  padding: 14px;
+  max-width: 1024;
+  min-height: 100dvh;
+}
+
+.nav {
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: 30;
+}
+
+.editorBox {
+  margin-top: 30px;
+}

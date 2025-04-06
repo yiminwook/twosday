@@ -4,6 +4,9 @@ import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
 import { MouseEvent } from "react";
 import css from "./layout.module.scss";
+import dynamic from "next/dynamic";
+
+const ThemeButton = dynamic(() => import("@/components/ThemeButton"), { ssr: false });
 
 type Props = {
   children: React.ReactNode;
@@ -39,14 +42,16 @@ export default function Client({ children }: Props) {
             </Link>
           </Flex>
           <Flex>
-            <Button component={Link} href="/" size="xs">
+            <Button mr={15} component={Link} href="/" size="xs">
               나가기
             </Button>
+            <ThemeButton />
           </Flex>
         </Flex>
       </AppShell.Header>
       <AppShell.Navbar p="xs" onClick={onClickSidebarNav}>
         <NavLink component={Link} href="/admin" label="관리자 홈" />
+        <NavLink component={Link} href="/admin/revalidate" label="캐시관리" />
         <NavLink component={Link} href="/admin/categories" label="카테고리" />
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>

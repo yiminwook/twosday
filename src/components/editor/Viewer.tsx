@@ -1,7 +1,7 @@
 "use client";
 import { useEditor } from "@tiptap/react";
 import { RichTextEditor } from "@mantine/tiptap";
-import StarterKit from "@tiptap/starter-kit";
+import { extensions } from "@/libraries/extentions";
 
 interface ViewerProps {
   content: string;
@@ -10,7 +10,7 @@ interface ViewerProps {
 export default function Viewer({ content }: ViewerProps) {
   const editRef = useEditor({
     content,
-    extensions: [StarterKit],
+    extensions,
     editable: false,
     immediatelyRender: false,
   });

@@ -1,4 +1,4 @@
-import { cardSlider } from "./cardSlider.css";
+import css from "./CardSlider.module.scss";
 import Card from "./Card";
 import { TPost, TPostOrderBy } from "@/libraries/pg/posts/posts.dto";
 import { TPublicPost } from "@/libraries/pg/posts/posts.type";
@@ -10,7 +10,7 @@ interface CardSliderProps {
 
 export default function CardSlider({ post, order }: CardSliderProps) {
   return (
-    <section className={cardSlider}>
+    <section className={css.cardSlider}>
       {post.map((item) => (
         <Card key={`${item.postId}_${order}`} post={item} />
       ))}

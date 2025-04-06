@@ -1,0 +1,21 @@
+.viewerBox {
+}
+
+.header {
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+
+  .author {
+    display: flex;
+    gap: 1rem;
+  }
+}

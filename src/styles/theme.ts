@@ -7,6 +7,7 @@ import {
   MantineColorSchemeManager,
   LocalStorageColorSchemeManagerOptions,
   Tooltip,
+  Pagination,
 } from "@mantine/core";
 
 export const theme = createTheme({
@@ -35,5 +36,12 @@ export const theme = createTheme({
       "#b12100",
     ],
   },
-  components: {},
+  components: {
+    Pagination: {
+      defaultProps: {
+        siblings: 2,
+        withEdges: true, // Show first/last controls
+      },
+    },
+  },
 });

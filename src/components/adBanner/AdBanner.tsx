@@ -1,4 +1,4 @@
-import * as css from "./adBanner.css";
+import css from "./AdBanner.module.scss";
 
 export default function AdBanner() {
   return (

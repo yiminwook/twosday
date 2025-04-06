@@ -2,19 +2,20 @@
 "use client";
 import css from "./PostList.module.scss";
 import { useRouter } from "next/navigation";
-import PagePagination from "@/components/common/pagination/PagePagination";
 import { TPublicPost } from "@/libraries/pg/posts/posts.type";
 import dayjs from "@/libraries/dayjs";
+import { Pagination } from "@mantine/core";
+import Image from "next/image";
+import PlaceholderImage from "@/assets/images/neon-512x512.png";
 
-interface ListProps {
+interface Props {
   posts: TPublicPost[];
   currentPage: number;
   total: number;
-  size: number;
   order?: "popular";
 }
 
-export default function List({ posts, currentPage, total, size, order }: ListProps) {
+export default function PostList({ posts, currentPage, total, order }: Props) {
   const router = useRouter();
 
   return (
@@ -29,7 +30,14 @@ export default function List({ posts, currentPage, total, size, order }: ListPro
             }}
           >
             <div className={css.thumbnailBox}>
-              <img className={css.thumbnail} src={""} alt={`${post.title}`} />
+              <Image
+                width={120}
+                height={80}
+                className={css.image}
+                src={PlaceholderImage}
+                alt="placeholder_image"
+              />
+              {/* <img className={css.thumbnail} src={""} alt={`${post.title}`} /> */}
             </div>
             <div>
               <div className={css.title}>{post.title}</div>
@@ -46,11 +54,11 @@ export default function List({ posts, currentPage, total, size, order }: ListPro
         ))}
       </div>
       <div className={css.paginationBox}>
-        <PagePagination
-          currentPage={currentPage}
-          totalCnt={total}
+        <Pagination
+          value={currentPage}
+          total={total}
+          size="sm"
           onChange={(page) => router.push(`/posts?order=${order}&page=${page}`)}
-          pgSize={size}
         />
       </div>
     </div>

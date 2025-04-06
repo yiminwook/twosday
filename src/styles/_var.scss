@@ -24,13 +24,15 @@ $breakpoints: (
 );
 
 $mobile-boundary: sm; // breakpoint for mobile devices
+$main-max-width: 1200px; // max width of main content
 
 $z-indexes: (
   app: 100,
   // mantine default
   float: 150,
   header: 180,
-  modal: 200,
+  sidebar: 1001,
+  modal: 2000,
   // mantine default
   popover: 300,
   // mantine default

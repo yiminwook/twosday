@@ -23,7 +23,7 @@ export default function Editor({ editor, editable, session }: EditorProps) {
   }
 
   return (
-    <RichTextEditor editor={editor}>
+    <RichTextEditor editor={editor} variant="subtle">
       {editable && <Control editor={editor} session={session} />}
       <RichTextEditor.Content />
     </RichTextEditor>

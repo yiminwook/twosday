@@ -1,5 +1,6 @@
 @use "sass:math";
 @use "sass:map";
+@use "sass:meta";
 @use "var";
 
 @function rem($value) {
@@ -63,25 +64,13 @@
   }
 }
 
-@mixin text-line($line-count, $line-height) {
-  overflow: hidden;
-  white-space: pre-line;
-  text-overflow: ellipsis;
-  word-break: break-word;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: $line-count;
-  line-height: $line-height;
-  height: #{$line-height * $line-count}em;
-}
-
 @mixin line-clamp($line-count) {
   @if $line-count == "none" {
     overflow: visible;
     display: block;
     -webkit-box-orient: horizontal;
     -webkit-line-clamp: none;
-  } @else if type-of($line-count) == "number" and $line-count > 1 {
+  } @else if meta.type-of($line-count) == "number" and $line-count > 0 {
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
