@@ -2,7 +2,6 @@
   position: relative;
   border-radius: 10px;
   box-shadow: 2px 4px 12px rgba(17, 17, 17, 0.25);
-  overflow: hidden;
 }
 
 .imageBox {
@@ -39,7 +38,6 @@
   font-size: 1em;
   @include util.line-clamp(2);
   letter-spacing: 0.05em;
-  width: 85%;
 }
 
 @include util.min-width(sm) {
@@ -50,15 +48,13 @@
 }
 
 .descBox {
+  width: 100%;
   padding: 7px;
-  bottom: 0px;
-  left: 0px;
   backdrop-filter: blur(5px);
 }
 
 .title {
-  cursor: pointer;
-  margin-bottom: 20;
+  margin-bottom: 20px;
   font-weight: 500;
   font-size: 1em;
   @include util.line-clamp(1);
@@ -67,7 +63,6 @@
 @include util.min-width(sm) {
   .title {
     font-size: 1.2em;
-    @include util.line-clamp(1);
   }
 }
 
