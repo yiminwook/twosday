@@ -20,3 +20,4 @@ export const USER_TAG = "user";
 export const TAG_TAG = "tag";
 export const CATEGORY_TAG = "category";
 export const REFERENCE_TAG = "reference";
+export const META_TAG = "meta";

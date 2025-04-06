@@ -4,7 +4,7 @@ import css from "@/components/common/modal/Modal.module.scss";
 import { ModalProps } from "@/stores/modalStore";
 import { useRouter } from "next/navigation";
 import { Button, Modal, TextInput } from "@mantine/core";
-import { clientApi } from "@/apis/fetcher";
+import { clientApi, revalidateApi } from "@/apis/fetcher";
 import { toast } from "sonner";
 import { REFERENCE_TAG } from "@/constances";
 
@@ -34,8 +34,7 @@ export default function PostRefernceModal({ onClose, onSuccess, session }: Modal
       onSuccess(true);
     },
     onSettled: async () => {
-      // https://nextjs.org/docs/app/api-reference/functions/revalidateTag
-      await clientApi.get(`revalidate/tag?name=${REFERENCE_TAG}`);
+      await revalidateApi.get(`tag?name=${REFERENCE_TAG}`);
       router.refresh();
     },
   });

@@ -1,5 +1,5 @@
 "use client";
-import { clientApi } from "@/apis/fetcher";
+import { clientApi, revalidateApi } from "@/apis/fetcher";
 import { IMAGE_URL, POST_TAG } from "@/constances";
 import { extensions } from "@/libraries/extentions";
 import {
@@ -92,7 +92,7 @@ export default function PatchHome({
       router.push(`/posts/${data.id}`);
     },
     onSettled: async () => {
-      await clientApi.get(`revalidate/tag?name=${POST_TAG}`);
+      await revalidateApi.get(`tag?name=${POST_TAG}`);
     },
   });
 
