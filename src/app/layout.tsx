@@ -5,15 +5,12 @@ import "@mantine/code-highlight/styles.css";
 import "@/styles/swiper/swiper.scss";
 import "@/styles/swiper/pagination.scss";
 
-// design system css
 import "@/styles/mantine/core.scss";
 import "@/styles/mantine/theme.scss";
 import "@/styles/mantine/tiptap.scss";
 
-// application css (to-be)
 import "@/styles/global.scss";
 import "@/styles/theme.scss";
-import "@/styles/editor.scss";
 
 import type { Metadata, Viewport } from "next";
 import { PropsWithChildren } from "react";

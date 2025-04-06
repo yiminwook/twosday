@@ -6,7 +6,7 @@ import { TPublicPost } from "@/libraries/pg/posts/posts.type";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 const PatchHome = dynamic(() => import("@/components/editor/PatchHome"), { ssr: false });
 
@@ -24,6 +24,7 @@ function InjectedDataHome() {
   const session = useSession().data!;
   const params = useParams<{ id: string }>();
   const postId = params.id;
+  const [mounted, setMounted] = useState(false);
 
   const query = useSuspenseQuery({
     queryKey: ["post", postId],
@@ -38,9 +39,16 @@ function InjectedDataHome() {
     },
   });
 
-  if (query.data.authorId === session.id) {
+  useEffect(() => {
+    if (mounted) return;
+    setMounted(() => true);
+  }, [mounted]);
+
+  if (query.data.authorId !== session.id) {
     throw new Error("접근 권한이 없습니다.");
   }
+
+  if (!mounted) return null;
 
   return (
     <PatchHome

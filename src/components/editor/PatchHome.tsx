@@ -1,11 +1,11 @@
 "use client";
 import { clientApi } from "@/apis/fetcher";
 import { IMAGE_URL } from "@/constances";
-import { useSession } from "@/libraries/auth/useSession";
 import { extensions } from "@/libraries/extentions";
-import { TTag } from "@/types";
 import {
   ActionIcon,
+  Button,
+  ButtonGroup,
   ComboboxData,
   ComboboxItem,
   ComboboxLikeRenderOptionInput,
@@ -13,18 +13,18 @@ import {
   Stack,
   TagsInput,
 } from "@mantine/core";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEditor } from "@tiptap/react";
 import ky from "ky";
 import { X } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import Editor from "./Editor";
 import css from "./Home.module.scss";
 import editCss from "./Edit.module.scss";
 import { useSetModalStore } from "@/stores/modalStore";
-import ConfirmModal from "../common/modal/ConfirmModal";
+import { useManageTags, useServerTags } from "@/hooks/useTags";
 
 type Props = {
   session: Session;
@@ -34,11 +34,12 @@ type Props = {
 };
 
 export default function PatchHome({ session, initialValue, initialTitle, initialTags }: Props) {
+  const router = useRouter();
+
   const [title, setTitle] = useState(initialTitle);
   const [tags, setTags] = useState<string[]>(initialTags);
-
-  const router = useRouter();
   const [togglePreview, setTogglePreview] = useState(false);
+
   const queryClient = useQueryClient();
   const modalStore = useSetModalStore();
 
@@ -55,91 +56,27 @@ export default function PatchHome({ session, initialValue, initialTitle, initial
     [togglePreview],
   );
 
-  const tagsQuery = useQuery({
-    queryKey: ["tags"],
-    queryFn: async () => {
-      const json = await clientApi.get<{ message: string; data: TTag[] }>("tags").json();
-      return json.data;
-    },
-  });
-
-  const postTagMutation = useMutation({
-    mutationFn: async (arg: { name: string; session: Session }) => {
-      const json = await clientApi
-        .post<{ message: string; data: { id: number } }>("tags", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${arg.session.accessToken}`,
-          },
-          json: {
-            name: arg.name,
-          },
-        })
-        .json();
-
-      return json.data;
-    },
-    onSuccess: (data, arg) => {
-      queryClient.setQueryData(["tags"], (prev: TTag[] | undefined) => {
-        if (!prev) return prev;
-        return [...prev, { id: data.id, name: arg.name }];
-      });
-
-      toast.success("태그가 추가되었습니다.");
-    },
-    onError: async (error, arg) => {
-      await queryClient.invalidateQueries({ queryKey: ["tags"] });
-      setTags((prev) => prev.filter((tag) => tag !== arg.name));
-      toast.error(error.message);
-    },
-  });
-
-  const removeTagMutation = useMutation({
-    onMutate: (arg) => {
-      // Optimistic UI update
-      queryClient.setQueryData(["tags"], (prev: TTag[] | undefined) => {
-        if (!prev) return prev;
-        return prev.filter((tag) => tag.id !== arg.id);
-      });
-
-      toast.success("태그가 삭제되었습니다.");
-    },
-    mutationFn: async (arg: { id: number; session: Session }) => {
-      const json = await clientApi
-        .delete<{ message: string; data: { id: number } }>(`tags/${arg.id}`, {
-          headers: {
-            Authorization: `Bearer ${arg.session.accessToken}`,
-          },
-        })
-        .json();
-
-      return json.data;
-    },
-    onSuccess: (data) => {},
-    onError: async (error) => {
-      await queryClient.invalidateQueries({ queryKey: ["tags"] });
-      toast.error(error.message);
-    },
-  });
+  const tagsQuery = useServerTags();
+  const { postTagMutation, removeTagMutation } = useManageTags(session);
 
   const mutationPost = useMutation({
     mutationFn: async (arg: { content: string; imageKeys: string[] }) => {
-      const json = await clientApi<{ data: { id: number }; message: string }>("posts", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.accessToken}`,
-        },
-        json: {
-          title,
-          content: arg.content,
-          tagIds: [],
-          imageKeys: arg.imageKeys,
-          categoryId: null,
-          isPublic: true,
-        },
-      }).json();
+      const json = await clientApi
+        .post<{ data: { id: number }; message: string }>("posts", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.accessToken}`,
+          },
+          json: {
+            title,
+            content: arg.content,
+            tagIds: [],
+            imageKeys: arg.imageKeys,
+            categoryId: null,
+            isPublic: true,
+          },
+        })
+        .json();
 
       return json.data;
     },
@@ -179,14 +116,32 @@ export default function PatchHome({ session, initialValue, initialTitle, initial
     });
   };
 
-  const onChangeSelect = async (value: string[]) => {
+  const comboboxTags = useMemo<ComboboxData>(() => {
+    return (
+      tagsQuery.data?.map((tag) => ({
+        value: tag.id.toString(),
+        label: tag.name,
+      })) || []
+    );
+  }, [tagsQuery.data]);
+
+  const selectTag = (value: string[]) => {
     if (!tagsQuery.data) return;
     if (postTagMutation.isPending) return;
 
     value.forEach((v) => {
       const index = tagsQuery.data.findIndex((tag) => tag.name === v);
       if (index === -1) {
-        postTagMutation.mutate({ name: v, session });
+        postTagMutation.mutate(
+          { name: v, session },
+          {
+            onError: async (error, arg) => {
+              await queryClient.invalidateQueries({ queryKey: ["tags"] });
+              setTags((prev) => prev.filter((tag) => tag !== arg.name));
+              toast.error(error.message);
+            },
+          },
+        );
       }
     });
 
@@ -200,15 +155,6 @@ export default function PatchHome({ session, initialValue, initialTitle, initial
     },
     [removeTagMutation, session],
   );
-
-  const comboboxTags = useMemo<ComboboxData>(() => {
-    return (
-      tagsQuery.data?.map((tag) => ({
-        value: tag.id.toString(),
-        label: tag.name,
-      })) || []
-    );
-  }, [tagsQuery.data]);
 
   const renderTagsInputOption = useCallback(
     (
@@ -234,9 +180,6 @@ export default function PatchHome({ session, initialValue, initialTitle, initial
     [removeTag],
   );
 
-  const text = editor.getText();
-  console.log("text", text);
-
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       // 새로고침 방지
@@ -256,59 +199,53 @@ export default function PatchHome({ session, initialValue, initialTitle, initial
 
   return (
     <div className={css.main}>
-      <h1 className="blind">게시글 업로드 페이지</h1>
+      <h1 className="blind">게시글 수정 페이지</h1>
       <section className={css.section}>
         <h2 className="blind">{togglePreview ? "미리보기" : "게시글 작성"}</h2>
-        <div className={css.nav}>
-          <button
-            className={css.navBtn}
-            type="button"
-            onClick={() => setTogglePreview((pre) => !pre)}
-          >
-            {togglePreview ? "편집" : "미리보기"}
-          </button>
-          <button className={css.navBtn} type="button">
-            삭제
-          </button>
-          <button
-            className={css.navBtn}
-            type="submit"
-            disabled={mutationPost.isPending}
-            onClick={onSave}
-          >
-            저장
-          </button>
-        </div>
-        <div>
-          <Stack gap="md" component="form">
-            <Input
-              size="md"
-              type="text"
-              placeholder="제목을 입력해주세요"
-              id="upload-tag"
-              onChange={onChangeTitle}
-              value={title}
-            />
-            <TagsInput
-              size="md"
-              onChange={onChangeSelect}
-              value={tags}
-              data={comboboxTags}
-              renderOption={renderTagsInputOption as any}
-              splitChars={[",", " ", "|"]}
-              acceptValueOnBlur
-              clearable
-              filter={({ options, search }) => {
-                const filtered = (options as ComboboxItem[]).filter((option) =>
-                  option.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
-                );
-                // 알파벳 순서로 정렬
-                filtered.sort((a, b) => a.label.localeCompare(b.label));
-                return filtered;
-              }}
-            />
-            <Editor editor={editor} editable={!togglePreview} session={session} />
-          </Stack>
+
+        <nav className={css.nav}>
+          <ButtonGroup>
+            <Button variant="default" onClick={() => setTogglePreview((pre) => !pre)}>
+              {togglePreview ? "편집" : "미리보기"}
+            </Button>
+            <Button variant="default">삭제</Button>
+            <Button variant="default" disabled={mutationPost.isPending} onClick={onSave}>
+              저장
+            </Button>
+          </ButtonGroup>
+        </nav>
+
+        <Input
+          size="md"
+          mt={10}
+          type="text"
+          value={title}
+          onChange={onChangeTitle}
+          placeholder="제목을 입력해주세요"
+        />
+
+        <TagsInput
+          size="md"
+          mt={10}
+          onChange={selectTag}
+          value={tags}
+          data={comboboxTags}
+          renderOption={renderTagsInputOption as any}
+          splitChars={[",", " ", "|"]}
+          acceptValueOnBlur
+          clearable
+          filter={({ options, search }) => {
+            const filtered = (options as ComboboxItem[]).filter((option) =>
+              option.label.toLowerCase().trim().includes(search.toLowerCase().trim()),
+            );
+            // 알파벳 순서로 정렬
+            filtered.sort((a, b) => a.label.localeCompare(b.label));
+            return filtered;
+          }}
+        />
+
+        <div className={css.editorBox}>
+          <Editor editor={editor} editable={!togglePreview} session={session} />
         </div>
       </section>
     </div>

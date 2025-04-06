@@ -100,7 +100,7 @@ export default function Control({ editor, session }: ControlProps) {
   };
 
   return (
-    <RichTextEditor.Toolbar>
+    <RichTextEditor.Toolbar sticky stickyOffset="3.5rem">
       <RichTextEditor.ControlsGroup>
         <RichTextEditor.Bold />
         <RichTextEditor.Italic />
