@@ -59,6 +59,9 @@ export default function PatchHome({
       shouldRerenderOnTransaction: false,
       editable: !togglePreview,
       content: initialValue,
+      onUpdate: ({ editor }) => {
+        console.log("HTML", editor.getHTML());
+      },
     },
     [togglePreview],
   );

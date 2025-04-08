@@ -52,6 +52,9 @@ export default function PostHome({}: Props) {
       <p>Hello! This is a <code>tiptap</code> editor.</p>
       `,
       editable: !togglePreview,
+      onUpdate: ({ editor }) => {
+        console.log("HTML", editor.getHTML());
+      },
     },
     [togglePreview],
   );

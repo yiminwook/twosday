@@ -2,18 +2,29 @@
 import { useEditor } from "@tiptap/react";
 import { RichTextEditor } from "@mantine/tiptap";
 import { extensions } from "@/libraries/extentions";
+import { useEffect, useState } from "react";
 
 interface ViewerProps {
   content: string;
 }
 
 export default function Viewer({ content }: ViewerProps) {
+  const [show, setShow] = useState(false);
   const editRef = useEditor({
     content,
     extensions,
     editable: false,
     immediatelyRender: false,
   });
+
+  useEffect(() => {
+    setShow(true);
+  }, [show]);
+
+  console.log("RAW", content);
+  console.log("Viewer", editRef?.getHTML());
+
+  if (!show) return null;
 
   return (
     <RichTextEditor editor={editRef}>
