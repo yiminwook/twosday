@@ -30,12 +30,10 @@ export default function PostRefernceModal({ onClose, onSuccess, session }: Modal
         })
         .json();
     },
-    onSuccess: () => {
-      onSuccess(true);
-    },
-    onSettled: async () => {
+    onSuccess: async () => {
       await revalidateApi.get(`tag?name=${REFERENCE_TAG}`);
       router.refresh();
+      onSuccess(true);
     },
   });
 

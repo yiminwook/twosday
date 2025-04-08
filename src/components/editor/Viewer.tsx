@@ -21,9 +21,6 @@ export default function Viewer({ content }: ViewerProps) {
     setShow(true);
   }, [show]);
 
-  console.log("RAW", content);
-  console.log("Viewer", editRef?.getHTML());
-
   if (!show) return null;
 
   return (

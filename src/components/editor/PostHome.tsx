@@ -83,12 +83,10 @@ export default function PostHome({}: Props) {
 
       return json.data;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       toast.success("업로드 성공");
-      router.push(`/posts/${data.id}`);
-    },
-    onSettled: async () => {
       await revalidateApi.get(`tag?name=${POST_TAG}`);
+      router.push(`/posts/${data.id}`);
     },
   });
 
