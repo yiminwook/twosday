@@ -13,22 +13,23 @@ export default function PortalModalContainer() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let observer: MutationObserver;
-    console.log("PortalModalContainer mounted");
-    if (ref.current) {
-      observer = new MutationObserver(() => {
-        const size = ref.current?.childNodes.length || 0;
-        console.log("size", size);
-        ref.current?.classList.toggle("active", size > 0);
-      });
+    if (!ref.current) return;
+    let observer: MutationObserver | null = null;
 
-      observer.observe(ref.current, mutationObserverOption);
-    }
+    ref.current.childNodes.length > 0
+      ? ref.current.classList.add("active")
+      : ref.current.classList.remove("active");
 
-    console.log("PortalModalContainer mounted observer", observer!);
+    observer = new MutationObserver(() => {
+      const size = ref.current?.childNodes.length || 0;
+      ref.current?.classList.toggle("active", size > 0);
+    });
+
+    observer.observe(ref.current, mutationObserverOption);
+
     return () => {
-      console.log("disconnect");
-      observer.disconnect();
+      observer?.disconnect();
+      observer = null;
     };
   }, []);
 

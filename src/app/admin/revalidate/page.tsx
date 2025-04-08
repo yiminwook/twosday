@@ -30,7 +30,6 @@ export default function Page() {
     const tag = target.closest("button")?.dataset.tag;
 
     if (tag) {
-      console.log(tag);
       mutationRevalidate.mutate({ tag });
     }
   };

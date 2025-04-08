@@ -29,6 +29,7 @@
 }
 
 .cardSliderBox {
+  width: calc(100vw - var(--app-layout-padding) * 2);
 }
 
 .adBox {
