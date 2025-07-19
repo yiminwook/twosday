@@ -1,12 +1,12 @@
-import classNames from "classnames";
+import clsx from "clsx";
 import css from "./Circle.module.scss";
 
 export default function Circle() {
   return (
     <div className={css.wrap}>
-      <div className={classNames(css.circle, "a")} />
-      <div className={classNames(css.circle, "b")} />
-      <div className={classNames(css.circle, "c")} />
+      <div className={clsx(css.circle, "a")} />
+      <div className={clsx(css.circle, "b")} />
+      <div className={clsx(css.circle, "c")} />
     </div>
   );
 }

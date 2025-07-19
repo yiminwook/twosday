@@ -2,10 +2,9 @@
 }
 
 .item {
-  padding: 1rem;
+  padding: 1rem 1rem 2rem 1rem;
   background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.025));
   border-bottom: 1px solid #ccc;
-  border-radius: 4px;
   position: relative;
   transition: background 0.1s ease;
   cursor: pointer;

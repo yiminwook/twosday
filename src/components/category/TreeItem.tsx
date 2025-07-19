@@ -1,6 +1,5 @@
 import React, { forwardRef, HTMLAttributes } from "react";
-import classNames from "classnames";
-
+import clsx from "clsx";
 import { Action } from "./Action";
 import styles from "./TreeItem.module.scss";
 import { Handle } from "./Handle";
@@ -48,7 +47,7 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
   ) => {
     return (
       <li
-        className={classNames(
+        className={clsx(
           styles.Wrapper,
           clone && styles.clone,
           ghost && styles.ghost,
@@ -69,7 +68,7 @@ export const TreeItem = forwardRef<HTMLDivElement, Props>(
           {onCollapse && (
             <Action
               onClick={onCollapse}
-              className={classNames(styles.Collapse, collapsed && styles.collapsed)}
+              className={clsx(styles.Collapse, collapsed && styles.collapsed)}
             >
               {collapseIcon}
             </Action>

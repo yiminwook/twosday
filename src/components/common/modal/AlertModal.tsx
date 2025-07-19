@@ -1,6 +1,5 @@
 import { ModalProps } from "@/stores/modalStore";
 import { useTransition } from "@/hooks/useTransition";
-import classNames from "classnames";
 import css from "./Modal.module.scss";
 import { Button, Modal } from "@mantine/core";
 

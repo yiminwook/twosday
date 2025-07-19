@@ -1,0 +1,66 @@
+.wrap {
+  padding: 5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  min-width: 0px;
+  gap: 5rem;
+}
+
+@include util.min-width(sm) {
+  .wrap {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.left {
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+}
+
+.desc {
+}
+
+.tagBox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.buttonBox {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.recentButtonIcon {
+  margin-left: 0.5rem;
+}
+
+.right {
+}
+
+.imageBox {
+  width: 250px;
+  height: 250px;
+  margin: 0 auto;
+  border: 4px solid #ccc;
+  border-radius: 9999px;
+  position: relative;
+  overflow: hidden;
+}
+
+.image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: green;
+}

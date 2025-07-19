@@ -1,6 +1,6 @@
 "use client";
 import { PORTAL_MODAL_CONTAINER_ID } from "@/constances";
-import classNames from "classnames";
+import clsx from "clsx";
 import { useEffect, useRef } from "react";
 import css from "./Modal.module.scss";
 
@@ -33,7 +33,5 @@ export default function PortalModalContainer() {
     };
   }, []);
 
-  return (
-    <div id={PORTAL_MODAL_CONTAINER_ID} className={classNames(css.modalContainer)} ref={ref} />
-  );
+  return <div id={PORTAL_MODAL_CONTAINER_ID} className={clsx(css.modalContainer)} ref={ref} />;
 }

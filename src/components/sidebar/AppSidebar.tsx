@@ -9,7 +9,8 @@ import { useAppStore } from "@/stores/app";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { clientApi } from "@/apis/fetcher";
 import { useSession } from "@/libraries/auth/useSession";
-import {useRouter} from 'next/navigation';
+import { useRouter } from "next/navigation";
+import clsx from "clsx";
 
 const TOOLTIP_Z_INDEX = 10002;
 
@@ -27,17 +28,19 @@ export default function AppSidebar({ categories }: Props) {
   const query = useSession();
   const mutation = useMutation({
     mutationFn: async () => {
-      const json = await clientApi.post<{
-        message: string
-      }>("auth/signout", {
-        credentials: "include",
-      }).json();
+      const json = await clientApi
+        .post<{
+          message: string;
+        }>("auth/signout", {
+          credentials: "include",
+        })
+        .json();
       return json;
     },
     onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["session"] })
-      router.replace("/")
-    }
+      await queryClient.invalidateQueries({ queryKey: ["session"] });
+      router.replace("/");
+    },
   });
 
   const onClickLogout = () => {
@@ -49,16 +52,12 @@ export default function AppSidebar({ categories }: Props) {
     <aside className={css.wrap} data-mobile-open={showMobileSidebar}>
       <div className={css.position}>
         <div className={css.header}>
-          <ActionIcon className={"mobileOnly"} variant="transparent" onClick={closeMobileView}>
+          <ActionIcon variant="transparent" onClick={closeMobileView}>
             <PanelLeftClose size={20} />
           </ActionIcon>
         </div>
-        <div className={css.overviewBox}>
-          <div>
-            <p>비즈니스 요구사항을</p>
-            <p>코드로 녹여내기</p>
-          </div>
 
+        <div className={css.overviewBox}>
           <div className={css.actionIconBox}>
             <Tooltip label="GitHub" withArrow zIndex={TOOLTIP_Z_INDEX}>
               <ActionIcon component="a" href="https://github.com/xoxoinny0/twosday" radius="lg">
@@ -110,6 +109,7 @@ export default function AppSidebar({ categories }: Props) {
             )}
           </div>
         </div>
+
         <div className={css.categoryBox}>
           <h3>Catrgory</h3>
           {categories.map((category) => (

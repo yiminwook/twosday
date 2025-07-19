@@ -9,11 +9,12 @@ import { ResponsiveAdfit } from "@/components/adBanner/Adfit";
 import { TGetPostsResponse } from "@/libraries/pg/posts/posts.type";
 import { serverApi } from "@/apis/fetcher";
 import { TGetReferencesResponse } from "@/libraries/pg/references/references.type";
+import { CATEGORY_TAG, POST_TAG, REFERENCE_TAG, TAG_TAG, USER_TAG } from "@/constances";
+import Intro from "@/components/home/intro";
 
 // css
 import css from "./page.module.scss";
 import refListCss from "@/components/refCard/RefList.module.scss";
-import { CATEGORY_TAG, POST_TAG, REFERENCE_TAG, TAG_TAG, USER_TAG } from "@/constances";
 
 const RECENT_POST_SIZE = 6;
 const POPULAR_POST_SIZE = 6;
@@ -42,7 +43,7 @@ export default async function Page() {
 
   return (
     <main className={css.wrap}>
-      <HeroSection />
+      <Intro />
 
       <section className={css.section}>
         <div className={css.sectionTitleBox}>
@@ -50,7 +51,7 @@ export default async function Page() {
           <Link href="/posts?order=popluar">+ 더보기</Link>
         </div>
         <div className={css.cardSliderBox}>
-          <CardSlider order="popular" post={popularJson.data.list} />
+          {/* <CardSlider order="popular" post={popularJson.data.list} /> */}
         </div>
       </section>
 
@@ -76,11 +77,9 @@ export default async function Page() {
         </div>
       </section>
 
-      <div className={css.adBox}>
-        <ResponsiveAdfit />
-      </div>
+      {/* <div className={css.adBox}><ResponsiveAdfit /></div> */}
 
-      <div className={css.beltBox}>{/* <TechBelt /> */}</div>
+      {/* <div className={css.beltBox}><TechBelt /></div> */}
 
       {/* <AdBanner /> */}
     </main>

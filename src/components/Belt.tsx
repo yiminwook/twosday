@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 import css from "./Belt.module.scss";
 import React from "react";
 
@@ -31,7 +31,7 @@ export default function Belt({
         } as React.CSSProperties
       }
     >
-      <div className={classNames(css.row, direction)}>
+      <div className={clsx(css.row, direction)}>
         {[...Array(2)].map((_, i) => (
           // 요소를 복제하여 무한 스크롤링 효과를 줍니다.
           <div key={i}>{children}</div>

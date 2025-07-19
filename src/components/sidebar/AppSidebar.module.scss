@@ -56,6 +56,12 @@ $sidebar-background-dark: #606060;
   padding: var(--app-layout-padding);
 }
 
+@include util.min-width(sm) {
+  .header {
+    display: none;
+  }
+}
+
 .overviewBox {
   padding: 0 var(--app-layout-padding);
 }
