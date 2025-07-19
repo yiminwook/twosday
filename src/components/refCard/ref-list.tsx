@@ -1,6 +1,6 @@
 "use client";
-import RefCard from "@/components/refCard/RefCard";
-import css from "./RefList.module.scss";
+import RefCard from "@/components/refCard/ref-card";
+import css from "./ref-list.module.scss";
 import { useRouter } from "next/navigation";
 import { TReference } from "@/libraries/pg/references/references.dto";
 import { Pagination } from "@mantine/core";

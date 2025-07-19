@@ -1,6 +1,6 @@
 import { TPublicPost } from "@/libraries/pg/posts/posts.type";
-import css from "./PostList.module.scss";
 import Link from "next/link";
+import css from "./post-list.module.scss";
 
 type Props = {
   posts: TPublicPost[];

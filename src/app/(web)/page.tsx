@@ -1,10 +1,10 @@
-import RefCard from "@/components/refCard/RefCard";
+import RefCard from "@/components/refCard/ref-card";
 import Link from "next/link";
 import AdBanner from "@/components/adBanner/AdBanner";
-import CardSlider from "@/components/common/card/CardSlider";
+import CardSlider from "@/components/common/card/card-slider";
 import HeroSection from "@/components/home/HeroSection";
 import TechBelt from "@/components/home/TechBelt";
-import PostsList from "@/components/post/PostList";
+import PostsList from "@/components/post/post-list";
 import { ResponsiveAdfit } from "@/components/adBanner/Adfit";
 import { TGetPostsResponse } from "@/libraries/pg/posts/posts.type";
 import { serverApi } from "@/apis/fetcher";
@@ -14,7 +14,7 @@ import Intro from "@/components/home/intro";
 
 // css
 import css from "./page.module.scss";
-import refListCss from "@/components/refCard/RefList.module.scss";
+import refListCss from "@/components/refCard/ref-list.module.scss";
 
 const RECENT_POST_SIZE = 6;
 const POPULAR_POST_SIZE = 6;
@@ -43,7 +43,9 @@ export default async function Page() {
 
   return (
     <main className={css.wrap}>
-      <Intro />
+      <section className={css.section}>
+        <Intro />
+      </section>
 
       <section className={css.section}>
         <div className={css.sectionTitleBox}>
@@ -51,7 +53,7 @@ export default async function Page() {
           <Link href="/posts?order=popluar">+ 더보기</Link>
         </div>
         <div className={css.cardSliderBox}>
-          {/* <CardSlider order="popular" post={popularJson.data.list} /> */}
+          <CardSlider order="popular" post={popularJson.data.list} />
         </div>
       </section>
 

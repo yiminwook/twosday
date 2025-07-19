@@ -17,7 +17,9 @@
   --mantine-color-white: #fff;
   --mantine-color-black: #000;
   --mantine-line-height: 1.55;
-  --mantine-font-family: Pretendard Variable, Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, Helvetica Neue, Segoe UI, Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, sans-serif;
+  --mantine-font-family: Pretendard Variable, Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, Roboto, Helvetica Neue, Segoe UI, Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, sans-serif;
 
   --mantine-heading-font-weight: 700;
   --mantine-radius-default: calc(0.25rem * var(--mantine-scale));
@@ -372,9 +374,11 @@
   --mantine-color-orange-light-color: var(--mantine-color-orange-6);
   --mantine-color-orange-outline: var(--mantine-color-orange-6);
   --mantine-color-orange-outline-hover: rgba(253, 126, 20, 0.05);
+
+  --sheet-background-color: #fefefe;
 }
 
-:root[data-mantine-color-scheme='dark'] {
+:root[data-mantine-color-scheme="dark"] {
   --mantine-color-scheme: dark;
   --mantine-color-bright: var(--mantine-color-white);
   --mantine-color-text: var(--mantine-color-dark-0);
@@ -501,4 +505,6 @@
   --mantine-color-orange-light-color: var(--mantine-color-orange-3);
   --mantine-color-orange-outline: var(--mantine-color-orange-4);
   --mantine-color-orange-outline-hover: rgba(255, 169, 77, 0.05);
+
+  --sheet-background-color: #303030;
 }

@@ -3,14 +3,14 @@
 
 .item {
   padding: 1rem 1rem 2rem 1rem;
-  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.025));
+  background: linear-gradient(180deg, var(--sheet-background-color), rgba(0, 0, 0, 0.025));
   border-bottom: 1px solid #ccc;
   position: relative;
   transition: background 0.1s ease;
   cursor: pointer;
 
   &:hover {
-    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.075));
+    background: linear-gradient(180deg, var(--sheet-background-color), rgba(0, 0, 0, 0.025));
   }
 
   h4 {

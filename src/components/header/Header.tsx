@@ -4,7 +4,7 @@ import css from "./Header.module.scss";
 import { ActionIcon } from "@mantine/core";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import Logo from "@/assets/images/logo-92x50.png";
+import Logo from "/public/assets/images/logo-92x50.png";
 import { useAppStore } from "@/stores/app";
 import { PanelLeftOpen } from "lucide-react";
 

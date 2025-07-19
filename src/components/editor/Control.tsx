@@ -6,7 +6,7 @@ import { clientApi } from "@/apis/fetcher";
 import { ACCEPTED_IMAGE_MIME_TYPES, IMAGE_URL } from "@/constances";
 import { toast } from "sonner";
 import { Upload } from "lucide-react";
-import Youtube from "@/assets/svg/youtube.svg?react";
+import Youtube from "/public/assets/svg/youtube.svg?react";
 
 interface ControlProps {
   editor: Editor;

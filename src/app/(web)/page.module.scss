@@ -16,17 +16,22 @@
 
   h2 {
     font-size: 1.5rem;
-    color: #787878;
     display: inline-block;
     margin-right: 10px;
   }
 
   a {
     font-size: 0.875rem;
-    background-color: #989898;
-    padding-inline: 10px;
-    border-radius: 15px;
+    background-color: #000000;
+    padding: 0.25rem 1rem;
+    border-radius: 9999px;
     color: #ffffff;
+    transition: background-color 0.1s ease;
+    font-weight: 500;
+
+    &:hover {
+      background-color: #101010;
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-import RefList from "@/components/refCard/RefList";
+import RefList from "@/components/refCard/ref-list";
 import Nav from "@/components/reference/Nav";
 import { REFERENCE_PAGE_SIZE, REFERENCE_TAG } from "@/constances";
 import css from "./page.module.scss";

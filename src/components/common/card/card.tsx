@@ -4,7 +4,7 @@ import css from "./Card.module.scss";
 import { useRouter } from "next/navigation";
 import dayjs from "@/libraries/dayjs";
 import { TPublicPost } from "@/libraries/pg/posts/posts.type";
-import PlaceholderImage from "@/assets/images/neon-512x512.png";
+import PlaceholderImage from "/public/assets/images/neon-512x512.png";
 import Image from "next/image";
 import { Avatar } from "@mantine/core";
 

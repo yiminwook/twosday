@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import css from "./PostList.module.scss";
 import { useRouter } from "next/navigation";
 import { TPublicPost } from "@/libraries/pg/posts/posts.type";
 import dayjs from "@/libraries/dayjs";
 import { Pagination } from "@mantine/core";
 import Image from "next/image";
-import PlaceholderImage from "@/assets/images/neon-512x512.png";
+import PlaceholderImage from "/public/assets/images/neon-512x512.png";
+import css from "./PostList.module.scss";
 
 interface Props {
   posts: TPublicPost[];

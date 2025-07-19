@@ -1,40 +1,46 @@
 .wrap {
-  padding: 5rem 2rem;
+  padding: 2rem 0rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   min-width: 0px;
-  gap: 5rem;
+  gap: 1rem;
 }
 
 @include util.min-width(sm) {
   .wrap {
     flex-direction: row;
     justify-content: space-between;
+    padding: 5rem 0rem;
   }
 }
 
 .left {
+  max-width: 35rem;
 }
 
 .title {
   font-size: 2rem;
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: 0.05em;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
 }
 
 .desc {
+  margin-top: 1rem;
+  line-height: 1.5;
+  font-size: 1.2rem;
 }
 
 .tagBox {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 
 .buttonBox {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   margin-top: 1rem;
 }
@@ -47,20 +53,11 @@
 }
 
 .imageBox {
-  width: 250px;
-  height: 250px;
+  width: 18rem;
+  height: 18rem;
   margin: 0 auto;
   border: 4px solid #ccc;
   border-radius: 9999px;
   position: relative;
   overflow: hidden;
-}
-
-.image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: green;
 }

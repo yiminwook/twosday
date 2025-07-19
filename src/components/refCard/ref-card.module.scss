@@ -2,6 +2,7 @@
   flex: 0 1 100%;
   padding: 2em 1em;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px;
+  background-color: var(--sheet-background-color);
 }
 
 @include util.min-width(sm) {

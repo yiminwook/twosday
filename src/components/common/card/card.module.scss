@@ -1,7 +1,9 @@
 .wrap {
   position: relative;
-  border-radius: 10px;
-  box-shadow: 2px 4px 12px rgba(17, 17, 17, 0.25);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  background-color: var(--sheet-background-color);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .imageBox {
@@ -56,14 +58,8 @@
 .title {
   margin-bottom: 20px;
   font-weight: 500;
-  font-size: 1em;
+  font-size: 1em; // 고정, 증가되면 카드가 커져 스크롤이 생긴다.
   @include util.line-clamp(1);
-}
-
-@include util.min-width(sm) {
-  .title {
-    font-size: 1.2em;
-  }
 }
 
 .tagBox {
