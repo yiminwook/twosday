@@ -6,7 +6,7 @@ import { parse } from "qs";
 import { getImagesDto } from "@/libraries/pg/images/images.dto";
 import { getImages, postImage } from "@/libraries/pg/images/images.service";
 import path from "node:path";
-import { ACCEPTED_IMAGE_MIME_TYPES } from "@/constances";
+import { ACCEPTED_IMAGE_MIME_TYPES } from "@/constants";
 import { checkBearerAuth } from "@/libraries/auth/jwt.service";
 import { headers } from "next/headers";
 

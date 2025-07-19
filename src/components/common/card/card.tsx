@@ -1,6 +1,6 @@
 "use client";
 import gravatar from "gravatar";
-import css from "./Card.module.scss";
+import css from "./card.module.scss";
 import { useRouter } from "next/navigation";
 import dayjs from "@/libraries/dayjs";
 import { TPublicPost } from "@/libraries/pg/posts/posts.type";

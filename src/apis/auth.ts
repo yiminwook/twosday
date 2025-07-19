@@ -1,4 +1,4 @@
-import { utf8ToBase64 } from "@/utils/textEncode";
+import { utf8ToBase64 } from "@/utils/text-encode";
 import { clientApi } from "./fetcher";
 
 export const signInFn = async (arg: { email: string; password: string }) => {

@@ -1,5 +1,5 @@
 "use client";
-import { PORTAL_MODAL_CONTAINER_ID } from "@/constances";
+import { PORTAL_MODAL_CONTAINER_ID } from "@/constants";
 import { createPortal } from "react-dom";
 
 type Props = {

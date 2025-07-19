@@ -6,7 +6,7 @@ import { MouseEvent } from "react";
 import css from "./layout.module.scss";
 import dynamic from "next/dynamic";
 
-const ThemeButton = dynamic(() => import("@/components/ThemeButton"), { ssr: false });
+const ThemeButton = dynamic(() => import("@/components/theme-button"), { ssr: false });
 
 type Props = {
   children: React.ReactNode;

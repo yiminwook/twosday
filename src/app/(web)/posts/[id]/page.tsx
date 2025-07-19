@@ -1,14 +1,14 @@
 import { notFound } from "next/navigation";
 import css from "./page.module.scss";
-import Viewer from "@/components/editor/Viewer";
-import { DisqusComment } from "@/components/Comment";
-import { ResponsiveAdfit } from "@/components/adBanner/Adfit";
-import AdBanner from "@/components/adBanner/AdBanner";
+import Viewer from "@/components/editor/viewer";
+import { DisqusComment } from "@/components/comment";
+import { ResponsiveAdfit } from "@/components/ad/adfit";
+import AdBanner from "@/components/ad/ad-banner";
 import { TGetPostResponse } from "@/libraries/pg/posts/posts.type";
-import ViewObserver from "@/components/post/ViewObserver";
-import PostInfo from "@/components/post/PostInfo";
+import ViewObserver from "@/components/post/view-observer";
+import PostInfo from "@/components/post/post-info";
 import { serverApi } from "@/apis/fetcher";
-import { CATEGORY_TAG, POST_TAG, TAG_TAG, USER_TAG } from "@/constances";
+import { CATEGORY_TAG, POST_TAG, TAG_TAG, USER_TAG } from "@/constants";
 
 interface PageProps {
   params: Promise<{ id: string }>;

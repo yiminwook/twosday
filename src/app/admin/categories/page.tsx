@@ -1,5 +1,5 @@
 "use client";
-import { SortableTree } from "@/components/category/SortableTree";
+import { SortableTree } from "@/components/category/sortable-tree";
 
 export default function Page() {
   return (

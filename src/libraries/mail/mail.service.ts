@@ -1,5 +1,5 @@
 import * as nodemailer from "nodemailer";
-import { verificationTemplate } from "./template/verificationCode.";
+import { verificationTemplate } from "./template/verification-code.";
 
 export const sendVerificationCode = async (email: string, code: string) => {
   const user = process.env.MAIL_USER;

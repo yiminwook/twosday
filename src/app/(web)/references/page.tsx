@@ -1,6 +1,6 @@
-import RefList from "@/components/refCard/ref-list";
-import Nav from "@/components/reference/Nav";
-import { REFERENCE_PAGE_SIZE, REFERENCE_TAG } from "@/constances";
+import RefList from "@/components/ref-card/ref-list";
+import Nav from "@/components/reference/nav";
+import { REFERENCE_PAGE_SIZE, REFERENCE_TAG } from "@/constants";
 import css from "./page.module.scss";
 import { serverApi } from "@/apis/fetcher";
 import { TGetReferencesResponse } from "@/libraries/pg/references/references.type";

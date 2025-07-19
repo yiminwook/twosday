@@ -1,20 +1,20 @@
-import RefCard from "@/components/refCard/ref-card";
+import RefCard from "@/components/ref-card/ref-card";
 import Link from "next/link";
-import AdBanner from "@/components/adBanner/AdBanner";
+import AdBanner from "@/components/ad/ad-banner";
 import CardSlider from "@/components/common/card/card-slider";
-import HeroSection from "@/components/home/HeroSection";
-import TechBelt from "@/components/home/TechBelt";
+import HeroSection from "@/components/home/hero-section";
+import TechBelt from "@/components/home/tech-belt";
 import PostsList from "@/components/post/post-list";
-import { ResponsiveAdfit } from "@/components/adBanner/Adfit";
+import { ResponsiveAdfit } from "@/components/ad/adfit";
 import { TGetPostsResponse } from "@/libraries/pg/posts/posts.type";
 import { serverApi } from "@/apis/fetcher";
 import { TGetReferencesResponse } from "@/libraries/pg/references/references.type";
-import { CATEGORY_TAG, POST_TAG, REFERENCE_TAG, TAG_TAG, USER_TAG } from "@/constances";
+import { CATEGORY_TAG, POST_TAG, REFERENCE_TAG, TAG_TAG, USER_TAG } from "@/constants";
 import Intro from "@/components/home/intro";
 
 // css
 import css from "./page.module.scss";
-import refListCss from "@/components/refCard/ref-list.module.scss";
+import refListCss from "@/components/ref-card/ref-list.module.scss";
 
 const RECENT_POST_SIZE = 6;
 const POPULAR_POST_SIZE = 6;
