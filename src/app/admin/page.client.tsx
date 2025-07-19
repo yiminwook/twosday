@@ -1,5 +1,5 @@
 "use client";
-import { useSession } from "@/libraries/auth/useSession";
+import { useSession } from "@/libraries/auth/use-session";
 
 type Props = {};
 

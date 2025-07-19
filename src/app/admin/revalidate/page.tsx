@@ -1,6 +1,6 @@
 "use client";
 import { revalidateApi } from "@/apis/fetcher";
-import { CATEGORY_TAG, META_TAG, POST_TAG, REFERENCE_TAG, TAG_TAG, USER_TAG } from "@/constances";
+import { CATEGORY_TAG, META_TAG, POST_TAG, REFERENCE_TAG, TAG_TAG, USER_TAG } from "@/constants";
 import { Button, LoadingOverlay, Table } from "@mantine/core";
 import { useMutation } from "@tanstack/react-query";
 import { MouseEvent } from "react";

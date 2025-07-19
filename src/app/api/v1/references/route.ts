@@ -1,4 +1,4 @@
-import { parseMetadata } from "@/libraries/dompurify/parseMetadata";
+import { parseMetadata } from "@/libraries/dompurify/parse-metadata";
 import { BadRequestError, serverErrorHandler } from "@/libraries/error";
 import {
   createReferenceDto,

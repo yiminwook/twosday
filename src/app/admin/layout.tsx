@@ -1,4 +1,4 @@
-import { Authorized } from "@/libraries/auth/Authorized";
+import { Authorized } from "@/libraries/auth/authorized";
 import Client from "./layout.client";
 
 type AdminLayoutProps = {

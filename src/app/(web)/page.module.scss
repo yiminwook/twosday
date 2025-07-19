@@ -10,18 +10,28 @@
 
 .sectionTitleBox {
   margin-bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   h2 {
-    font-size: 24px;
-    color: #787878;
+    font-size: 1.5rem;
     display: inline-block;
     margin-right: 10px;
   }
+
   a {
-    font-size: 18px;
-    background-color: #989898;
-    padding-inline: 10px;
-    border-radius: 15px;
+    font-size: 0.875rem;
+    background-color: #000000;
+    padding: 0.25rem 1rem;
+    border-radius: 9999px;
     color: #ffffff;
+    transition: background-color 0.1s ease;
+    font-weight: 500;
+
+    &:hover {
+      background-color: #101010;
+    }
   }
 }
 
@@ -29,7 +39,6 @@
 }
 
 .cardSliderBox {
-  width: calc(100vw - var(--app-layout-padding) * 2);
 }
 
 .adBox {

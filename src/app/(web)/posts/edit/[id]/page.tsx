@@ -1,14 +1,14 @@
 "use client";
 import { clientApi } from "@/apis/fetcher";
-import { AwaitAuthorized } from "@/libraries/auth/Authorized";
-import { useSession } from "@/libraries/auth/useSession";
+import { AwaitAuthorized } from "@/libraries/auth/authorized";
+import { useSession } from "@/libraries/auth/use-session";
 import { TPublicPost } from "@/libraries/pg/posts/posts.type";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
-const PatchHome = dynamic(() => import("@/components/editor/PatchHome"), { ssr: false });
+const PatchHome = dynamic(() => import("@/components/editor/patch-home"), { ssr: false });
 
 export default function Page() {
   return (

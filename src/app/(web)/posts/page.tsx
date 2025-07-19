@@ -1,7 +1,7 @@
-import PostList from "@/components/PostList";
+import PostList from "@/components/post-list";
 import Link from "next/link";
 import css from "./page.module.scss";
-import { CATEGORY_TAG, POST_TAG, POSTS_PAGE_SIZE, TAG_TAG, USER_TAG } from "@/constances";
+import { CATEGORY_TAG, POST_TAG, POSTS_PAGE_SIZE, TAG_TAG, USER_TAG } from "@/constants";
 import { TGetPostsResponse } from "@/libraries/pg/posts/posts.type";
 import { serverApi } from "@/apis/fetcher";
 

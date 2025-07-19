@@ -1,0 +1,50 @@
+.wrap {
+  flex: 0 1 100%;
+  padding: 2em 1em;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 0px 1px;
+  background-color: var(--sheet-background-color);
+}
+
+@include util.min-width(sm) {
+  .wrap {
+    flex: 1 1 300px;
+  }
+}
+
+@include util.min-width(md) {
+  .wrap {
+    max-width: 295px;
+  }
+}
+
+.imgBox {
+  display: inline-block;
+  overflow: hidden;
+  margin-bottom: 1em;
+  aspect-ratio: 16 / 9;
+  cursor: pointer;
+  width: 100%;
+}
+
+.img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-position: center center;
+}
+
+.descBox {
+}
+
+.title {
+  @include util.line-clamp(2);
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.desc {
+  @include util.line-clamp(2);
+  font-size: 12px;
+  color: #767676;
+}

@@ -1,10 +1,10 @@
 import { PropsWithChildren } from "react";
-import Header from "@/components/header/Header";
-import Navigation from "@/components/navigation/Navigation";
-import AppSidebar from "@/components/sidebar/AppSidebar";
+import Header from "@/components/header/header";
+import Navigation from "@/components/navigation/navigation";
+import AppSidebar from "@/components/sidebar/app-sidebar";
 import { serverApi } from "@/apis/fetcher";
 import { TGetCategoriesResponse } from "@/libraries/pg/categories/categories.type";
-import { CATEGORY_TAG } from "@/constances";
+import { CATEGORY_TAG } from "@/constants";
 
 import "@/styles/cropper.scss";
 import css from "./layout.module.scss";

@@ -1,10 +1,10 @@
 import { Toaster } from "sonner";
-import Devtools from "@/components/config/Devtools";
-import Hotkeys from "@/components/config/Hotkeys";
-import ReactQuery from "./ReactQuery";
-import MantineProvider from "./MantainProvider";
-import AsyncModalContainer from "../common/modal/AsyncModalContainer";
-import PortalModalContainer from "../common/modal/PortalModalContainer";
+import Devtools from "@/components/config/devtools";
+import Hotkeys from "@/components/config/hotkeys";
+import ReactQuery from "./react-query";
+import MantineProvider from "./mantain-provider";
+import AsyncModalContainer from "../common/modal/async-modal-container";
+import PortalModalContainer from "../common/modal/portal-modal-container";
 
 interface ConfigsProps {
   children: React.ReactNode;

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { UnauthorizedError } from "../error";
 import { ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE } from "./config";
-import { base64ToUtf8 } from "@/utils/textEncode";
+import { base64ToUtf8 } from "@/utils/text-encode";
 
 export const generateAccessToken = (data: Payload) => {
   return jwt.sign(data, process.env.AUTH_ACCESS_SECRET, { expiresIn: ACCESS_TOKEN_MAX_AGE });

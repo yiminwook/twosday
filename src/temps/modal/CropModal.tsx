@@ -9,7 +9,7 @@ import * as modal from "./cropModal.css";
 import Cropper from "cropperjs";
 import { readFile } from "../../utils/readFile";
 import { useTransition } from "@/hooks/useTransition";
-import classNames from "classnames";
+import clsx from "clsx";
 
 export type CroppedData = {
   data: {
@@ -79,7 +79,7 @@ export default function CropModal({
 
   return (
     <Modal id={ID}>
-      <div className={classNames(modal.content, modifier)} onAnimationEnd={onAnimationEnd}>
+      <div className={clsx(modal.content, modifier)} onAnimationEnd={onAnimationEnd}>
         <div>
           <div className={css.modalHeader}>
             <h3 className={modal.title}>이미지 업로드</h3>

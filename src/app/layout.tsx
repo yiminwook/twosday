@@ -17,9 +17,9 @@ import { PropsWithChildren } from "react";
 import Configs from "@/components/config";
 import { ColorSchemeScript } from "@mantine/core";
 
-import MswProvider from "@/mocks/MswProvider";
-import "@/mocks/enableServer";
-import { THEME_LOCAL_STORAGE_KEY } from "@/constances";
+import MswProvider from "@/mocks/msw-provider";
+import "@/mocks/enable-server";
+import { THEME_LOCAL_STORAGE_KEY } from "@/constants";
 
 export const metadata: Metadata = {
   title: "Twosday",

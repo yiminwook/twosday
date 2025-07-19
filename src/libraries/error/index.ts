@@ -1,2 +1,2 @@
-export * from "./ServerError";
-export * from "./serverErrorHandler";
+export * from "./server-error";
+export * from "./server-error-handler";

@@ -1,5 +1,5 @@
-import Fire from '@/libraries/error/Fire';
-import { PropsWithChildren } from 'react';
+import Fire from "@/libraries/error/fire";
+import { PropsWithChildren } from "react";
 
 export default function TestErrorLayout({ children }: PropsWithChildren) {
   return (
