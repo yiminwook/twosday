@@ -39,6 +39,18 @@
 }
 
 .cardSliderBox {
+  // 제외
+  // 스크롤바 너비
+  // 좌우 패딩
+  // 사이드바 너비
+  max-width: calc(100vw - var(--app-layout-padding) * 2 - 7.5px);
+  overflow: hidden;
+}
+
+@include util.min-width(sm) {
+  .cardSliderBox {
+    max-width: calc(100vw - var(--app-layout-padding) * 2 - 7.5px - var.$sidebar-width);
+  }
 }
 
 .adBox {

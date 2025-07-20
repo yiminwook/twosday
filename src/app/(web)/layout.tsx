@@ -22,7 +22,7 @@ export default async function Layout({ children }: PropsWithChildren) {
       <div className={css.app}>
         <Header />
         <div className={css.expand}>{children}</div>
-        <Navigation />
+        {/* <Navigation /> */}
       </div>
     </div>
   );

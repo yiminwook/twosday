@@ -17,11 +17,11 @@
 
 .cardSlider > article {
   scroll-snap-align: center;
-  flex: 0 0 50%;
+  flex: 0 0 10rem;
 }
 
 @include util.min-width(md) {
   .cardSlider > article {
-    flex: 0 0 25%;
+    flex: 0 0 15rem;
   }
 }

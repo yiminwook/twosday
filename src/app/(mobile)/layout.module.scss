@@ -1,4 +1,4 @@
-$mobile-min-width: 480px;
+$mobile-min-width: 30rem;
 
 .wrap {
   max-width: $mobile-min-width;
@@ -7,6 +7,8 @@ $mobile-min-width: 480px;
   margin: 0 auto;
   box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.05);
   padding-top: 62px;
+  border-left: 1px solid #70737c36;
+  border-right: 1px solid #70737c36;
 }
 
 .inner {
@@ -16,16 +18,4 @@ $mobile-min-width: 480px;
   gap: 48px;
   padding-bottom: 24px;
   padding: 14px;
-}
-
-.title {
-  text-align: center;
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 24px;
-}
-
-.backBtn {
-  margin-top: 100;
-  color: #747474;
 }

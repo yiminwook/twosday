@@ -58,8 +58,14 @@
 .title {
   margin-bottom: 20px;
   font-weight: 500;
-  font-size: 1em; // 고정, 증가되면 카드가 커져 스크롤이 생긴다.
+  font-size: 1em;
   @include util.line-clamp(1);
+}
+
+@include util.min-width(sm) {
+  .title {
+    font-size: 1.2em;
+  }
 }
 
 .tagBox {
