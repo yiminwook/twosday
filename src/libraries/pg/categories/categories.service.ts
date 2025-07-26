@@ -1,3 +1,4 @@
+import "server-only";
 import { withPgConnection, withPgTransaction } from "..";
 import { CATEGORIES_TABLE, POSTS_TABLE } from "../tables";
 import { TPostCategoryDto, TPutCategoryDto } from "./categories.dto";

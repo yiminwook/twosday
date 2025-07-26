@@ -1,3 +1,4 @@
+import "server-only";
 import { withPgConnection } from "..";
 import { USERS_TABLE } from "../tables";
 

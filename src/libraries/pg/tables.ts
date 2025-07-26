@@ -1,3 +1,4 @@
+import "server-only";
 export const USERS_TABLE = "users";
 export const POSTS_TABLE = "posts";
 export const IMAGES_TABLE = "images";

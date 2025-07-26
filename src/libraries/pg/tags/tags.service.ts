@@ -1,3 +1,4 @@
+import "server-only";
 import { InternalServerError } from "@/libraries/error";
 import { isDatabaseError, withPgConnection, withPgTransaction } from "..";
 import { POSTS_TAGS_TABLE, TAGS_TABLE } from "../tables";

@@ -1,3 +1,4 @@
+import "server-only";
 import { pageOffset, withPgConnection, withPgTransaction } from "..";
 import {
   CATEGORIES_TABLE,
@@ -14,75 +15,51 @@ import {
   removeImagesQueryByTransaction,
 } from "../images/images.service";
 import { addTagsQueryByTransaction, removeTagsQueryByTransaction } from "../tags/tags.service";
-import { TPublicPost } from "./posts.type";
+import * as type from "./posts.type";
+import * as sql from "./posts.sql";
 import { ForbiddenError } from "@/libraries/error";
 
 export const getPosts = withPgConnection(async (client, dto: TGetPostsDto) => {
-  const countSql = `
-    SELECT COUNT(DISTINCT T01."id") as "count"
-    FROM "${POSTS_TABLE}" T01
-    WHERE LOWER(T01."title") LIKE LOWER('%' || $1 || '%')
-      AND T01."deleted_at" IS NULL
-      AND T01."is_public" = TRUE
-  `;
-
-  const countResult = await client.query<{ count: number }>(countSql, [dto.query]);
-
-  const orderBy =
-    dto.order === "popular"
-      ? `ORDER BY T01."created_at" DESC, T01."view_count" DESC`
-      : `ORDER BY T01."created_at" DESC`;
-
-  const listSql = `
-    SELECT  T01."id"                                AS "postId",
-            T01."title"                             AS "title",
-            T01."content"                           AS "content",
-            T01."view_count"                        AS "viewCount",
-            T01."created_at"                        AS "createdAt",
-            T01."updated_at"                        AS "updatedAt",
-            T02."id"                                AS "authorId",
-            T02."email"                             AS "email",
-            T02."nickname"                          AS "nickname",
-            T02."avatar"                            AS "avatar",
-            COALESCE(
-              ARRAY(
-                SELECT T04_sub."key"
-                FROM "${POSTS_IMAGES_TABLE}" T03_sub
-                JOIN "${IMAGES_TABLE}" T04_sub ON T03_sub."images_id" = T04_sub."id"
-                WHERE T03_sub."posts_id" = T01."id"
-                ORDER BY T04_sub."id"
-              ), '{}'
-            ) AS "imageKeys",
-            COALESCE(
-              JSON_AGG(DISTINCT JSONB_BUILD_OBJECT('id', T07."id", 'name', T07."name")) FILTER (WHERE T07."id" IS NOT NULL),
-              '[]'::json
-            ) AS "tags",
-            JSONB_BUILD_OBJECT('id', T05."id", 'name', T05."name") AS "category"
-    FROM "${POSTS_TABLE}"             T01
-    LEFT JOIN "${USERS_TABLE}"        T02 ON T01."author_id"   = T02."id"
-    LEFT JOIN "${POSTS_IMAGES_TABLE}" T03 ON T01."id"          = T03."posts_id"
-    LEFT JOIN "${IMAGES_TABLE}"       T04 ON T03."images_id"   = T04."id"
-    LEFT JOIN "${CATEGORIES_TABLE}"   T05 ON T01."category_id" = T05."id"
-    LEFT JOIN "${POSTS_TAGS_TABLE}"   T06 ON T01."id"          = T06."posts_id"
-    LEFT JOIN "${TAGS_TABLE}"         T07 ON T06."tags_id"     = T07."id"
-    WHERE LOWER(T01."title") LIKE LOWER('%' || $1 || '%')
-      AND T01."deleted_at" IS NULL
-      AND T01."is_public" = TRUE
-    GROUP BY  T01."id", 
-              T02."id", 
-              T05."id"
-    ${orderBy}
-    OFFSET $2 ROWS FETCH NEXT $3 ROWS ONLY
-  `;
-
-  const listResult = await client.query<TPublicPost>(listSql, [
+  const listResult = await client.query<type.TPostListSqlResult>(sql.postListSql(dto), [
     dto.query,
     pageOffset(dto.page, dto.size),
     dto.size,
   ]);
 
+  const postIds = listResult.rows.map((post) => post.postId);
+
+  const [imagesResult, tagsResult, countResult] = await Promise.all([
+    client.query<type.TPostImageSqlResult>(sql.postImagesSql(postIds)),
+    client.query<type.TPostTagSqlResult>(sql.postTagsSql(postIds)),
+    client.query<type.TPostCountSqlResult>(sql.postCountSql, [dto.query]),
+  ]);
+
+  const imageMap = new Map<number, string[]>();
+  const tagMap = new Map<number, { id: number; name: string }[]>();
+
+  imagesResult.rows.forEach((image) => {
+    const keys = imageMap.get(image.postId) || [];
+    keys.push(image.imageKey);
+    imageMap.set(image.postId, keys);
+  });
+
+  tagsResult.rows.forEach((tag) => {
+    const tags = tagMap.get(tag.postId) || [];
+    tags.push({ id: tag.tagId, name: tag.tagName });
+    tagMap.set(tag.postId, tags);
+  });
+
+  const posts = listResult.rows.map<type.TPublicPost>(({ categoryId, categoryName, ...post }) => {
+    return {
+      ...post,
+      imageKeys: imageMap.get(post.postId) || [],
+      tags: tagMap.get(post.postId) || [],
+      category: { id: categoryId, name: categoryName },
+    };
+  });
+
   return {
-    posts: listResult.rows,
+    posts,
     total: countResult.rows[0].count,
   };
 });
@@ -129,7 +106,7 @@ export const getPublicPostById = withPgConnection(async (client, postId: number)
               T05."id"
   `;
 
-  const postResult = await client.query<TPublicPost>(postSql, [postId]);
+  const postResult = await client.query<type.TPublicPost>(postSql, [postId]);
 
   return postResult.rows[0];
 });
