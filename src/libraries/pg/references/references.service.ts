@@ -1,3 +1,4 @@
+import "server-only";
 import { isDatabaseError, pageOffset, withPgConnection, withPgTransaction } from "..";
 import { REFERENCES_TABLE } from "../tables";
 import { TCreateReferenceDto, TGetReferencesDto, TReference } from "./references.dto";

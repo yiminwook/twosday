@@ -1,3 +1,4 @@
+import "server-only";
 import { Client, DatabaseError, Pool, PoolClient } from "pg";
 import { z } from "zod";
 import { CustomServerError } from "../error";

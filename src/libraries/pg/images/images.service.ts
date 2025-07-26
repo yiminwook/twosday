@@ -1,3 +1,4 @@
+import "server-only";
 import { PoolClient } from "pg";
 import { pageOffset, withPgConnection, withPgTransaction } from "..";
 import { IMAGES_TABLE, POSTS_IMAGES_TABLE } from "../tables";
