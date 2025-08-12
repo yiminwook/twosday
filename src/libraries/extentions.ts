@@ -115,6 +115,7 @@ export const CustomImageResize = Image.extend({
       // container.style.display = 'inline-block'; // 컨테이너 자체는 인라인 블록처럼 동작
       container.style.lineHeight = "0"; // 이미지 하단 여백 제거
       container.style.position = "relative"; // 컨트롤러/닷 위치 기준점
+      container.classList.add("image-node");
 
       const img = document.createElement("img");
 
@@ -454,7 +455,9 @@ export const extensions: Extensions = [
   CustomImageResize,
   CodeBlockLowlight.configure({ lowlight: createLowlight(common) }),
   TextAlign.configure({ types: ["heading", "paragraph"] }),
-  Youtube,
+  Youtube.configure({
+    HTMLAttributes: { class: "youtube-video-node" },
+  }),
   Link.configure({
     // openOnClick: false, //편집기중은 비활성화
     autolink: true,
