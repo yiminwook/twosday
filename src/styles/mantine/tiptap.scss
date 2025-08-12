@@ -462,3 +462,20 @@ $editor-min-height: 450px;
 .m_8b44009a :where(li > label) {
   margin-inline-end: var(--mantine-spacing-sm);
 }
+
+// 모바일 화면에서 유투브 영상으로인한 스크롤방지
+.youtube-video-node {
+  width: 100%;
+  max-width: 640px;
+}
+
+// 모바일 화면에서 이미지크기로 인한 스크롤방지
+@include util.max-width(md) {
+  .image-node {
+    width: 100% !important;
+  }
+
+  .image-node img {
+    width: 100% !important;
+  }
+}
