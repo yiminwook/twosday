@@ -63,7 +63,7 @@ export default function PatchHome({
         console.log("HTML", editor.getHTML());
       },
     },
-    [togglePreview],
+    [], // 인스턴스 초기화 의존성 배열
   );
 
   const tagsQuery = useServerTags();
