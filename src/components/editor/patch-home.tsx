@@ -15,7 +15,6 @@ import {
 } from "@mantine/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEditor } from "@tiptap/react";
-import ky from "ky";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
@@ -91,8 +90,11 @@ export default function PatchHome({
       return json.data;
     },
     onSuccess: async (data) => {
+      await Promise.all([
+        revalidateApi.get(`tag?name=${POST_TAG}`),
+        queryClient.invalidateQueries({ queryKey: ["post", postId] }),
+      ]);
       toast.success("업로드 성공");
-      await revalidateApi.get(`tag?name=${POST_TAG}`);
       router.push(`/posts/${data.id}`);
     },
   });

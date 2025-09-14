@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
       throw new BadRequestError(dto.error.errors[0].message);
     }
 
-    const data = await getPosts(dto.data);
+    const data = await getPosts(dto.data, true);
     const parsedPosts = parsePosts(data.posts);
 
     return NextResponse.json(
