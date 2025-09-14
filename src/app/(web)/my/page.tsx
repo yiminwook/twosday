@@ -1,20 +1,23 @@
 "use client";
 import NoSSR from "@/components/common/NoSSR";
-import { Authorized } from "@/libraries/auth/authorized";
+import { AwaitAuthorized } from "@/libraries/auth/authorized";
 import { useSuspenseSession } from "@/libraries/auth/use-session";
 import css from "./page.module.scss";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default function Page() {
   return (
     <NoSSR>
-      <Authorized>
-        <div className={css.wrap}>
-          <h1 className={css.title}>마이페이지</h1>
-          <Info />
-          <Nav />
-        </div>
-      </Authorized>
+      <Suspense fallback={<div>fetching client side</div>}>
+        <AwaitAuthorized>
+          <div className={css.wrap}>
+            <h1 className={css.title}>마이페이지</h1>
+            <Info />
+            <Nav />
+          </div>
+        </AwaitAuthorized>
+      </Suspense>
     </NoSSR>
   );
 }

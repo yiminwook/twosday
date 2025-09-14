@@ -1,5 +1,5 @@
 "use client";
-import { clientApi, revalidateApi } from "@/apis/fetcher";
+import { revalidateApi } from "@/apis/fetcher";
 import { IMAGE_URL, POST_TAG } from "@/constants";
 import { useSession } from "@/libraries/auth/use-session";
 import { extensions } from "@/libraries/extentions";
@@ -14,7 +14,7 @@ import {
   Stack,
   TagsInput,
 } from "@mantine/core";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEditor } from "@tiptap/react";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -26,6 +26,7 @@ import editCss from "./edit.module.scss";
 import { useSetModalStore } from "@/stores/modal-store";
 import ConfirmModal from "../common/modal/confirm-modal";
 import { useManageTags, useServerTags } from "@/hooks/use-tags";
+import { usePostCreateMutation } from "@/hooks/use-post";
 
 type Props = {};
 
@@ -60,34 +61,7 @@ export default function PostHome({}: Props) {
 
   const tagsQuery = useServerTags();
   const { postTagMutation, removeTagMutation } = useManageTags(session);
-
-  const mutationPost = useMutation({
-    mutationFn: async (arg: { content: string; imageKeys: string[]; tagIds: number[] }) => {
-      const json = await clientApi
-        .post<{ data: { id: number }; message: string }>("posts", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.accessToken}`,
-          },
-          json: {
-            title,
-            content: arg.content,
-            tagIds: arg.tagIds,
-            imageKeys: arg.imageKeys,
-            categoryId: null,
-            isPublic: true,
-          },
-        })
-        .json();
-
-      return json.data;
-    },
-    onSuccess: async (data) => {
-      toast.success("업로드 성공");
-      await revalidateApi.get(`tag?name=${POST_TAG}`);
-      router.push(`/posts/${data.id}`);
-    },
-  });
+  const mutationPost = usePostCreateMutation();
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(() => e.target.value);
@@ -111,13 +85,27 @@ export default function PostHome({}: Props) {
       })
       .filter((src): src is string => typeof src === "string");
 
-    mutationPost.mutate({
-      content: editor.getHTML(),
-      imageKeys: savedImageKeys || [],
-      tagIds: tags
-        .map((tag) => tagsQuery.data.find((t) => t.name === tag)?.id)
-        .filter((tagId): tagId is number => typeof tagId === "number"),
-    });
+    mutationPost.mutate(
+      {
+        title,
+        content: editor.getHTML(),
+        imageKeys: savedImageKeys || [],
+        tagIds: tags
+          .map((tag) => tagsQuery.data.find((t) => t.name === tag)?.id)
+          .filter((tagId): tagId is number => typeof tagId === "number"),
+        session,
+      },
+      {
+        onSuccess: async (data) => {
+          await Promise.all([
+            revalidateApi.get(`tag?name=${POST_TAG}`), // 서버캐시
+            queryClient.invalidateQueries({ queryKey: ["author-posts"] }), // 클라이언트캐시
+          ]);
+          toast.success("업로드 성공");
+          router.push(`/posts/${data.id}`);
+        },
+      },
+    );
   };
 
   const comboboxTags = useMemo<ComboboxData>(() => {

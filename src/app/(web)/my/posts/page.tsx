@@ -1,6 +1,6 @@
 "use client";
 import NoSSR from "@/components/common/NoSSR";
-import { Authorized } from "@/libraries/auth/authorized";
+import { AwaitAuthorized } from "@/libraries/auth/authorized";
 import { useSuspenseSession } from "@/libraries/auth/use-session";
 import css from "./page.module.scss";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -13,14 +13,14 @@ import Link from "next/link";
 export default function Page() {
   return (
     <NoSSR>
-      <Authorized>
-        <div className={css.wrap}>
-          <h1 className={css.title}>나의 포스트</h1>
-          <Suspense fallback={<div>fetching client side</div>}>
+      <Suspense fallback={<div>fetching client side</div>}>
+        <AwaitAuthorized>
+          <div className={css.wrap}>
+            <h1 className={css.title}>나의 포스트</h1>
             <AuthorPosts />
-          </Suspense>
-        </div>
-      </Authorized>
+          </div>
+        </AwaitAuthorized>
+      </Suspense>
     </NoSSR>
   );
 }
