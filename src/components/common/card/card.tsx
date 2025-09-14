@@ -3,20 +3,20 @@ import gravatar from "gravatar";
 import css from "./card.module.scss";
 import { useRouter } from "next/navigation";
 import dayjs from "@/libraries/dayjs";
-import { TPublicPost } from "@/libraries/pg/posts/posts.type";
+import { TPost } from "@/libraries/pg/posts/posts.type";
 import PlaceholderImage from "/public/assets/images/neon-512x512.png";
 import Image from "next/image";
 import { Avatar } from "@mantine/core";
 
 interface CardProps {
-  post: TPublicPost;
+  post: TPost;
 }
 
 /* eslint-disable @next/next/no-img-element */
 export default function Card({ post }: CardProps) {
   const router = useRouter();
-  const updateTime = dayjs(post.updatedAt).format("yy년 MM월 dd일");
   const onClick = () => router.push(`/posts/${post.postId}`);
+
   return (
     <article className={css.wrap}>
       <div className={css.imageBox} onClick={onClick}>
@@ -48,7 +48,7 @@ export default function Card({ post }: CardProps) {
           <span className={css.editor}>{post.nickname}</span>
         </div>
         <div className={css.timeBox}>
-          <time>{updateTime}</time>
+          <time>{dayjs(post.updatedAt).format("YYYY년 MM월 DD일")}</time>
         </div>
         {/* <div className={css.tagBox}>
           <Tag name="태그1" />

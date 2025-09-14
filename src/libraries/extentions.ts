@@ -100,10 +100,7 @@ export const CustomImageResize = Image.extend({
     // 반환 타입 명시
     return ({ node, editor, getPos }) => {
       // 파라미터 타입 명시 및 반환 타입 NodeView
-      const {
-        view,
-        options: { editable },
-      } = editor;
+      const { view } = editor;
       // 노드의 style 속성 가져오기 (parseHTML 결과)
       const initialNodeStyle = node.attrs.style || "";
 
@@ -118,6 +115,42 @@ export const CustomImageResize = Image.extend({
       container.classList.add("image-node");
 
       const img = document.createElement("img");
+
+      // --- 편집 모드 활성화/비활성화 로직 ---
+      let isActive = false; // 현재 활성화 상태
+      const activate = () => {
+        if (isActive || !editor.isEditable) return;
+        isActive = true;
+        container.style.border = "1px dashed #6C6C6C";
+        paintPositionController();
+        paintResizeDots();
+        // 다른 이미지 비활성화 (선택 사항)
+        document.querySelectorAll(".ProseMirror-selectednode").forEach((el) => {
+          if (el !== dom) el.classList.remove("ProseMirror-selectednode");
+        });
+        dom.classList.add("ProseMirror-selectednode");
+      };
+
+      const deactivate = () => {
+        if (!isActive) return;
+        isActive = false;
+        container.style.border = "none";
+        positionController?.remove();
+        positionController = null;
+        while (resizeDots.length) resizeDots.pop()?.remove();
+        dom.classList.remove("ProseMirror-selectednode");
+      };
+
+      const syncEditable = () => {
+        if (!editor.isEditable) {
+          deactivate();
+          container.style.pointerEvents = "none";
+        } else {
+          container.style.pointerEvents = "auto";
+        }
+      };
+
+      syncEditable();
 
       // --- 초기 스타일 및 속성 적용 ---
       // 1. 노드의 style 속성을 img 요소에 직접 적용
@@ -177,7 +210,8 @@ export const CustomImageResize = Image.extend({
             };
             // console.log("Dispatching node update with attrs:", newAttrs);
             try {
-              view.dispatch(view.state.tr.setNodeMarkup(pos, null, newAttrs));
+              // 수정 정보를 editor에 반영
+              view.dispatch(view.state.tr.setNodeMarkup(pos, null, newAttrs, node.marks));
             } catch (error) {
               console.error("Error dispatching node update:", error);
             }
@@ -210,6 +244,7 @@ export const CustomImageResize = Image.extend({
           button.addEventListener("mouseover", () => (button.style.opacity = "0.5"));
           button.addEventListener("mouseout", () => (button.style.opacity = "1"));
           button.addEventListener("click", (e) => {
+            if (!editor.isEditable) return;
             e.stopPropagation(); // 이벤트 버블링 중단
 
             // ---- 수정된 부분 시작 ----
@@ -326,18 +361,22 @@ export const CustomImageResize = Image.extend({
             document.removeEventListener("mousemove", onPointerMove);
             document.removeEventListener("touchmove", onPointerMove);
             // height: auto 적용된 최종 스타일 업데이트
-            img.style.width = "100%"; // 명시적으로 설정
+            const finalWidth = container.style.width || `${container.offsetWidth}px`;
+            img.style.width = finalWidth; // px 고정 저장
             img.style.height = "auto";
+            applyLayoutStyles(img.style.cssText);
             dispatchNodeUpdate(); // 노드 업데이트
           };
 
           dot.addEventListener("mousedown", (e) => {
+            if (!editor.isEditable) return;
             e.preventDefault();
             onPointerDown(e.clientX);
           });
           dot.addEventListener(
             "touchstart",
             (e) => {
+              if (!editor.isEditable) return;
               e.cancelable && e.preventDefault();
               onPointerDown(e.touches[0].clientX);
             },
@@ -349,35 +388,10 @@ export const CustomImageResize = Image.extend({
         });
       };
 
-      // --- 편집 모드 활성화/비활성화 로직 ---
-      let isActive = false; // 현재 활성화 상태
-      const activate = () => {
-        if (isActive || !editable) return;
-        isActive = true;
-        container.style.border = "1px dashed #6C6C6C";
-        paintPositionController();
-        paintResizeDots();
-        // 다른 이미지 비활성화 (선택 사항)
-        document.querySelectorAll(".ProseMirror-selectednode").forEach((el) => {
-          if (el !== dom) el.classList.remove("ProseMirror-selectednode");
-        });
-        dom.classList.add("ProseMirror-selectednode");
-      };
-
-      const deactivate = () => {
-        if (!isActive) return;
-        isActive = false;
-        container.style.border = "none";
-        positionController?.remove();
-        positionController = null;
-        while (resizeDots.length) resizeDots.pop()?.remove();
-        dom.classList.remove("ProseMirror-selectednode");
-      };
-
       // --- 이벤트 리스너 ---
       // 이미지 클릭 시 활성화
       dom.addEventListener("click", (e) => {
-        if (!editable) return;
+        if (!editor.isEditable) return;
         // 컨트롤러 클릭은 제외
         if ((e.target as HTMLElement).closest('div[style*="position: absolute"]')) {
           return;
@@ -393,9 +407,14 @@ export const CustomImageResize = Image.extend({
       };
 
       // --- 편집 가능할 때만 활성화 로직 및 외부 클릭 리스너 추가 ---
-      if (editable) {
-        document.addEventListener("click", handleClickOutside, true); // Capture phase
+      if (editor.isEditable) {
+        document.addEventListener("click", handleClickOutside, true);
       }
+      const editableObserver = new MutationObserver(syncEditable);
+      editableObserver.observe(view.dom, {
+        attributes: true,
+        attributeFilter: ["contenteditable"],
+      });
 
       // --- NodeView 인터페이스 반환 ---
       return {
@@ -419,17 +438,18 @@ export const CustomImageResize = Image.extend({
         },
         destroy: () => {
           // 외부 클릭 리스너 제거 등 정리 작업
-          if (editable) {
+          if (editor.isEditable) {
             document.removeEventListener("click", handleClickOutside, true);
           }
+          editableObserver.disconnect();
           // console.log("NodeView destroyed");
         },
         // selectNode, deselectNode (선택 시/해제 시 동작 정의 - activate/deactivate 호출 등)
         selectNode: () => {
-          if (editable) activate();
+          if (editor.isEditable) activate();
         },
         deselectNode: () => {
-          if (editable) deactivate();
+          if (editor.isEditable) deactivate();
         },
       };
     }; // end of NodeView function

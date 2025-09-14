@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useRouter } from "next/navigation";
-import { TPublicPost } from "@/libraries/pg/posts/posts.type";
+import { TPost } from "@/libraries/pg/posts/posts.type";
 import dayjs from "@/libraries/dayjs";
 import { Pagination } from "@mantine/core";
 import Image from "next/image";
@@ -9,12 +9,13 @@ import PlaceholderImage from "/public/assets/images/neon-512x512.png";
 import css from "./post-list.module.scss";
 
 interface Props {
-  posts: TPublicPost[];
+  posts: TPost[];
   currentPage: number;
   total: number;
   order?: "popular";
 }
 
+// 여긴 공개글만 보이도록 한다.
 export default function PostList({ posts, currentPage, total, order }: Props) {
   const router = useRouter();
 

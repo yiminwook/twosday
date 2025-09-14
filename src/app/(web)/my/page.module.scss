@@ -1,0 +1,27 @@
+.wrap {
+  padding: var(--app-layout-padding);
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.navBox {
+  padding: 1rem;
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav > * {
+  flex: 1;
+}
+
+.navItem {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #f0f0f0;
+}

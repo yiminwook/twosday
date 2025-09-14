@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Button } from "@mantine/core";
 
 type Props = {
-  postId: string;
+  postId: number;
   title: string;
   authorId: number;
   viewCount: number;

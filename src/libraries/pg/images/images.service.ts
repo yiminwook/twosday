@@ -97,6 +97,8 @@ export const removeImagesQueryByTransaction = async (
   postId: number,
   imageKeys: string[],
 ) => {
+  if (imageKeys.length === 0) return; // 이미지가 없으면 실행하지 않음
+
   // ANY  : 배열 안에 포함된 값 중 하나라도 일치하면 참
   // "imagesId"= $2 OR "imagesId"= $3 OR "imagesId"= $4
 
