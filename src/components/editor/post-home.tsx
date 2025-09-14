@@ -16,7 +16,6 @@ import {
 } from "@mantine/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEditor } from "@tiptap/react";
-import ky from "ky";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";

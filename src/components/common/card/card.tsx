@@ -3,13 +3,13 @@ import gravatar from "gravatar";
 import css from "./card.module.scss";
 import { useRouter } from "next/navigation";
 import dayjs from "@/libraries/dayjs";
-import { TPublicPost } from "@/libraries/pg/posts/posts.type";
+import { TPost } from "@/libraries/pg/posts/posts.type";
 import PlaceholderImage from "/public/assets/images/neon-512x512.png";
 import Image from "next/image";
 import { Avatar } from "@mantine/core";
 
 interface CardProps {
-  post: TPublicPost;
+  post: TPost;
 }
 
 /* eslint-disable @next/next/no-img-element */

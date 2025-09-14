@@ -2,7 +2,7 @@
 import { clientApi } from "@/apis/fetcher";
 import { AwaitAuthorized } from "@/libraries/auth/authorized";
 import { useSession } from "@/libraries/auth/use-session";
-import { TPublicPost } from "@/libraries/pg/posts/posts.type";
+import { TPost } from "@/libraries/pg/posts/posts.type";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
@@ -33,7 +33,7 @@ function InjectedDataHome() {
       const json = await clientApi
         .get<{
           message: string;
-          data: TPublicPost;
+          data: TPost;
         }>("posts/" + postId)
         .json();
       return json.data;

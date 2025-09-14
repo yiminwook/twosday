@@ -1,10 +1,10 @@
 import { TPost, TPostOrderBy } from "@/libraries/pg/posts/posts.dto";
 import Card from "./card";
 import css from "./card-section.module.scss";
-import { TPublicPost } from "@/libraries/pg/posts/posts.type";
+import { TPost } from "@/libraries/pg/posts/posts.type";
 
 interface CardSectionProps {
-  post: TPublicPost[];
+  post: TPost[];
   order: TPostOrderBy;
 }
 

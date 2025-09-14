@@ -11,7 +11,7 @@ import * as sql from "./posts.sql";
 import { ForbiddenError } from "@/libraries/error";
 
 export const getPosts = withPgConnection(async (client, dto: TGetPostsDto, isPublic: boolean) => {
-  const listResult = await client.query<type.TPostListSqlResult>(sql.postListSql(dto), [
+  const listResult = await client.query<type.TPostSqlResult>(sql.postListSql(dto), [
     dto.query,
     isPublic,
     pageOffset(dto.page, dto.size),
@@ -41,7 +41,7 @@ export const getPosts = withPgConnection(async (client, dto: TGetPostsDto, isPub
     tagMap.set(tag.postId, tags);
   });
 
-  const posts = listResult.rows.map<type.TPublicPost>(({ categoryId, categoryName, ...post }) => {
+  const posts = listResult.rows.map<type.TPost>(({ categoryId, categoryName, ...post }) => {
     return {
       ...post,
       imageKeys: imageMap.get(post.postId) || [],
@@ -56,10 +56,58 @@ export const getPosts = withPgConnection(async (client, dto: TGetPostsDto, isPub
   };
 });
 
-export const getPublicPostById = withPgConnection(
+export const getAuthorPosts = withPgConnection(
+  async (client, authorId: number, dto: TGetPostsDto) => {
+    const listResult = await client.query<type.TPostSqlResult>(sql.authorPostListSql(dto), [
+      dto.query,
+      authorId,
+      pageOffset(dto.page, dto.size),
+      dto.size,
+    ]);
+
+    const postIds = listResult.rows.map((post) => post.postId);
+
+    const [imagesResult, tagsResult, countResult] = await Promise.all([
+      client.query<type.TPostImageSqlResult>(sql.postImagesSql(postIds)),
+      client.query<type.TPostTagSqlResult>(sql.postTagsSql(postIds)),
+      client.query<type.TPostCountSqlResult>(sql.postCountSql, [dto.query]),
+    ]);
+
+    const imageMap = new Map<number, string[]>();
+    const tagMap = new Map<number, { id: number; name: string }[]>();
+
+    imagesResult.rows.forEach((image) => {
+      const keys = imageMap.get(image.postId) || [];
+      keys.push(image.imageKey);
+      imageMap.set(image.postId, keys);
+    });
+
+    tagsResult.rows.forEach((tag) => {
+      const tags = tagMap.get(tag.postId) || [];
+      tags.push({ id: tag.tagId, name: tag.tagName });
+      tagMap.set(tag.postId, tags);
+    });
+
+    const posts = listResult.rows.map<type.TPost>(({ categoryId, categoryName, ...post }) => {
+      return {
+        ...post,
+        imageKeys: imageMap.get(post.postId) || [],
+        tags: tagMap.get(post.postId) || [],
+        category: { id: categoryId, name: categoryName },
+      };
+    });
+
+    return {
+      posts,
+      total: countResult.rows[0].count,
+    };
+  },
+);
+
+export const getPostById = withPgConnection(
   async (client, postId: number, publicTp: "TRUE" | "FALSE" | "ALL") => {
     const [postResult, imagesResult, tagsResult] = await Promise.all([
-      client.query<type.TPostListSqlResult>(sql.postDetailSql(publicTp), [postId]),
+      client.query<type.TPostSqlResult>(sql.postDetailSql(publicTp), [postId]),
       client.query<type.TPostImageSqlResult>(sql.postImagesSql([postId])),
       client.query<type.TPostTagSqlResult>(sql.postTagsSql([postId])),
     ]);
@@ -79,7 +127,43 @@ export const getPublicPostById = withPgConnection(
       tagMap.set(tag.postId, tags);
     });
 
-    const posts = postResult.rows.map<type.TPublicPost>(({ categoryId, categoryName, ...post }) => {
+    const posts = postResult.rows.map<type.TPost>(({ categoryId, categoryName, ...post }) => {
+      return {
+        ...post,
+        imageKeys: imageMap.get(post.postId) || [],
+        tags: tagMap.get(post.postId) || [],
+        category: { id: categoryId, name: categoryName },
+      };
+    });
+
+    return posts[0];
+  },
+);
+
+export const getAuthorPostById = withPgConnection(
+  async (client, postId: number, authorId: number) => {
+    const [postResult, imagesResult, tagsResult] = await Promise.all([
+      client.query<type.TPostSqlResult>(sql.authorPostDetailSql, [postId, authorId]),
+      client.query<type.TPostImageSqlResult>(sql.postImagesSql([postId])),
+      client.query<type.TPostTagSqlResult>(sql.postTagsSql([postId])),
+    ]);
+
+    const imageMap = new Map<number, string[]>();
+    const tagMap = new Map<number, { id: number; name: string }[]>();
+
+    imagesResult.rows.forEach((image) => {
+      const keys = imageMap.get(image.postId) || [];
+      keys.push(image.imageKey);
+      imageMap.set(image.postId, keys);
+    });
+
+    tagsResult.rows.forEach((tag) => {
+      const tags = tagMap.get(tag.postId) || [];
+      tags.push({ id: tag.tagId, name: tag.tagName });
+      tagMap.set(tag.postId, tags);
+    });
+
+    const posts = postResult.rows.map<type.TPost>(({ categoryId, categoryName, ...post }) => {
       return {
         ...post,
         imageKeys: imageMap.get(post.postId) || [],
@@ -111,7 +195,7 @@ export const postPost = withPgTransaction(async (client, authorId: number, dto: 
 /** 수정시 트랜잭션 처리 */
 export const patchPost = withPgTransaction(
   async (client, authorId: number, postId: number, dto: TCreatePostDto) => {
-    const currentPost = await getPublicPostById(postId, "ALL"); // public 여부에 상관없이 가져온다.
+    const currentPost = await getPostById(postId, "ALL"); // public 여부에 상관없이 가져온다.
 
     if (currentPost.authorId !== authorId) {
       throw new ForbiddenError("접근 권한이 없습니다.");

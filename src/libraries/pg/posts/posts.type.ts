@@ -1,4 +1,4 @@
-export type TPostListSqlResult = {
+export type TPostSqlResult = {
   postId: number;
   title: string;
   content: string;
@@ -9,6 +9,8 @@ export type TPostListSqlResult = {
   email: string;
   nickname: string;
   avatar: string | null;
+  isPublic: boolean;
+
   categoryId: number;
   categoryName: string;
 };
@@ -28,7 +30,7 @@ export type TPostCountSqlResult = {
   count: number;
 };
 
-export type TPublicPost = {
+export type TPost = {
   postId: number;
   title: string;
   content: string;
@@ -39,17 +41,19 @@ export type TPublicPost = {
   email: string;
   nickname: string;
   avatar: string | null;
+  isPublic: boolean;
+
   imageKeys: string[];
   tags: { id: number; name: string }[];
   category: { id: number; name: string } | null;
 };
 
 export type TGetPostsResponse = {
-  data: { list: TPublicPost[]; total: number };
+  data: { list: TPost[]; total: number };
   message: string;
 };
 
 export type TGetPostResponse = {
-  data: TPublicPost;
+  data: TPost;
   message: string;
 };

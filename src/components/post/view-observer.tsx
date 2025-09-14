@@ -3,7 +3,7 @@ import { clientApi } from "@/apis/fetcher";
 import { memo, useEffect } from "react";
 
 type Props = {
-  postId: string;
+  postId: number;
 };
 
 export default memo(function ViewObserver({ postId }: Props) {

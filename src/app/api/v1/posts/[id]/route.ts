@@ -2,7 +2,7 @@ import { checkBearerAuth } from "@/libraries/auth/jwt.service";
 import { BadRequestError, serverErrorHandler } from "@/libraries/error";
 import { zInt } from "@/libraries/pg";
 import { createPostDto } from "@/libraries/pg/posts/posts.dto";
-import { getPublicPostById, patchPost } from "@/libraries/pg/posts/posts.service";
+import { getPostById, patchPost } from "@/libraries/pg/posts/posts.service";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest, props: { params: Promise<{ id: strin
       throw new BadRequestError(dto.error.errors[0].message);
     }
 
-    const data = await getPublicPostById(dto.data, "TRUE");
+    const data = await getPostById(dto.data, "TRUE");
 
     return NextResponse.json({ message: `${params.id} 포스트 조회성공`, data });
   } catch (error) {

@@ -1,10 +1,10 @@
 import css from "./card-slider.module.scss";
 import Card from "./card";
 import { TPost, TPostOrderBy } from "@/libraries/pg/posts/posts.dto";
-import { TPublicPost } from "@/libraries/pg/posts/posts.type";
+import { TPost } from "@/libraries/pg/posts/posts.type";
 
 interface CardSliderProps {
-  post: TPublicPost[];
+  post: TPost[];
   order: TPostOrderBy;
 }
 
