@@ -6,6 +6,7 @@ import {
   ActionIcon,
   Button,
   ButtonGroup,
+  Checkbox,
   ComboboxData,
   ComboboxItem,
   ComboboxLikeRenderOptionInput,
@@ -25,26 +26,21 @@ import editCss from "./edit.module.scss";
 import { useSetModalStore } from "@/stores/modal-store";
 import { useManageTags, useServerTags } from "@/hooks/use-tags";
 import { usePostUpdateMutation } from "@/hooks/use-post";
+import { TPost } from "@/libraries/pg/posts/posts.type";
 
 type Props = {
   session: Session;
   postId: number;
-  initialValue: string;
-  initialTitle: string;
-  initialTags: string[];
+  initialPost: TPost;
 };
 
-export default function PatchHome({
-  session,
-  postId,
-  initialValue,
-  initialTitle,
-  initialTags,
-}: Props) {
+export default function PatchHome({ session, postId, initialPost }: Props) {
   const router = useRouter();
 
-  const [title, setTitle] = useState(initialTitle);
-  const [tags, setTags] = useState<string[]>(initialTags);
+  const [title, setTitle] = useState(initialPost.title);
+  const [tags, setTags] = useState<string[]>(() => initialPost.tags.map((t) => t.name));
+  const [isPublic, setIsPublic] = useState(initialPost.isPublic);
+
   const [togglePreview, setTogglePreview] = useState(false);
 
   const queryClient = useQueryClient();
@@ -61,8 +57,8 @@ export default function PatchHome({
       immediatelyRender: true,
       /** 에디터 내부에서 트랜잭션 발생시 리렌더링 **/
       shouldRerenderOnTransaction: false,
-      editable: !togglePreview,
-      content: initialValue,
+      content: initialPost.content,
+      editable: true, // 인스턴스 생성시 결정, 초기값
       onUpdate: ({ editor }) => {
         console.log("HTML", editor.getHTML());
       },
@@ -97,6 +93,7 @@ export default function PatchHome({
         postId,
         title,
         content: editor.getHTML(),
+        isPublic,
         imageKeys: savedImageKeys || [],
         tagIds: tags
           .map((tag) => tagsQuery.data.find((t) => t.name === tag)?.id)
@@ -110,7 +107,7 @@ export default function PatchHome({
             queryClient.invalidateQueries({ queryKey: ["author-post"] }), // 클라이언트캐시
           ]);
           toast.success("업로드 성공");
-          router.push(`/posts/${data.id}`);
+          router.push(`/my/posts/${data.id}`);
         },
       },
     );
@@ -213,6 +210,11 @@ export default function PatchHome({
               저장
             </Button>
           </ButtonGroup>
+
+          <Button variant="default" onClick={() => setIsPublic((pre) => !pre)}>
+            {isPublic ? "공개" : "비공개"}
+            <Checkbox checked={isPublic} readOnly ml={10} />
+          </Button>
         </nav>
 
         <Input

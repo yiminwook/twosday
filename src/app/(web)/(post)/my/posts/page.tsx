@@ -71,7 +71,7 @@ function AuthorPosts() {
                 <div>{post.category?.name}</div>
                 <div>{dayjs(post.createdAt).format("YYYY-MM-DD HH:mm:ss")}</div>
                 <div>{dayjs(post.updatedAt).format("YYYY-MM-DD HH:mm:ss")}</div>
-                <div>{post.isPublic}</div>
+                <div>{post.isPublic ? "공개" : "비공개"}</div>
               </div>
             </div>
 

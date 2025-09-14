@@ -15,8 +15,8 @@ interface CardProps {
 /* eslint-disable @next/next/no-img-element */
 export default function Card({ post }: CardProps) {
   const router = useRouter();
-  const updateTime = dayjs(post.updatedAt).format("yy년 MM월 dd일");
   const onClick = () => router.push(`/posts/${post.postId}`);
+
   return (
     <article className={css.wrap}>
       <div className={css.imageBox} onClick={onClick}>
@@ -48,7 +48,7 @@ export default function Card({ post }: CardProps) {
           <span className={css.editor}>{post.nickname}</span>
         </div>
         <div className={css.timeBox}>
-          <time>{updateTime}</time>
+          <time>{dayjs(post.updatedAt).format("YYYY년 MM월 DD일")}</time>
         </div>
         {/* <div className={css.tagBox}>
           <Tag name="태그1" />

@@ -35,13 +35,5 @@ function InjectedDataHome() {
     throw new Error("접근 권한이 없습니다.");
   }
 
-  return (
-    <PatchHome
-      session={session}
-      postId={Number(postId)}
-      initialValue={query.data.content}
-      initialTitle={query.data.title}
-      initialTags={query.data.tags.map((t) => t.name)}
-    />
-  );
+  return <PatchHome session={session} postId={Number(postId)} initialPost={query.data} />;
 }

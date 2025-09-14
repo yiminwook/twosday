@@ -42,7 +42,6 @@ export async function PATCH(response: NextRequest, props: { params: Promise<{ id
       throw new BadRequestError(dto.error.errors[0].message);
     }
 
-    console.log("PATCH", postId, payload.id, dto.data);
     const data = await patchPost(payload.id, postId, dto.data);
     return NextResponse.json({ message: "성공적으로 글이 수정되었습니다.", data: { id: postId } });
   } catch (error) {

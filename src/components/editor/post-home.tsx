@@ -7,6 +7,7 @@ import {
   ActionIcon,
   Button,
   ButtonGroup,
+  Checkbox,
   ComboboxData,
   ComboboxItem,
   ComboboxLikeRenderOptionInput,
@@ -36,10 +37,16 @@ export default function PostHome({}: Props) {
 
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  const [isPublic, setIsPublic] = useState(false);
+
   const [togglePreview, setTogglePreview] = useState(false);
 
   const queryClient = useQueryClient();
   const modalStore = useSetModalStore();
+
+  const tagsQuery = useServerTags();
+  const { postTagMutation, removeTagMutation } = useManageTags(session);
+  const mutationPost = usePostCreateMutation();
 
   const editor = useEditor(
     {
@@ -51,17 +58,13 @@ export default function PostHome({}: Props) {
       content: `
       <p>Hello! This is a <code>tiptap</code> editor.</p>
       `,
-      editable: !togglePreview,
+      editable: true, // 인스턴스 생성시 결정, 초기값
       onUpdate: ({ editor }) => {
         console.log("HTML", editor.getHTML());
       },
     },
     [togglePreview],
   );
-
-  const tagsQuery = useServerTags();
-  const { postTagMutation, removeTagMutation } = useManageTags(session);
-  const mutationPost = usePostCreateMutation();
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(() => e.target.value);
@@ -89,6 +92,7 @@ export default function PostHome({}: Props) {
       {
         title,
         content: editor.getHTML(),
+        isPublic,
         imageKeys: savedImageKeys || [],
         tagIds: tags
           .map((tag) => tagsQuery.data.find((t) => t.name === tag)?.id)
@@ -102,7 +106,7 @@ export default function PostHome({}: Props) {
             queryClient.invalidateQueries({ queryKey: ["author-posts"] }), // 클라이언트캐시
           ]);
           toast.success("업로드 성공");
-          router.push(`/posts/${data.id}`);
+          router.push(`/my/posts/${data.id}`);
         },
       },
     );
@@ -205,6 +209,11 @@ export default function PostHome({}: Props) {
               저장
             </Button>
           </ButtonGroup>
+
+          <Button variant="default" onClick={() => setIsPublic((pre) => !pre)}>
+            {isPublic ? "공개" : "비공개"}
+            <Checkbox checked={isPublic} readOnly ml={10} />
+          </Button>
         </nav>
 
         <Input

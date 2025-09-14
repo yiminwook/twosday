@@ -15,6 +15,7 @@ interface Props {
   order?: "popular";
 }
 
+// 여긴 공개글만 보이도록 한다.
 export default function PostList({ posts, currentPage, total, order }: Props) {
   const router = useRouter();
 

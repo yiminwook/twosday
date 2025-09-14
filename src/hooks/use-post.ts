@@ -21,6 +21,7 @@ export const usePostCreateMutation = () =>
     mutationFn: async (args: {
       title: string;
       content: string;
+      isPublic: boolean;
       imageKeys: string[];
       tagIds: number[];
       session: Session;
@@ -34,10 +35,10 @@ export const usePostCreateMutation = () =>
           json: {
             title: args.title,
             content: args.content,
+            isPublic: args.isPublic,
+            categoryId: null,
             tagIds: args.tagIds,
             imageKeys: args.imageKeys,
-            categoryId: null,
-            isPublic: true,
           },
         })
         .json();
@@ -52,6 +53,7 @@ export const usePostUpdateMutation = () =>
       postId: number;
       title: string;
       content: string;
+      isPublic: boolean;
       imageKeys: string[];
       tagIds: number[];
       session: Session;
@@ -65,10 +67,10 @@ export const usePostUpdateMutation = () =>
           json: {
             title: args.title,
             content: args.content,
+            isPublic: args.isPublic,
+            categoryId: null,
             tagIds: args.tagIds,
             imageKeys: args.imageKeys,
-            categoryId: null,
-            isPublic: true,
           },
         })
         .json();
