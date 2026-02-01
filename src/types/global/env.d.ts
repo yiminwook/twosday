@@ -25,6 +25,7 @@ declare global {
       // pg
       readonly PG_HOST: string;
       readonly PG_DATABASE: string;
+      readonly PG_PORT: string;
       readonly PG_USER: string;
       readonly PG_PASSWORD: string;
 
