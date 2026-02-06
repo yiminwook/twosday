@@ -1,9 +1,9 @@
-import { TPublicPost } from "@/libraries/pg/posts/posts.type";
+import { TPost } from "@/libraries/pg/posts/posts.type";
 import Link from "next/link";
 import css from "./post-list.module.scss";
 
 type Props = {
-  posts: TPublicPost[];
+  posts: TPost[];
 };
 
 export default function PostsList({ posts }: Props) {

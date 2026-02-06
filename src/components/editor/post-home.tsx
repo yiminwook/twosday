@@ -1,5 +1,5 @@
 "use client";
-import { clientApi, revalidateApi } from "@/apis/fetcher";
+import { revalidateApi } from "@/apis/fetcher";
 import { IMAGE_URL, POST_TAG } from "@/constants";
 import { useSession } from "@/libraries/auth/use-session";
 import { extensions } from "@/libraries/extentions";
@@ -7,6 +7,7 @@ import {
   ActionIcon,
   Button,
   ButtonGroup,
+  Checkbox,
   ComboboxData,
   ComboboxItem,
   ComboboxLikeRenderOptionInput,
@@ -14,9 +15,8 @@ import {
   Stack,
   TagsInput,
 } from "@mantine/core";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEditor } from "@tiptap/react";
-import ky from "ky";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
@@ -27,6 +27,7 @@ import editCss from "./edit.module.scss";
 import { useSetModalStore } from "@/stores/modal-store";
 import ConfirmModal from "../common/modal/confirm-modal";
 import { useManageTags, useServerTags } from "@/hooks/use-tags";
+import { usePostCreateMutation } from "@/hooks/use-post";
 
 type Props = {};
 
@@ -36,10 +37,16 @@ export default function PostHome({}: Props) {
 
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  const [isPublic, setIsPublic] = useState(false);
+
   const [togglePreview, setTogglePreview] = useState(false);
 
   const queryClient = useQueryClient();
   const modalStore = useSetModalStore();
+
+  const tagsQuery = useServerTags();
+  const { postTagMutation, removeTagMutation } = useManageTags(session);
+  const mutationPost = usePostCreateMutation();
 
   const editor = useEditor(
     {
@@ -51,44 +58,13 @@ export default function PostHome({}: Props) {
       content: `
       <p>Hello! This is a <code>tiptap</code> editor.</p>
       `,
-      editable: !togglePreview,
+      editable: true, // 인스턴스 생성시 결정, 초기값
       onUpdate: ({ editor }) => {
         console.log("HTML", editor.getHTML());
       },
     },
     [togglePreview],
   );
-
-  const tagsQuery = useServerTags();
-  const { postTagMutation, removeTagMutation } = useManageTags(session);
-
-  const mutationPost = useMutation({
-    mutationFn: async (arg: { content: string; imageKeys: string[]; tagIds: number[] }) => {
-      const json = await clientApi
-        .post<{ data: { id: number }; message: string }>("posts", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.accessToken}`,
-          },
-          json: {
-            title,
-            content: arg.content,
-            tagIds: arg.tagIds,
-            imageKeys: arg.imageKeys,
-            categoryId: null,
-            isPublic: true,
-          },
-        })
-        .json();
-
-      return json.data;
-    },
-    onSuccess: async (data) => {
-      toast.success("업로드 성공");
-      await revalidateApi.get(`tag?name=${POST_TAG}`);
-      router.push(`/posts/${data.id}`);
-    },
-  });
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(() => e.target.value);
@@ -112,13 +88,28 @@ export default function PostHome({}: Props) {
       })
       .filter((src): src is string => typeof src === "string");
 
-    mutationPost.mutate({
-      content: editor.getHTML(),
-      imageKeys: savedImageKeys || [],
-      tagIds: tags
-        .map((tag) => tagsQuery.data.find((t) => t.name === tag)?.id)
-        .filter((tagId): tagId is number => typeof tagId === "number"),
-    });
+    mutationPost.mutate(
+      {
+        title,
+        content: editor.getHTML(),
+        isPublic,
+        imageKeys: savedImageKeys || [],
+        tagIds: tags
+          .map((tag) => tagsQuery.data.find((t) => t.name === tag)?.id)
+          .filter((tagId): tagId is number => typeof tagId === "number"),
+        session,
+      },
+      {
+        onSuccess: async (data) => {
+          await Promise.all([
+            revalidateApi.get(`tag?name=${POST_TAG}`), // 서버캐시
+            queryClient.invalidateQueries({ queryKey: ["author-posts"] }), // 클라이언트캐시
+          ]);
+          toast.success("업로드 성공");
+          router.push(`/my/posts/${data.id}`);
+        },
+      },
+    );
   };
 
   const comboboxTags = useMemo<ComboboxData>(() => {
@@ -218,6 +209,11 @@ export default function PostHome({}: Props) {
               저장
             </Button>
           </ButtonGroup>
+
+          <Button variant="default" onClick={() => setIsPublic((pre) => !pre)}>
+            {isPublic ? "공개" : "비공개"}
+            <Checkbox checked={isPublic} readOnly ml={10} />
+          </Button>
         </nav>
 
         <Input

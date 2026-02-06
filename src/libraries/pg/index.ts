@@ -3,7 +3,6 @@ import { Client, DatabaseError, Pool, PoolClient } from "pg";
 import { z } from "zod";
 import { CustomServerError } from "../error";
 
-const PG_PORT = 5432 as const;
 
 // 공식문서
 // https://node-postgres.com/apis/client
@@ -21,7 +20,7 @@ export function withPgConnection<TArgs extends any[], TResult>(
   return async (...args: TArgs): Promise<TResult> => {
     const pgClient = new Client({
       host: process.env.PG_HOST,
-      port: PG_PORT,
+      port: Number(process.env.PG_PORT) || 5432,
       user: process.env.PG_USER,
       password: process.env.PG_PASSWORD,
       database: process.env.PG_DATABASE,
@@ -49,7 +48,7 @@ export function withPgConnection<TArgs extends any[], TResult>(
 
 const pool = new Pool({
   host: process.env.PG_HOST,
-  port: PG_PORT,
+  port: Number(process.env.PG_PORT) || 5432,
   user: process.env.PG_USER,
   password: process.env.PG_PASSWORD,
   database: process.env.PG_DATABASE,

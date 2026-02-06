@@ -1,16 +1,8 @@
 import { checkBearerAuth } from "@/libraries/auth/jwt.service";
 import { BadRequestError, serverErrorHandler } from "@/libraries/error";
 import { zInt } from "@/libraries/pg";
-import {
-  addImagesQueryByTransaction,
-  removeImagesQueryByTransaction,
-} from "@/libraries/pg/images/images.service";
 import { createPostDto } from "@/libraries/pg/posts/posts.dto";
-import { getPublicPostById, patchPost } from "@/libraries/pg/posts/posts.service";
-import {
-  addTagsQueryByTransaction,
-  removeTagsQueryByTransaction,
-} from "@/libraries/pg/tags/tags.service";
+import { getPostById, patchPost } from "@/libraries/pg/posts/posts.service";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -24,7 +16,7 @@ export async function GET(req: NextRequest, props: { params: Promise<{ id: strin
       throw new BadRequestError(dto.error.errors[0].message);
     }
 
-    const data = await getPublicPostById(dto.data);
+    const data = await getPostById(dto.data, "TRUE");
 
     return NextResponse.json({ message: `${params.id} 포스트 조회성공`, data });
   } catch (error) {
@@ -50,7 +42,6 @@ export async function PATCH(response: NextRequest, props: { params: Promise<{ id
       throw new BadRequestError(dto.error.errors[0].message);
     }
 
-    console.log("PATCH", postId, payload.id, dto.data);
     const data = await patchPost(payload.id, postId, dto.data);
     return NextResponse.json({ message: "성공적으로 글이 수정되었습니다.", data: { id: postId } });
   } catch (error) {

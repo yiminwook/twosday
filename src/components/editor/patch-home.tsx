@@ -1,11 +1,12 @@
 "use client";
-import { clientApi, revalidateApi } from "@/apis/fetcher";
+import { revalidateApi } from "@/apis/fetcher";
 import { IMAGE_URL, POST_TAG } from "@/constants";
 import { extensions } from "@/libraries/extentions";
 import {
   ActionIcon,
   Button,
   ButtonGroup,
+  Checkbox,
   ComboboxData,
   ComboboxItem,
   ComboboxLikeRenderOptionInput,
@@ -13,9 +14,8 @@ import {
   Stack,
   TagsInput,
 } from "@mantine/core";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEditor } from "@tiptap/react";
-import ky from "ky";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
@@ -25,30 +25,30 @@ import css from "./home.module.scss";
 import editCss from "./edit.module.scss";
 import { useSetModalStore } from "@/stores/modal-store";
 import { useManageTags, useServerTags } from "@/hooks/use-tags";
+import { usePostUpdateMutation } from "@/hooks/use-post";
+import { TPost } from "@/libraries/pg/posts/posts.type";
 
 type Props = {
   session: Session;
-  postId: string;
-  initialValue: string;
-  initialTitle: string;
-  initialTags: string[];
+  postId: number;
+  initialPost: TPost;
 };
 
-export default function PatchHome({
-  session,
-  postId,
-  initialValue,
-  initialTitle,
-  initialTags,
-}: Props) {
+export default function PatchHome({ session, postId, initialPost }: Props) {
   const router = useRouter();
 
-  const [title, setTitle] = useState(initialTitle);
-  const [tags, setTags] = useState<string[]>(initialTags);
+  const [title, setTitle] = useState(initialPost.title);
+  const [tags, setTags] = useState<string[]>(() => initialPost.tags.map((t) => t.name));
+  const [isPublic, setIsPublic] = useState(initialPost.isPublic);
+
   const [togglePreview, setTogglePreview] = useState(false);
 
   const queryClient = useQueryClient();
   const modalStore = useSetModalStore();
+
+  const tagsQuery = useServerTags();
+  const { postTagMutation, removeTagMutation } = useManageTags(session);
+  const mutationPost = usePostUpdateMutation();
 
   const editor = useEditor(
     {
@@ -57,45 +57,14 @@ export default function PatchHome({
       immediatelyRender: true,
       /** 에디터 내부에서 트랜잭션 발생시 리렌더링 **/
       shouldRerenderOnTransaction: false,
-      editable: !togglePreview,
-      content: initialValue,
+      content: initialPost.content,
+      editable: true, // 인스턴스 생성시 결정, 초기값
       onUpdate: ({ editor }) => {
         console.log("HTML", editor.getHTML());
       },
     },
     [], // 인스턴스 초기화 의존성 배열
   );
-
-  const tagsQuery = useServerTags();
-  const { postTagMutation, removeTagMutation } = useManageTags(session);
-
-  const mutationPost = useMutation({
-    mutationFn: async (arg: { content: string; imageKeys: string[]; tagIds: number[] }) => {
-      const json = await clientApi
-        .patch<{ data: { id: number }; message: string }>("posts/" + postId, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.accessToken}`,
-          },
-          json: {
-            title,
-            content: arg.content,
-            tagIds: arg.tagIds,
-            imageKeys: arg.imageKeys,
-            categoryId: null,
-            isPublic: true,
-          },
-        })
-        .json();
-
-      return json.data;
-    },
-    onSuccess: async (data) => {
-      toast.success("업로드 성공");
-      await revalidateApi.get(`tag?name=${POST_TAG}`);
-      router.push(`/posts/${data.id}`);
-    },
-  });
 
   const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(() => e.target.value);
@@ -119,13 +88,29 @@ export default function PatchHome({
       })
       .filter((src): src is string => typeof src === "string");
 
-    mutationPost.mutate({
-      content: editor.getHTML(),
-      imageKeys: savedImageKeys || [],
-      tagIds: tags
-        .map((tag) => tagsQuery.data.find((t) => t.name === tag)?.id)
-        .filter((tagId): tagId is number => typeof tagId === "number"),
-    });
+    mutationPost.mutate(
+      {
+        postId,
+        title,
+        content: editor.getHTML(),
+        isPublic,
+        imageKeys: savedImageKeys || [],
+        tagIds: tags
+          .map((tag) => tagsQuery.data.find((t) => t.name === tag)?.id)
+          .filter((tagId): tagId is number => typeof tagId === "number"),
+        session,
+      },
+      {
+        onSuccess: async (data) => {
+          await Promise.all([
+            revalidateApi.get(`tag?name=${POST_TAG}`), // 서버캐시
+            queryClient.invalidateQueries({ queryKey: ["author-post"] }), // 클라이언트캐시
+          ]);
+          toast.success("업로드 성공");
+          router.push(`/my/posts/${data.id}`);
+        },
+      },
+    );
   };
 
   const comboboxTags = useMemo<ComboboxData>(() => {
@@ -225,6 +210,11 @@ export default function PatchHome({
               저장
             </Button>
           </ButtonGroup>
+
+          <Button variant="default" onClick={() => setIsPublic((pre) => !pre)}>
+            {isPublic ? "공개" : "비공개"}
+            <Checkbox checked={isPublic} readOnly ml={10} />
+          </Button>
         </nav>
 
         <Input
